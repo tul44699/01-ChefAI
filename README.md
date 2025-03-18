@@ -1,5 +1,6 @@
-# Project Name
-Put here a short paragraph describing your project. 
+# ChefAI - AI-Powered Recipe Generator
+ChefAI is a web application that helps users generate recipes based on the ingredients they have at home. 
+Whether you're an inexperienced cook or looking for creative meal ideas, ChefAI provides AI-generated recipes tailored to your available ingredients.
 Adding an screenshot or a mockup of your application in action would be nice.  
 
 ![This is a screenshot.](images.png)
