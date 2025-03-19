@@ -3,27 +3,54 @@ ChefAI is a web application that helps users generate recipes based on the ingre
 Whether you're an inexperienced cook or looking for creative meal ideas, ChefAI provides AI-generated recipes tailored to your available ingredients.
 Adding an screenshot or a mockup of your application in action would be nice.  
 
-![This is a screenshot.](images.png)
+![This is a screenshot.](initial_demo_image.png)
 # How to run
-Provide here instructions on how to use your application.   
-- Download the latest binary from the Release section on the right on GitHub.  
-- On the command line uncompress using
+To run the ChefAI locally:
+1. Ensure Python3 is installed on development computer  
+2. Fork repository
+3. Git clone repository
+4. Create a virtual enironment using command:
 ```
-tar -xzf  
+a. python3 -m venv myenv  
 ```
-- On the command line run with
+5. Activate the virtual enironment with command
+- For mac0S/Linux:
 ```
-./hello
+a. source myenv/bin/activate
 ```
-- You will see Hello World! on your terminal. 
+- For Windows:
+```
+a. myenv\Script\Activate
+```
+6. Navigate to the folder that has the file requirements.txt and type the command:
+```
+a. pip install -r requirements.txt
+```
+7. Start local server by typing the command:
+```
+a. python3 manage.py runserver
+```
+8. Visit http://127.0.0.1:8000
 
 # How to contribute
-Follow this project board to know the latest status of the project: [http://...]([http://...])  
+Follow this project board to know the latest status of the project: [https://github.com/orgs/cis3296s25/projects/58]([https://github.com/orgs/cis3296s25/projects/58])  
 
 ### How to build
-- Use this github repository: ... 
-- Specify what branch to use for a more stable release or for cutting edge development.  
-- Use InteliJ 11
-- Specify additional library to download if needed 
-- What file and target to compile and run. 
-- What is expected to happen when the app start. 
+- Use this github repository: [https://github.com/cis3296s25/01-ChefAI]([https://github.com/cis3296s25/01-ChefAI])
+- Use the `main` branch for the latest stable release:
+```
+git checkout main
+```
+- All required dependencies are listed in `requirements.txt`. Install them with:
+```
+a. pip install -r requirements.txt
+```
+- To start the application, run:
+```
+a. python manage.py runserver
+```
+- The Django development server should start, and you should be prompted to go to:
+```
+http://127.0.0.1:8000/    
+```
+
