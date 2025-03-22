@@ -1,7 +1,5 @@
 from django import forms
 
-
-
 OPTIONS = [
     ('butter', 'Butter'),
     ('egg', 'Egg'),
