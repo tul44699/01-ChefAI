@@ -16,14 +16,32 @@ def index(request):
     if request.method == "POST":
         form = ingredientList(request.POST)
         if form.is_valid():
-            selected_options = form.cleaned_data['choices']
             
+            pantry = form.cleaned_data.get('pantry',[])
+            veggies= form.cleaned_data.get('veggies',[])
+            appliances= form.cleaned_data.get('appliances',[])
+            print(f"Here are the pantry items: {pantry}")
+            print(f"Here are the veggies: {veggies}")
+            print(f"Here are the appliances: {appliances}")
+            
+            selected_options = pantry + veggies + appliances
+            print(selected_options)
             ai_response = feedLLM(selected_options)
+            
+            request.session['selected_options'] = selected_options
+            request.session['ai_response'] = ai_response
 
-            return render(request, 'resp.html', {'selected_options': selected_options, 'ai_response' : ai_response})
+            return redirect('response_recipe')
     else:
         form = ingredientList()
-    return render(request, 'test.html', {'form': form})
+    return render(request, 'index.html', {'form': form})
+
+#displays a new page with the recipe listed
+def response_recipe(request):
+    selected_options = request.session.get('selected_options', [])
+    ai_response = request.session.get('ai_response', "")
+
+    return render(request, 'resp.html', {'selected_options': selected_options, 'ai_response': ai_response})
 
 
 def feedLLM(selected_options):

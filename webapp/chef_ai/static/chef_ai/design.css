@@ -112,3 +112,7 @@ body {
 .hidden {
     display: none;
 }
+.hidden-checkbox{
+    display: none;
+}
+
