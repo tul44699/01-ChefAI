@@ -13,27 +13,29 @@
         <p>Welcome to ChefAI!<br> Select ingredients and available appliances to generate recipes!</p>
     </div>
     
+    <form method="POST">
+        {%csrf_token%}
+    
     <!-- Ingredients Section -->
     <div class="ingredient-group">
         <h3>Pantry Essentials</h3>
         <div class="ingredient-container">
-            <div class="ingredient" data-value="butter">Butter</div>
-            <div class="ingredient" data-value="egg">Egg</div>
-            <div class="ingredient" data-value="garlic">Garlic</div>
-            <div class="ingredient" data-value="onion">Onion</div>
-            <div class="ingredient" data-value="milk">Milk</div>
-            <div class="ingredient" data-value="sugar">Sugar</div>
+            {% for value, label in form.pantry.field.choices %}
+             <div class="ingredient" value = "{{ value }}" data-value= "{{ value }}" onclick="toggleCheckBox('{{value}}')">{{ label }}
+                <input type="checkbox" name="pantry" id="{{ value }}" value="{{ value }}" class="hidden-checkbox">
+             </div>
+             {% endfor %}
         </div>
     </div>
 
     <div class="ingredient-group">
         <h3>Vegetables & Greens</h3>
         <div class="ingredient-container">
-            <div class="ingredient" data-value="bell pepper">Bell Pepper</div>
-            <div class="ingredient" data-value="scallion">Scallion</div>
-            <div class="ingredient" data-value="carrot">Carrot</div>
-            <div class="ingredient" data-value="tomato">Tomato</div>
-            <div class="ingredient" data-value="potato">Potato</div>
+            {% for value, label in form.veggies.field.choices %}
+            <div class="ingredient" id= "{{ value }} "value = "{{ value }}"data-value= "{{ value }}" onclick="toggleCheckBox('{{value}}')">{{ label }}
+                <input type="checkbox" name="veggies" id="{{ value }}" value="{{ value }}" class="hidden-checkbox">
+            </div>
+            {% endfor %}
         </div>
     </div>
 
@@ -41,20 +43,29 @@
     <div class="appliance-group hidden">
         <h3>Which appliances do you have?</h3>
         <div class="appliance-container">
-            <div class="appliance" data-value="gas stove">Gas Stove</div>
-            <div class="appliance" data-value="grill">Grill</div>
-            <div class="appliance" data-value="air fryer">Air Fryer</div>
-            <div class="appliance" data-value="oven">Oven</div>
+            {% for value, label in form.appliances.field.choices %}
+            <div class="appliance" value = "{{ value }}" data-value= "{{ value }}" onclick="toggleCheckBox('{{value}}')">{{ label }}
+                <input type="checkbox" name="appliances" id="{{ value }}" value="{{ value }}" class="hidden-checkbox">
+            </div>
+            {% endfor %}
         </div>
     </div>
 
 
-    <button id="submit-btn" class="hidden">Generate Recipes</button>
+    <button type="submit" id="submit-btn" class="hidden">Generate Recipes</button>
 
     <input type="hidden" id="selectedIngredients" name="ingredients">
-    <input type="hidden" id="selectedAppliances" name="appliances">
+    <input type="hidden" id="selectedAppliances" name="appliances1">
+
+</form>
 
 <script>
+
+    function toggleCheckBox(checkBoxId){
+        const checkbox = document.getElementById(checkBoxId);
+        checkbox.checked = !checkbox.checked;
+        console.log(`CheckBox ${checkBoxId} is now ${checkbox.checked}`);
+    }
     document.querySelectorAll('.ingredient').forEach(item => {
         item.addEventListener('click', function() {
             this.classList.toggle('selected');
@@ -81,7 +92,7 @@
 
     function updateSelectedAppliances() {
         let selected = [];
-        document.querySelectorAll('.appliance.selected').forEach(item => {
+        document.querySelectorAll('.appliance1.selected').forEach(item => {
             selected.push(item.getAttribute('data-value'));
         });
         document.getElementById('selectedAppliances').value = selected.join(', ');
@@ -107,14 +118,10 @@
         }
     }
 
-
-        document.getElementById("submit-btn").addEventListener("click", function() {
-            let ingredients = document.getElementById("selectedIngredients").value;
-            let appliances = document.getElementById("selectedAppliances").value;
-            
-            // Redirect to Django's recipe generation route
-            window.location.href = `/generate-recipe/?ingredients=${encodeURIComponent(ingredients)}&appliances=${encodeURIComponent(appliances)}`;
-        });
+//     document.getElementById('submit-btn').addEventListener('click', function() {
+//     alert("submit was clicked");
+//     console.log("Submit button clicked");
+// });
     </script>
     
 
