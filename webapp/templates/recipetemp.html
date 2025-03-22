@@ -10,5 +10,12 @@
 <body>
     <div class="header">ChefAI</div>
 
+    <ul>
+        {% for item in selected_options %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+    <p>{{ ai_response }}</p>
+
 </body>
 </html>

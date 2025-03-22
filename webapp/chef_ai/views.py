@@ -41,7 +41,7 @@ def response_recipe(request):
     selected_options = request.session.get('selected_options', [])
     ai_response = request.session.get('ai_response', "")
 
-    return render(request, 'resp.html', {'selected_options': selected_options, 'ai_response': ai_response})
+    return render(request, 'recipetemp.html', {'selected_options': selected_options, 'ai_response': ai_response})
 
 
 def feedLLM(selected_options):
