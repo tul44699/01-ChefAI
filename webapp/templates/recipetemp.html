@@ -8,14 +8,37 @@
     <link rel="stylesheet" href="{% static 'chef_ai/design.css' %}">
 </head>
 <body>
-    <div class="header">ChefAI</div>
-
+    <h4>Your selected ingredients:</h4>
     <ul>
         {% for item in selected_options %}
             <li>{{ item }}</li>
         {% endfor %}
     </ul>
-    <p>{{ ai_response }}</p>
+    <hr>
 
+    <h1>{{ ai_response.title }}</h1>
+    <p><strong>Cuisine:</strong> {{ ai_response.cuisine }}</p>
+    <p><strong>Time Required:</strong> {{ ai_response.time }}</p>
+
+    <h2>Ingredients</h2>
+    <ul>
+        {% for item in ai_response.ingredients %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Utensils</h2>
+    <ul>
+        {% for item in ai_response.utensils %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Steps</h2>
+    <ol>
+        {% for step in ai_response.steps %}
+            <li>{{ step }}</li>
+        {% endfor %}
+    </ol>
 </body>
 </html>
