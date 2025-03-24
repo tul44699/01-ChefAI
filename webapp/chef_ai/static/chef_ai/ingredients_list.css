@@ -1,88 +1,37 @@
+/* This is the CSS for the selection of ingredients or the homepage */
+
 body {
-<<<<<<< HEAD
-    background: rgb(255, 127, 17);
-    color: #FDF0D5; 
-    font-family: Georgia, sans-serif;
-    height: fit-content;
-    margin: 0;
-=======
     background: linear-gradient(180deg, rgba(255,115,115,1) 0%, rgba(255,152,64,1) 50%);
     color: #F5CBA7; 
     font-family: Arial, sans-serif;
->>>>>>> main
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-<<<<<<< HEAD
-}
-
-.header {
-    position: fixed;
-=======
     height: 120vh;
     margin: 0;
     text-align: center;
-}
-
-.header {
-    position: absolute;
->>>>>>> main
-    top: 20px;
-    left: 20px;
-    font-size: 24px;
-    font-weight: bold;
-<<<<<<< HEAD
-    z-index: 1;
-=======
->>>>>>> main
-}
-
-.add-image {
-    margin-left: 10px;
-    cursor: pointer;
-    font-size: 18px;
-    color: #A04000;
-    background: none;
-    border: none;
-    position: relative;
-}
-
-.add-image:hover::after {
-    content: "Scan your ingredients";
-    position: absolute;
-    bottom: -25px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #F5CBA7;
-    color: #A04000;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 12px;
-    white-space: nowrap;
 }
 
 .linkToInformation {
     margin-top: 20px;
 }
 
+.header {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
 /* Ingredient & Appliances Group Box  */
 .ingredient-group, .appliance-group {
     background: rgba(255, 255, 255, 0.2); 
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 12px;
     padding: 15px;
-<<<<<<< HEAD
-    margin: auto;
-    margin-top: 10px;
-    margin-bottom:10px;
-    width: auto;
-    max-width: 90%;
-    height: auto;
-=======
     margin: 15px 0;
     width: 30%;
->>>>>>> main
     backdrop-filter: blur(5px); 
     text-align: center;
 }
@@ -98,11 +47,7 @@ body {
 
 /* Ingredient & Appliance Box */
 .ingredient, .appliance {
-<<<<<<< HEAD
-    background-color: #FDF0D5;;
-=======
     background-color: #E0E0E0;
->>>>>>> main
     color: #333;
     padding: 10px 15px;
     border-radius: 8px;
@@ -122,47 +67,16 @@ body {
     color: white;
     font-weight: bold;
 }
-<<<<<<< HEAD
-.generate-button{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-/* Submit Button */
-.submit-btn{
-    background-color: #FDF0D5;
-    color: #443742;
-=======
 
 /* Submit Button */
 #submit-btn {
     background-color: #F5CBA7;
     color: white;
->>>>>>> main
     border: none;
     padding: 12px 24px;
     font-size: 18px;
     border-radius: 8px;
     cursor: pointer;
-<<<<<<< HEAD
-    justify-content: center;
-    margin: 10px;
-    width: fit-content;
-}
-
-.submit-btn:hover{
-    box-shadow: 0px 0px 30px rgba(255, 0, 0, 50);
-    background-color: rgb(210, 43, 43);
-    font-weight: bold;
-}
-.hidden{
-    display: none;
-    justify-content: center;
-}
-/* Hidden by Default */
-=======
     margin-top: 20px;
     transition: background 0.3s ease-in-out;
 }
@@ -175,7 +89,6 @@ body {
 .hidden {
     display: none;
 }
->>>>>>> main
 .hidden-checkbox{
     display: none;
 }
