@@ -16,7 +16,6 @@
     <form method="POST">
         {%csrf_token%}
     
-<<<<<<< HEAD
         <!-- Ingredients Section -->
         <div class="ingredient-group">
             <h3>Pantry Essentials</h3>
@@ -133,114 +132,6 @@
     //     alert("submit was clicked");
     //     console.log("Submit button clicked");
     // });
-=======
-    <!-- Ingredients Section -->
-    <div class="ingredient-group">
-        <h3>Pantry Essentials</h3>
-        <div class="ingredient-container">
-            {% for value, label in form.pantry.field.choices %}
-             <div class="ingredient" value = "{{ value }}" data-value= "{{ value }}" onclick="toggleCheckBox('{{value}}')">{{ label }}
-                <input type="checkbox" name="pantry" id="{{ value }}" value="{{ value }}" class="hidden-checkbox">
-             </div>
-             {% endfor %}
-        </div>
-    </div>
-
-    <div class="ingredient-group">
-        <h3>Vegetables & Greens</h3>
-        <div class="ingredient-container">
-            {% for value, label in form.veggies.field.choices %}
-            <div class="ingredient" id= "{{ value }} "value = "{{ value }}"data-value= "{{ value }}" onclick="toggleCheckBox('{{value}}')">{{ label }}
-                <input type="checkbox" name="veggies" id="{{ value }}" value="{{ value }}" class="hidden-checkbox">
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
-    <!-- Appliances Section (Hidden by Default) -->
-    <div class="appliance-group hidden">
-        <h3>Which appliances do you have?</h3>
-        <div class="appliance-container">
-            {% for value, label in form.appliances.field.choices %}
-            <div class="appliance" value = "{{ value }}" data-value= "{{ value }}" onclick="toggleCheckBox('{{value}}')">{{ label }}
-                <input type="checkbox" name="appliances" id="{{ value }}" value="{{ value }}" class="hidden-checkbox">
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
-
-    <button type="submit" id="submit-btn" class="hidden">Generate Recipes</button>
-
-    <input type="hidden" id="selectedIngredients" name="ingredients">
-    <input type="hidden" id="selectedAppliances" name="appliances1">
-
-</form>
-
-<script>
-
-    function toggleCheckBox(checkBoxId){
-        const checkbox = document.getElementById(checkBoxId);
-        checkbox.checked = !checkbox.checked;
-        console.log(`CheckBox ${checkBoxId} is now ${checkbox.checked}`);
-    }
-    document.querySelectorAll('.ingredient').forEach(item => {
-        item.addEventListener('click', function() {
-            this.classList.toggle('selected');
-            updateSelectedIngredients();
-            showApplianceSection();
-            toggleSubmitButton();
-        });
-    });
-
-    document.querySelectorAll('.appliance').forEach(item => {
-        item.addEventListener('click', function() {
-            this.classList.toggle('selected');
-            updateSelectedAppliances();
-        });
-    });
-
-    function updateSelectedIngredients() {
-        let selected = [];
-        document.querySelectorAll('.ingredient.selected').forEach(item => {
-            selected.push(item.getAttribute('data-value'));
-        });
-        document.getElementById('selectedIngredients').value = selected.join(', ');
-    }
-
-    function updateSelectedAppliances() {
-        let selected = [];
-        document.querySelectorAll('.appliance1.selected').forEach(item => {
-            selected.push(item.getAttribute('data-value'));
-        });
-        document.getElementById('selectedAppliances').value = selected.join(', ');
-    }
-
-    function showApplianceSection() {
-        let selectedIngredients = document.querySelectorAll('.ingredient.selected');
-        let applianceSection = document.querySelector('.appliance-group');
-        if (selectedIngredients.length > 0) {
-            applianceSection.classList.remove('hidden');
-        } else {
-            applianceSection.classList.add('hidden');
-        }
-    }
-
-    function toggleSubmitButton() {
-        let selectedIngredients = document.querySelectorAll('.ingredient.selected');
-        let submitButton = document.getElementById('submit-btn');
-        if (selectedIngredients.length > 0) {
-            submitButton.classList.remove('hidden');
-        } else {
-            submitButton.classList.add('hidden');
-        }
-    }
-
-//     document.getElementById('submit-btn').addEventListener('click', function() {
-//     alert("submit was clicked");
-//     console.log("Submit button clicked");
-// });
->>>>>>> main
     </script>
     
 
