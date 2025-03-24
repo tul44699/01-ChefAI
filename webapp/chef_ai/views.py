@@ -21,6 +21,7 @@ def index(request):
             pantry = form.cleaned_data.get('pantry',[])
             veggies= form.cleaned_data.get('veggies',[])
             appliances= form.cleaned_data.get('appliances',[])
+<<<<<<< HEAD
             spices= form.cleaned_data.get('spices' ,[])
 
             print(f"Here are the pantry items: {pantry}")
@@ -30,6 +31,13 @@ def index(request):
 
             
             selected_options = pantry + veggies + appliances + spices
+=======
+            print(f"Here are the pantry items: {pantry}")
+            print(f"Here are the veggies: {veggies}")
+            print(f"Here are the appliances: {appliances}")
+            
+            selected_options = pantry + veggies + appliances
+>>>>>>> main
             print(selected_options)
             ai_response = feedLLM(selected_options)
             
@@ -55,10 +63,14 @@ def feedLLM(selected_options):
 
 
        # Create the prompt
+<<<<<<< HEAD
     prompt = f"""I want a recipe that I can make for the list of ingredients and quantity. It is fine even if it simple. The recipe should be accurate with the list of ingredients and their quantity. For now you can assume that the user has the required quantity. The recipe should have a title, cuisine, 
     and amount of time required to cook the recipe, the list of ingredients with their quantity, utensils required and then a step by step process of cooking the recipe. Be careful to not suggest a recipe with ingredients that the user has not mentioned, 
     and one that does not exist. Do not assume that the user has more ingredients. YOU DO NOT NEED TO USE ALL THE INGREDIENTS LISTED.
 
+=======
+    prompt = f"""I want the most optimal and real recipe that I can make for the list of ingredients and quantity. The recipe should be accurate with the list of ingredients and their quantity. If additional ingredients are required, ask the user if they have it with them, if they do not, then don’t create a fake recipe, instead be honest and say that you will not be able to make a recipe with the given ingredients based on your knowledge. The recipe should have a title, cuisine, and amount of time required to cook the recipe, the list of ingredients with their quantity, utensils required and then a step by step process of cooking the recipe. Be careful to not suggest a recipe with ingredients that the user has not mentioned, and one that does not exist. If it is not possible then mention it to the user. 
+>>>>>>> main
     Please format your recipe response like this:
 
     Title: <recipe title>  
@@ -78,7 +90,10 @@ def feedLLM(selected_options):
     # Directly access the content attribute
     # If there's a proxy, you may need to resolve it or use another method to extract data
     raw = response.content if hasattr(response, 'content') else response.resolve()
+<<<<<<< HEAD
     print(raw)
+=======
+>>>>>>> main
 
     # Using regex to extract specific parts of the response
     sections = {
