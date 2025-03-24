@@ -1,0 +1,58 @@
+/* This is the CSS file for the output from the prompt */
+body {
+    background: rgb(255, 127, 17);
+    font-family: Georgia, serif;
+    color: #FDF0D5; 
+    font-family: Georgia, sans-serif;
+    height: fit-content;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-op{
+    margin-top: 80px;
+    background: rgba(255, 255, 255, 0.2); /* Optional: Gives a background color to the container */
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(15px); 
+}
+
+.header {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    z-index: 1;
+}
+
+h1, h2, h3{
+    text-align: center;
+}
+
+.selected-ingredients{
+    font-family: Georgia, serif;
+    padding: 20px;
+}
+
+.res{
+    font-family: Georgia, serif;
+    padding: 20px;
+}
+
+.no-recipe{
+    background: rgba(255, 255, 255, 0.2); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    margin: auto;
+    margin-top: 10px;
+    width: auto;
+    max-width: 90%;
+    height: auto;
+    backdrop-filter: blur(5px); 
+    text-align: center;
+}
