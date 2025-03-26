@@ -28,7 +28,7 @@ a. pip install -r requirements.txt
 ```
 7. Start local server by typing the command:
 ```
-a. python3 manage.py runserver
+a. python manage.py runserver
 ```
 8. Visit http://127.0.0.1:8000
 
@@ -53,4 +53,5 @@ a. python manage.py runserver
 ```
 http://127.0.0.1:8000/    
 ```
-
+Here is a deployed version of our current app:
+[Chef-AI](http://18.188.136.14:8000/)
