@@ -64,4 +64,4 @@ a. python manage.py runserver
 http://127.0.0.1:8000/    
 ```
 Here is a deployed version of our current app:
-[Chef-AI](http://18.188.136.14:8000/)
+[Chef-AI](http://18.188.136.14/)
