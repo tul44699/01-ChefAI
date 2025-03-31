@@ -1,58 +1,128 @@
-/* This is the CSS file for the output from the prompt */
-body {
-    background: rgb(255, 127, 17);
-    font-family: Georgia, serif;
-    color: #FDF0D5; 
-    font-family: Georgia, sans-serif;
-    height: fit-content;
+*{
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-.container-op{
-    margin-top: 80px;
-    background: rgba(255, 255, 255, 0.2); /* Optional: Gives a background color to the container */
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(15px); 
+body{
+    position: relative;
+    font-size: 12px;
+}
+.header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 75px;
+  width: 100%;
+  padding: 5px 25px;
+  backdrop-filter: blur(100px);
+  display: flex;
+  align-items: center;
+  z-index: 100;  
 }
 
-.header {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    font-size: 24px;
-    font-weight: bold;
-    z-index: 1;
-}
-
-h1, h2, h3{
-    text-align: center;
-}
-
-.selected-ingredients{
-    font-family: Georgia, serif;
-    padding: 20px;
-}
-
-.res{
-    font-family: Georgia, serif;
-    padding: 20px;
-}
-
-.no-recipe{
-    background: rgba(255, 255, 255, 0.2); 
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 12px;
-    padding: 15px;
-    margin: auto;
+.chefAI img{
     margin-top: 10px;
-    width: auto;
-    max-width: 90%;
-    height: auto;
-    backdrop-filter: blur(5px); 
+    width: 200px;
+    height: 200px;
+}
+
+.back-video{
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.back-img{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.back-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.recipe-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    z-index: 99;
+    position: relative;
+    margin-top: 20px;
+}
+
+.recipe-content {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 30px;
+    backdrop-filter: blur(50px);
+    width: 80%;
+    max-width: 1000px;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+}
+
+.no-recipe {
     text-align: center;
+}
+
+.no-recipe h1 {
+    color: #ff0000;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.selected-ingredients, .res {
+    margin-top: 20px;
+}
+
+h2 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    text-decoration: underline;
+}
+
+ul, ol {
+    margin-left: 20px;
+}
+
+li {
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.back-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+@media (max-width: 768px) {
+    .recipe-container {
+        padding: 15px;
+    }
+
+    .recipe-content {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .chefAI img {
+        width: 120px;
+        height: 120px;
+    }
 }
