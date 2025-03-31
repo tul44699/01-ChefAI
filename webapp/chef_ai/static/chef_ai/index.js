@@ -65,6 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedItemsContainer = document.getElementById('selectedItemsContainer');
     const selectedItemsDiv = document.getElementById('selectedItems');
     const video = document.querySelector('.back-video');
+    const form = document.querySelector("form");
+
+    form.addEventListener("submit", (e) => {
+        if (document.activeElement === searchInput) {
+            e.preventDefault(); // Block submission if user is typing and hits enter in the search bar
+        }
+    });
 
     createCategoryItems(); // Generate ingredient checkboxes
 
@@ -85,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Search and select ingredients
     searchInput.addEventListener('keyup', (event) => {
         if (event.key === 'Enter') {
+            event.preventDefault();
             const searchTerm = searchInput.value.trim().toLowerCase();
 
             Object.keys(ingredientCategories).forEach(categoryKey => {
@@ -164,6 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Append itemDiv to selected items container
         selectedItemsDiv.appendChild(itemDiv);
+        console.log('Added selected item:', item); // For debugging
+        // Clear the input field after adding the i
     }
 
     // Function to remove item from selected list
@@ -181,4 +191,19 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedItemsContainer.style.display = 'none';
         }
     }
+
+    document.getElementById("generateRecipeBtn").addEventListener("click", () => {
+        const items = document.querySelectorAll('.selected-item');
+        const final = [];
+    
+        items.forEach(item => {
+            const name = item.querySelector('.ingredient-name').textContent;
+            const qty = item.querySelector('input[type="text"]').value || '1';
+            final.push(`${name} (${qty})`);
+        });
+    
+        document.getElementById("final_ingredients").value = final.join(", ");
+        console.log("Final Ingredients:", final); // For debugging
+    });
+    
 });
