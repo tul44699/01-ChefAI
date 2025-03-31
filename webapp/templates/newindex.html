@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,14 +12,15 @@
 <body>
     <header class="header">
         <div class="chefAI">
-            <a href="index.html">
-                <img src="images/chef.png" alt="">
+            <a href="{% url 'index' %}">
+                <img src="{% static 'chef_ai/chef.png' %}" alt="">
+
             </a>
         </div>
     </header>
 
     <video autoplay loop muted plays-inline class="back-video">
-        <source src="./images/backgroundvid.mp4" type="video/mp4">
+        <source src="{% static 'chef_ai/backgroundvid.mp4' %}" type="video/mp4">
     </video>
     
     <div class="content">
@@ -27,8 +30,14 @@
 
     <div class="search-section" id="searchSection">
         <div class="search-container">
-            <input type="text" id="searchInput">
-            <button id="generateRecipeBtn" class="submit-btn" type="submit">Generate Recipe</button>
+            <form method="POST" action="{% url 'index' %}">
+                {% csrf_token %}
+                <div class="search-container">
+                    <input type="text" id="searchInput">
+                    <input type="hidden" id="final_ingredients" name="final_ingredients">
+                    <button id="generateRecipeBtn" class="submit-btn" type="submit">Generate Recipe</button>
+                </div>
+            </form>
         </div>
         <div class="slider">
             <div class="categories">
