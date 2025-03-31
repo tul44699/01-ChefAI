@@ -27,7 +27,7 @@ def index(request):
 
         return redirect('response_recipe')
 
-    return render(request, 'newindex.html') 
+    return render(request, 'index.html') 
 
 #displays a new page with the recipe listed
 def response_recipe(request):

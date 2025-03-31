@@ -17,7 +17,7 @@
   backdrop-filter: blur(100px);
   display: flex;
   align-items: center;
-  z-index: 99;  
+  z-index: 100;  
 }
 
 .chefAI img{
@@ -227,7 +227,6 @@
 .slider{
     display: flex;
     align-items: center;
-    justify-content: center;
     overflow-x: auto;
     white-space: nowrap;
     box-sizing: border-box;
@@ -253,7 +252,7 @@
 
 .slider .categories {
     display: flex;
-    gap: 20px;
+    gap: 20px; /* Adjust gap between categories */
 }
 
 .categories {
@@ -316,6 +315,34 @@
 #generateRecipeBtn:hover{
     background-color: #e68900;
 }
+
+.loading-screen{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99; 
+}
+
+.loading-screen video {
+    width: 100vw;
+    height: 100vh;
+    object-fit:cover;
+}
+
+.loading-text {
+    position: absolute;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
 
 @media (min-aspect-ratio: 16/9){
     .back-video{
