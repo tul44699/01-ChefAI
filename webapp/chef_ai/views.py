@@ -15,31 +15,19 @@ load_dotenv()
 
 def index(request):
     if request.method == "POST":
-        form = ingredientList(request.POST)
-        if form.is_valid():
-            
-            pantry = form.cleaned_data.get('pantry',[])
-            veggies= form.cleaned_data.get('veggies',[])
-            appliances= form.cleaned_data.get('appliances',[])
-            spices= form.cleaned_data.get('spices' ,[])
+        ingredients_input = request.POST.get("final_ingredients", "")
+        selected_options = [i.strip() for i in ingredients_input.split(",") if i.strip()]
 
-            print(f"Here are the pantry items: {pantry}")
-            print(f"Here are the veggies: {veggies}")
-            print(f"Here are the appliances: {appliances}")
-            print(f"Here are the spices {spices}")
+        print(f"[POST] Final selected ingredients with quantities: {selected_options}")
 
-            
-            selected_options = pantry + veggies + appliances + spices
-            print(selected_options)
-            ai_response = feedLLM(selected_options)
-            
-            request.session['selected_options'] = selected_options
-            request.session['ai_response'] = ai_response
+        ai_response = feedLLM(selected_options)
 
-            return redirect('response_recipe')
-    else:
-        form = ingredientList()
-    return render(request, 'index.html', {'form': form})
+        request.session['selected_options'] = selected_options
+        request.session['ai_response'] = ai_response
+
+        return redirect('response_recipe')
+
+    return render(request, 'newindex.html') 
 
 #displays a new page with the recipe listed
 def response_recipe(request):
