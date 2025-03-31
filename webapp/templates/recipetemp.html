@@ -4,63 +4,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generated Recipes</title>
     <link rel="stylesheet" href="{% static 'chef_ai/response.css' %}">
+    <!-- <script type="module" src="{% static 'chef_ai/index.js' %}" defer></script> -->
+    <title>Document</title>
 </head>
-
 <body>
-    <div class="header">ChefAI</div>
-
-    <div class = "container-op">
-
-        {% if ai_response.title == "Cannot make recipe with ingredients provided" %}
-        <div class="no-recipe">
-            <h1>{{ai_response.title}}</h1>
-            <h2>You need more ingredients!</h2>
-            <h3>Additional: </h3>
-            <p class = "suggestion">
-                {% for item in ai_response.ingredients %}
-                    {{ item }} {% if not forloop.last %} | {% endif %}
-                {% endfor %}
-            </p>
+    <header class="header">
+        <div class="chefAI">
+            <a href="{% url 'index' %}">
+                <img src="{% static 'chef_ai/chef.png' %}" alt="">
+            </a>
         </div>
-        {% else %}
-            <div class = "selected-ingredients">
-                <h2>Your selected ingredients:</h3>
-                <p>
-                    {% for item in selected_options %}
-                        {{ item }} {% if not forloop.last %} | {% endif %}
-                    {% endfor %}
-                </p>
-            </div>
+    </header>
 
-            <div class = "res">
-                <h2>{{ ai_response.title }}</h2>
-                <p><strong>Cuisine:</strong> {{ ai_response.cuisine }}</p>
-                <p><strong>Time Required:</strong> {{ ai_response.time }}</p>
+    <div class="recipe-container">
+        <div class="recipe-content">
+            {% if ai_response.title == "Cannot make recipe with ingredients provided" %}
+                <div class="no-recipe">
+                    <h1>{{ ai_response.title }}</h1>
+                    <h2>You need more ingredients!</h2>
+                    <h3>Additional:</h3>
+                    <p class="suggestion">
+                        {% for item in ai_response.ingredients %}
+                            {{ item }} {% if not forloop.last %} | {% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
+            {% else %}
+                <div class="selected-ingredients">
+                    <h2>Your selected ingredients:</h2>
+                    <p>
+                        {% for item in selected_options %}
+                            {{ item }} {% if not forloop.last %} | {% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
 
-                <h2>Ingredients Used</h2>
-                <ul>
-                    {% for item in ai_response.ingredients %}
-                        <li>{{ item }}</li>
-                    {% endfor %}
-                </ul>
+                <div class="res">
+                    <h2>{{ ai_response.title }}</h2>
+                    <p><strong>Cuisine:</strong> {{ ai_response.cuisine }}</p>
+                    <p><strong>Time Required:</strong> {{ ai_response.time }}</p>
 
-                <h2>Utensils</h2>
-                <ul>
-                    {% for item in ai_response.utensils %}
-                        <li>{{ item }}</li>
-                    {% endfor %}
-                </ul>
+                    <h2>Ingredients Used</h2>
+                    <ul>
+                        {% for item in ai_response.ingredients %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
 
-                <h2>Steps</h2>
-                <ol>
-                    {% for step in ai_response.steps %}
-                        <li>{{ step }}</li>
-                    {% endfor %}
-                </ol>
-            </div>
-        {% endif %}
+                    <h2>Utensils</h2>
+                    <ul>
+                        {% for item in ai_response.utensils %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <h2>Steps</h2>
+                    <ol>
+                        {% for step in ai_response.steps %}
+                            <li>{{ step }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            {% endif %}
+        </div>
     </div>
+    <video autoplay loop muted plays-inline class="back-video">
+        <source src="{% static 'chef_ai/kitchen.mp4' %}" type="video/mp4">
+    </video>
 </body>
 </html>
