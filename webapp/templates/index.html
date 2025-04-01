@@ -1,129 +1,64 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChefAI</title>
-    <link rel="stylesheet" href="{% static 'chef_ai/design.css' %}">
+    <title>Website with Background video</title>
+    <link rel="stylesheet" href="{% static 'chef_ai/style.css' %}">
+    <script type="module" src="{% static 'chef_ai/index.js' %}" defer></script>
 </head>
-
 <body>
-    <div class="header">ChefAI</div>
-    <div class="info">
-        <p>Welcome to ChefAI!<br> Select ingredients and available appliances to generate recipes!</p>
+    <header class="header">
+        <div class="chefAI">
+            <a href="{% url 'index' %}">
+                <img src="{% static 'chef_ai/chef.png' %}" alt="">
+
+            </a>
+        </div>
+    </header>
+
+    <video autoplay loop muted plays-inline class="back-video">
+        <source src="{% static 'chef_ai/backgroundvid.mp4' %}" type="video/mp4">
+    </video>
+    
+    <div class="content">
+        <h1>Yum</h1>
+        <a href="#" id="chefItUpBtn">Let's Chef it up!</a>
     </div>
 
-    <form method="POST">
-        {%csrf_token%}
-
-        {% for field in form %}
-
-        <div class="ingredient-group">
-            <h3>{{field.label}}</h3>
-            <div class="ingredient-container"> 
-                <!--creates a styled buton for each item int the field. slice limits the number of options that appear-->
-                {% for value, label in field.field.choices|slice:":25" %}
-                <div class="ingredient" value="{{ value }}" data-value="{{ value }}"
-                    onclick="toggleCheckBox('{{value}}')">
-                    {{ label }}
-                    <input type="checkbox" name="pantry" id="{{ value }}" value="{{ value }}" class="hidden-checkbox">
+    <div class="search-section" id="searchSection">
+        <div class="search-container">
+            <form method="POST" action="{% url 'index' %}">
+                {% csrf_token %}
+                <div class="search-container">
+                    <input type="text" id="searchInput">
+                    <input type="hidden" id="final_ingredients" name="final_ingredients">
+                    <button id="generateRecipeBtn" class="submit-btn" type="submit">Generate Recipe</button>
                 </div>
-                {% endfor %}
+            </form>
+        </div>
+        <div class="slider">
+            <div class="categories">
+                <div class="selected-items-container" id="selectedItemsContainer" style="display: none;">
+                    <h2>Selected Ingredients</h2>
+                    <div class="selected-items" id="selectedItems"></div>
+                </div>
+                <div class="category" id="pantryEssentials">
+                    <h2>Pantry Essentials</h2>
+                    <div class="category-items"></div>
+                </div>
+                <div class="category" id="spices">
+                    <h2>Spices</h2>
+                    <div class="category-items"></div>
+                </div>
+                <div class="category" id="vegetablesGreens">
+                    <h2>Vegetables & Greens</h2>
+                    <div class="category-items"></div>
+                </div>
             </div>
         </div>
-        {% endfor %}
-
-        <!-- Appliances Section (Hidden by Default)
-        <div class="appliance-group hidden">
-            <h3>Which appliances do you have?</h3>
-            <div class="appliance-container">
-                {% for value, label in form.appliances.field.choices %}
-                <div class="appliance" value="{{ value }}" data-value="{{ value }}"
-                    onclick="toggleCheckBox('{{value}}')">{{ label }}
-                    <input type="checkbox" name="appliances" id="{{ value }}" value="{{ value }}"
-                        class="hidden-checkbox">
-                </div>
-                {% endfor %}
-            </div>
-        </div> -->
-
-        <div class='generate-button'>
-            <button class="submit-btn hidden" type="submit">Generate Recipes</button>
-        </div>
-
-        <input type="hidden" id="selectedIngredients" name="ingredients">
-        <input type="hidden" id="selectedAppliances" name="appliances1">
-
-    </form>
-
-    <script>
-
-        function toggleCheckBox(checkBoxId) {
-            const checkbox = document.getElementById(checkBoxId);
-            checkbox.checked = !checkbox.checked;
-            console.log(`CheckBox ${checkBoxId} is now ${checkbox.checked}`);
-        }
-        document.querySelectorAll('.ingredient').forEach(item => {
-            item.addEventListener('click', function () {
-                this.classList.toggle('selected');
-                updateSelectedIngredients();
-                showApplianceSection();
-                toggleSubmitButton();
-            });
-        });
-
-        document.querySelectorAll('.appliance').forEach(item => {
-            item.addEventListener('click', function () {
-                this.classList.toggle('selected');
-                updateSelectedAppliances();
-            });
-        });
-
-        function updateSelectedIngredients() {
-            let selected = [];
-            document.querySelectorAll('.ingredient.selected').forEach(item => {
-                selected.push(item.getAttribute('data-value'));
-            });
-            document.getElementById('selectedIngredients').value = selected.join(', ');
-        }
-
-        function updateSelectedAppliances() {
-            let selected = [];
-            document.querySelectorAll('.appliance1.selected').forEach(item => {
-                selected.push(item.getAttribute('data-value'));
-            });
-            document.getElementById('selectedAppliances').value = selected.join(', ');
-        }
-
-        function showApplianceSection() {
-            let selectedIngredients = document.querySelectorAll('.ingredient.selected');
-            let applianceSection = document.querySelector('.appliance-group');
-            if (selectedIngredients.length > 0) {
-                applianceSection.classList.remove('hidden');
-            } else {
-                applianceSection.classList.add('hidden');
-            }
-        }
-
-        function toggleSubmitButton() {
-            let selectedIngredients = document.querySelectorAll('.ingredient.selected');
-            let submitButton = document.querySelector('.submit-btn');
-            if (selectedIngredients.length > 0) {
-                submitButton.classList.remove('hidden');
-            } else {
-                submitButton.classList.add('hidden');
-            }
-        }
-
-        //     document.getElementById('submit-btn').addEventListener('click', function() {
-        //     alert("submit was clicked");
-        //     console.log("Submit button clicked");
-        // });
-    </script>
-
-
+    </div>
 </body>
-
 </html>
