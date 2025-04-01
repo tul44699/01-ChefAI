@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django import forms
 from .forms import ingredientList
 from django.conf import settings
@@ -9,6 +9,7 @@ from langchain_groq import ChatGroq
 import os
 from dotenv import load_dotenv
 import re
+from .models import Ingredient
 # Create your views here.
 
 load_dotenv()
@@ -100,3 +101,12 @@ def feedLLM(selected_options):
     # # Return the full content of the response
     # return response.content
     return parsed
+
+def search_ingredients(request):
+    # Gets the search query
+    query = request.GET.get('q', '').strip().lower()
+    # Query the database for ingredients whose name starts with the input
+    if query:
+        results = Ingredient.objects.filter(ingredient_name__istartswith=query).values_list('ingredient_name', flat=True)
+        return JsonResponse({'results': list(results)}) # Sends back the matching ingredient names as JSON
+    return JsonResponse({'results': []})
