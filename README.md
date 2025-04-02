@@ -6,18 +6,18 @@ Adding an screenshot or a mockup of your application in action would be nice.
 ![This is a screenshot.](https://github.com/cis3296s25/01-ChefAI/blob/main/chef_ai%20launch%20page.png)
 
 Features:
-• Implemented ingredient selection from a predefined list to retrieve recipes.
-• Allow users to click “Generate Recipe” after selecting ingredients, redirecting them to the
+- Implemented ingredient selection from a predefined list to retrieve recipes.
+- Allow users to click “Generate Recipe” after selecting ingredients, redirecting them to the
 response.html page.
-• Display AI-generated recipe on the response.html page, including step-by-step
+- Display AI-generated recipe on the response.html page, including step-by-step
 instructions and a list of necessary ingredients.
-• Modularize the ingredient selection form.
-• Set up basic environment configuration
-• Deploy the website to EC2 for testing and accessibility.
-• Implemented a back-to-the-home screen button as the logo.
-• Implemented a feature that allows users to search and select from a drop-down menu in
+- Modularize the ingredient selection form.
+- Set up basic environment configuration
+- Deploy the website to EC2 for testing and accessibility.
+- Implemented a back-to-the-home screen button as the logo.
+- Implemented a feature that allows users to search and select from a drop-down menu in
 the search bar.
-• Implemented a feature to let the users download a jpeg or pdf file of the generated recipe.
+- Implemented a feature to let the users download a jpeg or pdf file of the generated recipe.
 
 
 # How to run
