@@ -52,6 +52,7 @@ body{
 
 .recipe-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -71,6 +72,30 @@ body{
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     overflow-y: auto;
 }
+
+button
+{
+    margin-top: 15px;
+    padding: 15px 15px;
+    background: #ffcc00;
+    border-radius: 15px;
+}
+button:hover{
+    background: white;
+}
+
+.download-recipe{
+    display: flex;
+    flex-direction: column;
+}
+
+.download-text{
+    margin-top: 5px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #ffcc00;
+}
+
 
 .no-recipe {
     text-align: center;
