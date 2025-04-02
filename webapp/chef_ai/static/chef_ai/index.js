@@ -105,13 +105,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             suggestionBox.innerHTML = '';
+
+            
             if (data.results.length > 0) {
                 data.results.forEach(result => {
                     const suggestion = document.createElement("div"); // To make each match as a clickable div
                     suggestion.textContent = result;
+
+                    //adds button to selected ingredients
                     suggestion.addEventListener("click", () => {
                         Object.keys(ingredientCategories).forEach(categoryKey => { // Currently only checks with the hardcoded ingredient categories
                             ingredientCategories[categoryKey].forEach(item => {
+                                //First checks if item exists in the predefines list of ingredients
                                 // Selects the checkbox and adds to UI
                                 if (item.toLowerCase() === result.toLowerCase()) {
                                     const checkboxId = `${categoryKey}-${item.toLowerCase().replace(/\s+/g, '-')}`;
@@ -120,6 +125,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                         checkbox.checked = true;
                                         addSelectedItem(item, categoryKey);
                                     }
+                                }
+                                else{
+                                    //add item since it exists in db
+                                    addSelectedItem(data.results[0], data.results[0]);
                                 }
                             });
                         });
@@ -166,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Prevent duplicates
         if (document.getElementById(`selected-${item.toLowerCase().replace(/\s+/g, '-')}`)) return;
-
+        console.log(item, categoryKey);
         // Create a div for the selected ingredient
         const itemDiv = document.createElement('div');
         itemDiv.classList.add('selected-item');
