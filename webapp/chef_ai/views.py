@@ -1,14 +1,18 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django import forms
 from .forms import ingredientList
 from django.conf import settings
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from PIL import Image, ImageDraw, ImageFont
 import groq
 # from mysite.settings import LOADENV
 from langchain_groq import ChatGroq
 import os
 from dotenv import load_dotenv
 import re
+import io
 # Create your views here.
 
 load_dotenv()
@@ -21,6 +25,7 @@ def index(request):
         print(f"[POST] Final selected ingredients with quantities: {selected_options}")
 
         ai_response = feedLLM(selected_options)
+
 
         request.session['selected_options'] = selected_options
         request.session['ai_response'] = ai_response
@@ -100,3 +105,78 @@ def feedLLM(selected_options):
     # # Return the full content of the response
     # return response.content
     return parsed
+
+
+# Function to generate and download PDF
+def download_pdf(request):
+    ai_response = request.session.get('ai_response', "")
+
+    if not ai_response:
+        return redirect('response_recipe')
+
+    buffer = io.BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=letter)
+    pdf.setFont("Times-Roman", 12)  # Set font to Times New Roman
+
+    y_position = 750  # Start position for text
+
+    for key, value in ai_response.items():
+        if y_position < 50:  # Create a new page if necessary
+            pdf.showPage()
+            pdf.setFont("Times-Roman", 12)
+            y_position = 750
+
+        pdf.drawString(50, y_position, f"{key.capitalize()}:")
+        y_position -= 20  # Move down after the key
+
+        if isinstance(value, list):
+            for item in value:
+                pdf.drawString(70, y_position, f"- {item}")  # Indent list items
+                y_position -= 15  # Move down for each item
+        else:
+            pdf.drawString(70, y_position, value)
+            y_position -= 20  # Move down for the next section
+
+    pdf.save()
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename="recipe.pdf")
+
+
+# Function to generate and download JPG
+def download_jpg(request):
+    ai_response = request.session.get('ai_response', "")
+
+    if not ai_response:
+        return redirect('response_recipe')  # Redirect if no data
+
+    img = Image.new("RGB", (800, 800), "white")
+    draw = ImageDraw.Draw(img)
+
+    try:
+        font = ImageFont.truetype("arial.ttf", 20)  # Use Arial if available
+    except:
+        font = ImageFont.load_default()
+
+    y_position = 50
+    line_spacing = 25  # Adjust line spacing for better readability
+
+    for key, value in ai_response.items():
+        if y_position > 550:  # Ensure text fits within image bounds
+            break  # You may need to create a new image if content is too long
+
+        draw.text((50, y_position), f"{key.capitalize()}:", fill="black", font=font)
+        y_position += 30  # Move down after the key
+
+        if isinstance(value, list):
+            for item in value:
+                draw.text((70, y_position), f"- {item}", fill="black", font=font)  # Indent list items
+                y_position += line_spacing  # Move down for each list item
+        else:
+            draw.text((70, y_position), value, fill="black", font=font)
+            y_position += line_spacing  # Move down for the next section
+
+    buffer = io.BytesIO()
+    img.save(buffer, format="JPEG")
+    buffer.seek(0)
+    
+    return FileResponse(buffer, as_attachment=True, filename="recipe.jpg")

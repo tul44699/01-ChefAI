@@ -5,10 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'chef_ai/response.css' %}">
-    <!-- <script type="module" src="{% static 'chef_ai/index.js' %}" defer></script> -->
+    <script type="module" src="{% static 'chef_ai/index.js' %}" defer></script>
     <title>Document</title>
 </head>
 <body>
+    <script>
+        function downloadFile(type){
+            let url = type === 'pdf' ? '/download-pdf/' : '/download-jpg/';
+            window.location.href = url;
+        }
+    </script>
+
     <header class="header">
         <div class="chefAI">
             <a href="{% url 'index' %}">
@@ -68,7 +75,13 @@
                 </div>
             {% endif %}
         </div>
+        <div class = "download-recipe">
+            <p class = "download-text">Download recipe: </p>
+            <button class = "jpg" onclick="downloadFile('jpg')"><strong>JPG</strong></button>
+            <button class="pdf" onclick ="downloadFile('pdf')"><strong>PDF</strong></button>
+        </div>
     </div>
+    
     <video autoplay loop muted plays-inline class="back-video">
         <source src="{% static 'chef_ai/kitchen.mp4' %}" type="video/mp4">
     </video>
