@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, FileResponse
+from django.http import HttpResponse, JsonResponse, FileResponse
 from django import forms
 from .forms import ingredientList
 from django.conf import settings
@@ -13,6 +13,7 @@ import os
 from dotenv import load_dotenv
 import re
 import io
+from .models import Ingredient
 # Create your views here.
 
 load_dotenv()
@@ -39,7 +40,7 @@ def response_recipe(request):
     selected_options = request.session.get('selected_options', [])
     ai_response = request.session.get('ai_response', "")
 
-    return render(request, 'recipetemp.html', {'selected_options': selected_options, 'ai_response': ai_response})
+    return render(request, 'recipeResults.html', {'selected_options': selected_options, 'ai_response': ai_response})
 
 
 def feedLLM(selected_options):
@@ -180,3 +181,11 @@ def download_jpg(request):
     buffer.seek(0)
     
     return FileResponse(buffer, as_attachment=True, filename="recipe.jpg")
+def search_ingredients(request):
+    # Gets the search query
+    query = request.GET.get('q', '').strip().lower()
+    # Query the database for ingredients whose name starts with the input
+    if query:
+        results = Ingredient.objects.filter(ingredient_name__istartswith=query).values_list('ingredient_name', flat=True)
+        return JsonResponse({'results': list(results)}) # Sends back the matching ingredient names as JSON
+    return JsonResponse({'results': []})

@@ -14,7 +14,7 @@ body{
   top: 0;
   left: 0;
   right: 0;
-  height: 75px;
+  height: 125px;
   width: 100%;
   padding: 5px 25px;
   backdrop-filter: blur(100px);
@@ -24,8 +24,8 @@ body{
 }
 
 .chefAI img{
-    margin-top: 10px;
-    width: 200px;
+    margin-top: 5px;
+    max-width: 200px;
     height: 200px;
 }
 
