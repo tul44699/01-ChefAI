@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.http import HttpResponse, JsonResponse, FileResponse
 from django import forms
 from .forms import ingredientList
@@ -209,3 +209,11 @@ def userRegistration(request):
         form = UserCreationForm()
     
     return render(request, "registration/register.html", {"form":form})
+
+def logoutUser(request):
+    logout(request)
+    return redirect('index')
+
+def getProfile(request):
+    
+    return render(request, 'registration/profile.html')

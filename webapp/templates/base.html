@@ -1,32 +1,78 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>{% block title %}Chef AI{% endblock %}</title>
+    <title>{% block title %}Chef AI{% endblock %}</title>
 
-<link rel="icon" type="image/x-icon" href="{% static 'chef_ai/icons/favicon.ico' %}">
-<link rel="stylesheet" href="{% static 'chef_ai/styles/style.css' %}">
-<link rel="stylesheet" href="{% static 'chef_ai/styles/logon.css' %}">
-<script type="module" src="{% static 'chef_ai/js/index.js' %}" defer></script>
+    <link rel="icon" type="image/x-icon" href="{% static 'chef_ai/icons/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'chef_ai/styles/style.css' %}">
+    <link rel="stylesheet" href="{% static 'chef_ai/styles/logon.css' %}">
+    <link rel="stylesheet" href="{% static 'chef_ai/styles/response.css' %}">
+    <link rel="stylesheet" href="{% static 'chef_ai/styles/navbar.css' %}">
+    <script type="module" src="{% static 'chef_ai/js/index.js' %}" defer></script>
+    <script type="module" src="{% static 'chef_ai/js/logout.js' %}"></script>
+    <script type="module" src="{% static 'chef_ai/js/navbar.js' %}"></script>
 </head>
-<body>
+<!-- made inline styling because link wont work when web hosting otherwise.
+ install Django Template Support to ignore red lines
+  the image will be hidden by videos if they exist-->
 
-  <header class="header">
-    <div class="chefAI">
-        <a href="{% url 'index' %}">
-            <img src="{% static 'chef_ai/images/AICHEF400X.png' %}" alt="">
-        </a>
-    </div>
-    <div class="navBar">
-        <a href="{% url 'login' %}">Log In</a>
-    </div>
-</header>
-<video autoplay loop muted plays-inline class="back-video">
-    <source src="{% static 'chef_ai/videos/backgroundvid.mp4' %}" type="video/mp4">
-</video>
-{% block content %}
-{% endblock %}
+<body 
+    style="background-image: url('{% static 'chef_ai/images/spoonsbg.jpg' %}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;">
+
+
+    <header class="header">
+        <div class="chefAI">
+            <a href="{% url 'index' %}">
+                <img src="{% static 'chef_ai/images/AICHEF400X.png' %}" alt="">
+            </a>
+        </div>
+        <div class="navbar">
+            {% if user.is_authenticated %}
+            <div class="dropdown">
+                <img class="userLogo dropbtn" src="{% static 'chef_ai/images/defaultLogo.png' %}">
+                <div class="dropdown-content">
+                    <ul>                     
+                        <li><a href="{% url 'profile' %}">View Profile</a></li>
+                        <li><a id="logoutBtn" 
+                            data-logout-url="{% url 'logout' %}" 
+                            data-csrf-token="{{ csrf_token }}">Logout</a></li>
+                            <!-- data tags needed to make django templating work in js file -->
+                        <li class="username">Logged in as: {{ request.user.username }}</li>
+                    </ul>
+                </div>
+            </div>
+
+            {% else %}
+            <a class="loginButton" href="{% url 'login' %}">Log In</a>
+            {% endif %}
+        </div>
+    </header>
+    {% if request.path == '/chefai/' or request.path == '/'%}<!--plays the video on launch page only-->
+    <video autoplay loop muted plays-inline class="back-video">
+        <source src="{% static 'chef_ai/videos/backgroundvid.mp4' %}" type="video/mp4">
+    </video>
+    {% endif %}
+    <!--plays the video on recipe page only-->
+    {% if request.path == '/chefai/recipe/' %}
+    <video autoplay loop muted plays-inline class="back-video">
+        <source src="{% static 'chef_ai/videos/kitchen.mp4' %}" type="video/mp4">
+    </video>
+    {% endif %}
+
+    <!--defaults to static image on other pages-->
+
+    {% block content %}
+    {% endblock %}
+
+
+    </script>
+    
 </body>
+
 </html>
-
-

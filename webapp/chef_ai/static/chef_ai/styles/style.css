@@ -6,6 +6,7 @@
 }
 
 
+
 .header{
   position: fixed;
   top: 0;
@@ -24,15 +25,9 @@
 .header .navBar {
     text-align: right;
 }
-.header .navBar a {
-    display:inline-block;
-    padding: 1rem;
-    background-color: #FFB949;
-    color:white;
-    text-decoration: none;
-    border-radius: 5rem;
-    font-weight: bold;
-}
+/* making edits start here */
+
+/* ENDING edits here */
 
 .chefAI img{
     margin-top: 5px;
@@ -364,6 +359,7 @@
     .back-video{
         width: 100%;
         height: auto;
+        object-fit: cover;
     }
 }
 
@@ -372,6 +368,7 @@
     .back-video{
         width: auto;
         height: 100%;
+        object-fit: cover;
     }
 }
 
@@ -455,4 +452,5 @@
     border-radius: 4px;
     font-size: 14px;
   }
+
   
