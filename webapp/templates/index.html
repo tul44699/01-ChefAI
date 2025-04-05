@@ -1,29 +1,6 @@
+{% extends 'base.html' %}
 {% load static %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chef AI</title>
-    <link rel="icon" type="image/x-icon" href="{% static 'chef_ai/favicon.ico' %}">
-    <link rel="stylesheet" href="{% static 'chef_ai/style.css' %}">
-    <script type="module" src="{% static 'chef_ai/index.js' %}" defer></script>
-</head>
-<body>
-    <header class="header">
-        <div class="chefAI">
-            <a href="{% url 'index' %}">
-                <img src="{% static 'chef_ai/AICHEF400X.png' %}" alt="">
-
-            </a>
-        </div>
-    </header>
-
-    <video autoplay loop muted plays-inline class="back-video">
-        <source src="{% static 'chef_ai/backgroundvid.mp4' %}" type="video/mp4">
-    </video>
-    
+{% block content %}
     <div class="content">
         <h1>Yum</h1>
         <a href="#" id="chefItUpBtn">Let's Chef it up!</a>
@@ -64,5 +41,6 @@
             </div>
         </div>
     </div>
+{% endblock %}
 </body>
 </html>

@@ -16,8 +16,22 @@
   padding: 5px 25px;
   backdrop-filter: blur(100px);
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  z-index: 100;  
+  z-index: 100;
+}
+
+.header .navBar {
+    text-align: right;
+}
+.header .navBar a {
+    display:inline-block;
+    padding: 1rem;
+    background-color: #FFB949;
+    color:white;
+    text-decoration: none;
+    border-radius: 5rem;
+    font-weight: bold;
 }
 
 .chefAI img{
