@@ -5,23 +5,17 @@
         <h1>Yum</h1>
         <a href="#" id="chefItUpBtn">Let's Chef it up!</a>
     </div>
-
-    <div class="search-section" id="searchSection">
-        <div class="search-container">
+        <div class="search-wrapper">
             <form method="POST" action="{% url 'index' %}">
                 {% csrf_token %}
-                <div class="search-container">
-                    <div class="search-wrapper">
-                        <input type="text" id="searchInput" autocomplete="off">
-                        <div id="searchSuggestions" class="suggestion-box"></div>
-                    </div> 
+                    <input type="text" id="searchInput" autocomplete="off">
+                    <div id="searchSuggestions" class="suggestion-box"></div> 
                     <input type="hidden" id="final_ingredients" name="final_ingredients">
                     <button id="generateRecipeBtn" class="submit-btn" type="submit">Generate Recipe</button>
-                </div>
             </form>
         </div>
+        
         <div class="slider">
-            <div class="categories">
                 <div class="selected-items-container" id="selectedItemsContainer" style="display: none;">
                     <h2>Selected Ingredients</h2>
                     <div class="selected-items" id="selectedItems"></div>
@@ -38,9 +32,7 @@
                     <h2>Vegetables & Greens</h2>
                     <div class="category-items"></div>
                 </div>
-            </div>
         </div>
-    </div>
 {% endblock %}
 </body>
 </html>

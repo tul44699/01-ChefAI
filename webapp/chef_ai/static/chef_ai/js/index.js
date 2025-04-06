@@ -3,7 +3,7 @@ let placeholder = "";
 const txt = "Search ingredients...";
 const speed = 300;
 
-function type(){
+function type() {
     placeholder += txt.charAt(i);
     document.getElementById('searchInput').setAttribute("placeholder", placeholder);
     i++;
@@ -14,17 +14,17 @@ type();
 
 const ingredientCategories = {
     pantryEssentials: [
-        'Rice', 'Pasta', 'Flour', 'Sugar', 
-        'Salt', 'Olive Oil', 'Vinegar', 
+        'Rice', 'Pasta', 'Flour', 'Sugar',
+        'Salt', 'Olive Oil', 'Vinegar',
         'Bread', 'Cereal'
     ],
     spices: [
-        'Black Pepper', 'Paprika', 'Cumin', 
+        'Black Pepper', 'Paprika', 'Cumin',
         'Oregano', 'Garlic Powder', 'Cinnamon',
         'Turmeric', 'Chili Powder', 'Basil'
     ],
     vegetablesGreens: [
-        'Onions', 'Tomatoes', 'Spinach', 
+        'Onions', 'Tomatoes', 'Spinach',
         'Carrots', 'Broccoli', 'Lettuce',
         'Potato', 'Bell Pepper', 'Cucumber'
     ]
@@ -33,25 +33,25 @@ const ingredientCategories = {
 function createCategoryItems() {
     Object.keys(ingredientCategories).forEach(categoryKey => {
         const categoryContainer = document.querySelector(`#${categoryKey} .category-items`);
-        
+
         if (!categoryContainer) return; // Prevent errors if container is missing
-        
+
         ingredientCategories[categoryKey].forEach(item => {
             const itemWrapper = document.createElement('div');
             itemWrapper.classList.add('category-item');
-            
+
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.id = `${categoryKey}-${item.toLowerCase().replace(/\s+/g, '-')}`;
             checkbox.name = item;
-            
+
             const label = document.createElement('label');
             label.htmlFor = checkbox.id;
             label.textContent = item;
-            
+
             itemWrapper.appendChild(checkbox);
             itemWrapper.appendChild(label);
-            
+
             categoryContainer.appendChild(itemWrapper);
         });
     });
@@ -66,6 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedItemsDiv = document.getElementById('selectedItems');
     const video = document.querySelector('.back-video');
     const form = document.querySelector("form");
+
+
 
     form.addEventListener("submit", (e) => {
         if (document.activeElement === searchInput) {
@@ -98,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             suggestionBox.style.display = "none";
             return;
         }
-        
+
         // Sends a request to the backend
         try {
             const response = await fetch(`/search/?q=${encodeURIComponent(query)}`);
@@ -106,11 +108,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             suggestionBox.innerHTML = '';
 
-            
+
             if (data.results.length > 0) {
                 data.results.forEach(result => {
                     const suggestion = document.createElement("div"); // To make each match as a clickable div
                     suggestion.textContent = result;
+                    suggestion.classList.add("suggestion-ingredient");
 
                     //adds button to selected ingredients
                     suggestion.addEventListener("click", () => {
@@ -126,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         addSelectedItem(item, categoryKey);
                                     }
                                 }
-                                else{
+                                else {
                                     //add item since it exists in db
                                     addSelectedItem(data.results[0], data.results[0]);
                                 }
@@ -156,18 +159,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Add event listeners for manual checkbox clicks
-    document.querySelectorAll('.category-items').forEach(category => {
-        category.addEventListener('change', (e) => {
-            if (e.target.type === 'checkbox') {
-                if (e.target.checked) {
-                    addSelectedItem(e.target.name, e.target.id.split('-')[0]);
-                } else {
-                    removeSelectedItem(e.target.name);
-                }
+    //allows the entire ingredient div to be clickable
+    document.querySelectorAll('.category-item').forEach(categoryItem => {
+        categoryItem.addEventListener('click', (e) => {
+            // Prevent default label behavior
+            e.preventDefault();
+    
+            const checkbox = categoryItem.querySelector('input[type="checkbox"]');
+            if (!checkbox) return;
+    
+            // Toggle checkbox manually
+            checkbox.checked = !checkbox.checked;
+    
+            const item = checkbox.name;
+            const categoryKey = checkbox.id.split('-')[0];
+            const selectedId = `selected-${item.toLowerCase().replace(/\s+/g, '-')}`;
+            const alreadyAdded = document.getElementById(selectedId);
+    
+            if (checkbox.checked && !alreadyAdded) {
+                addSelectedItem(item, categoryKey);
+                categoryItem.style.backgroundColor='#e68900';
+            } else if (!checkbox.checked && alreadyAdded) {
+                removeSelectedItem(item);
+                categoryItem.style.backgroundColor='#FFB949';
             }
         });
     });
+    
 
     // Function to add selected item to the top div
     function addSelectedItem(item, categoryKey) {
@@ -187,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const quantityInput = document.createElement('input');
         quantityInput.type = 'text';
-        quantityInput.placeholder = 'Qty'
+        quantityInput.placeholder = 'Quantity';
         quantityInput.id = `quantity-${item.toLowerCase().replace(/\s+/g, '-')}`;
 
         quantityContainer.appendChild(quantityInput);
@@ -225,6 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function removeSelectedItem(item) {
         const itemDiv = document.getElementById(`selected-${item.toLowerCase().replace(/\s+/g, '-')}`);
         if (itemDiv) {
+            console.log("removed item: ", itemDiv);
             itemDiv.remove();
             checkIfEmpty();
         }
@@ -240,15 +259,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById("generateRecipeBtn").addEventListener("click", () => {
         const items = document.querySelectorAll('.selected-item');
         const final = [];
-    
+
         items.forEach(item => {
             const name = item.querySelector('.ingredient-name').textContent;
             const qty = item.querySelector('input[type="text"]').value || '1';
             final.push(`${name} (${qty})`);
         });
-    
+
         document.getElementById("final_ingredients").value = final.join(", ");
         console.log("Final Ingredients:", final); // For debugging
     });
-    
+
 });
