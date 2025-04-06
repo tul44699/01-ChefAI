@@ -3,7 +3,23 @@ ChefAI is a web application that helps users generate recipes based on the ingre
 Whether you're an inexperienced cook or looking for creative meal ideas, ChefAI provides AI-generated recipes tailored to your available ingredients.
 Adding an screenshot or a mockup of your application in action would be nice.  
 
-![This is a screenshot.](initial_demo_image.png)
+![This is a screenshot.](https://github.com/cis3296s25/01-ChefAI/blob/main/chef_ai%20launch%20page.png)
+
+Features:
+- Implemented ingredient selection from a predefined list to retrieve recipes.
+- Allow users to click “Generate Recipe” after selecting ingredients, redirecting them to the
+response.html page.
+- Display AI-generated recipe on the response.html page, including step-by-step
+instructions and a list of necessary ingredients.
+- Modularize the ingredient selection form.
+- Set up basic environment configuration
+- Deploy the website to EC2 for testing and accessibility.
+- Implemented a back-to-the-home screen button as the logo.
+- Implemented a feature that allows users to search and select from a drop-down menu in
+the search bar.
+- Implemented a feature to let the users download a jpeg or pdf file of the generated recipe.
+
+
 # How to run
 To run the ChefAI locally:
 1. Ensure Python3 is installed on development computer
@@ -64,4 +80,4 @@ a. python manage.py runserver
 http://127.0.0.1:8000/    
 ```
 Here is a deployed version of our current app:
-[Chef-AI](http://18.188.136.14/)
+[Chef-AI](http://18.216.183.6/)
