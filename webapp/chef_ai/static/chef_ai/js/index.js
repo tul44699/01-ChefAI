@@ -114,7 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     //adds button to selected ingredients
                     suggestion.addEventListener("click", () => {
-                        Object.keys(ingredientCategories).forEach(categoryKey => { // Currently only checks with the hardcoded ingredient categories
+                        let matched = false;
+                        Object.keys(ingredientCategories).forEach(categoryKey => { // Trys to match with predefined ingredientCategories
                             ingredientCategories[categoryKey].forEach(item => {
                                 //First checks if item exists in the predefines list of ingredients
                                 // Selects the checkbox and adds to UI
@@ -124,14 +125,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (checkbox && !checkbox.checked) {
                                         checkbox.checked = true;
                                         addSelectedItem(item, categoryKey);
+                                        matched = true;
                                     }
-                                }
-                                else{
-                                    //add item since it exists in db
-                                    addSelectedItem(data.results[0], data.results[0]);
                                 }
                             });
                         });
+                        // Treats non-matches in the ingredientCategories as a valid DB result
+                        if (!matched) {
+                            addSelectedItem(result, "db");
+                        }
+
                         // Clears input and hides dropdown after user clicks a suggestion
                         searchInput.value = '';
                         suggestionBox.innerHTML = '';
