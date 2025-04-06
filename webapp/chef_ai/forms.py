@@ -1,5 +1,7 @@
 from django import forms
 from chef_ai.models import Ingredient
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 class ingredientList(forms.Form):
     
@@ -12,3 +14,12 @@ class ingredientList(forms.Form):
         field_name = f"{type.upper()}"
         locals()[field_name] = forms.MultipleChoiceField(choices = choices, widget=forms.CheckboxSelectMultiple, required=False)
     
+
+
+class UserRegistration(UserCreationForm):
+    email = forms.EmailField(required=True)
+    
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+        

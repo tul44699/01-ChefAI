@@ -21,4 +21,5 @@ urlpatterns = [
     path("", include("chef_ai.urls")),
     path("chefai/", include("chef_ai.urls")),
     path('admin/', admin.site.urls),
+    path("accounts/", include("django.contrib.auth.urls")),
 ]

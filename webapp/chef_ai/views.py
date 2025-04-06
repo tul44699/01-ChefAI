@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, logout
 from django.http import HttpResponse, JsonResponse, FileResponse
 from django import forms
 from .forms import ingredientList
@@ -181,6 +183,8 @@ def download_jpg(request):
     buffer.seek(0)
     
     return FileResponse(buffer, as_attachment=True, filename="recipe.jpg")
+
+
 def search_ingredients(request):
     # Gets the search query
     query = request.GET.get('q', '').strip().lower()
@@ -189,3 +193,27 @@ def search_ingredients(request):
         results = Ingredient.objects.filter(ingredient_name__istartswith=query).values_list('ingredient_name', flat=True)
         return JsonResponse({'results': list(results)}) # Sends back the matching ingredient names as JSON
     return JsonResponse({'results': []})
+
+
+# User Registration
+def userRegistration(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+                user = form.save()
+                #logs user in automatically
+                login(request, user)
+                
+                return redirect('index')
+    else:
+        form = UserCreationForm()
+    
+    return render(request, "registration/register.html", {"form":form})
+
+def logoutUser(request):
+    logout(request)
+    return redirect('index')
+
+def getProfile(request):
+    
+    return render(request, 'registration/profile.html')
