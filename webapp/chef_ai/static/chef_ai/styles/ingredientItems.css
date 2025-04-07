@@ -5,10 +5,24 @@
     align-items: center;
     margin:2rem;
     overflow-x: auto;
+    flex-wrap: wrap;
 
 }
+.selected-items-container::-webkit-scrollbar{
+    width: .5rem;
+}
 
+.selected-items-container::-webkit-scrollbar-track{
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 10px;
+}
 
+.selected-items-container::-webkit-scrollbar-thumb {
+    background: #ffcc00;
+    border-radius: 10px;
+}
+
+/* Gray box that holds the button container*/
 .slider .category {
     border-radius: 2rem;
     min-width: 15rem;
@@ -35,7 +49,12 @@
     color:white;
     text-shadow: 2px 2px 4px black;
 }
-.slider .category .category-item:hover {
+.slider .category .category-item:hover{
+    background-color: #e68900;
+    cursor: pointer;
+}
+
+.slider .category .category-item.selected {
     background-color: #e68900;
     cursor: pointer;
 }
@@ -58,7 +77,8 @@
 .slider .selected-items-container {
     border-radius: 2rem;
     min-width: 15rem;
-    margin:0 auto;
+    margin:.5rem;
+    padding:2rem;
     background-color:rgba(255, 255, 255, 0.336);
     
     
@@ -67,11 +87,10 @@
 .slider .selected-items-container h2{
     color:#FFB949;
     text-align: center;
-    word-wrap: break-word;
     text-shadow: 2px 2px 4px black;
 }
 
-.slider .selected-items .selected-item {
+.slider .selected-items-container .selected-item {
     display:flex;
     flex-direction: center;
     justify-content: center;

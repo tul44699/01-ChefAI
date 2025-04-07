@@ -178,10 +178,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
             if (checkbox.checked && !alreadyAdded) {
                 addSelectedItem(item, categoryKey);
-                categoryItem.style.backgroundColor='#e68900';
+                categoryItem.classList.add("selected");
             } else if (!checkbox.checked && alreadyAdded) {
                 removeSelectedItem(item);
-                categoryItem.style.backgroundColor='#FFB949';
+                categoryItem.classList.remove("selected");
             }
         });
     });
@@ -226,8 +226,17 @@ document.addEventListener('DOMContentLoaded', () => {
         removeBtn.classList.add('remove-btn');
         removeBtn.addEventListener('click', () => {
             itemDiv.remove();
-            document.getElementById(`${categoryKey}-${item.toLowerCase().replace(/\s+/g, '-')}`).checked = false;
-            checkIfEmpty();
+
+            const checkbox = document.getElementById(`${categoryKey}-${item.toLowerCase().replace(/\s+/g, '-')}`);
+            if (checkbox) {
+                checkbox.checked = false;
+        
+                
+                const categoryItem = checkbox.closest('.category-item');
+                if (categoryItem) {
+                    categoryItem.classList.remove('selected');
+                }
+            }
         });
 
         // Append the remove button to the itemDiv
