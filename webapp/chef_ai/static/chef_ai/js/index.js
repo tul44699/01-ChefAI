@@ -58,6 +58,10 @@ function createCategoryItems() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // For tracking highlighted sugguestions
+    let selectedIndex = -1; 
+    let suggestions = [];
+    
     const chefItUpBtn = document.getElementById('chefItUpBtn');
     const mainContent = document.querySelector('.content');
     const searchSection = document.getElementById('searchSection');
@@ -94,6 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Search and select ingredients
     const suggestionBox = document.getElementById("searchSuggestions");
     searchInput.addEventListener('keyup', async (event) => {
+        if (["ArrowUp", "ArrowDown", "Enter"].includes(event.key)) return;
+
         const query = searchInput.value.trim(); // Grabs the user's input and remove any extra spaces
         // Ignores unneccessary inputs
         if (query.length < 2) {
@@ -107,6 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             suggestionBox.innerHTML = '';
+            selectedIndex = -1;
+            suggestions = [];
 
 
             if (data.results.length > 0) {
@@ -117,7 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     //adds button to selected ingredients
                     suggestion.addEventListener("click", () => {
-                        Object.keys(ingredientCategories).forEach(categoryKey => { // Currently only checks with the hardcoded ingredient categories
+                        let matched = false;
+                        Object.keys(ingredientCategories).forEach(categoryKey => { // Trys to match with predefined ingredientCategories
                             ingredientCategories[categoryKey].forEach(item => {
                                 //First checks if item exists in the predefines list of ingredients
                                 // Selects the checkbox and adds to UI
@@ -127,20 +136,30 @@ document.addEventListener('DOMContentLoaded', () => {
                                     if (checkbox && !checkbox.checked) {
                                         checkbox.checked = true;
                                         addSelectedItem(item, categoryKey);
+                                        matched = true;
                                     }
                                 }
+<<<<<<< HEAD
                                 else {
                                     //add item since it exists in db
                                     addSelectedItem(data.results[0], data.results[0]);
                                 }
+=======
+>>>>>>> origin/main
                             });
                         });
+                        // Treats non-matches in the ingredientCategories as a valid DB result
+                        if (!matched) {
+                            addSelectedItem(result, "db");
+                        }
+
                         // Clears input and hides dropdown after user clicks a suggestion
                         searchInput.value = '';
                         suggestionBox.innerHTML = '';
                         suggestionBox.style.display = "none";
                     });
                     suggestionBox.appendChild(suggestion);
+                    suggestions.push(suggestion); // Stores suggestion for keyboard use
                 });
                 suggestionBox.style.display = "block";
             } else {
@@ -152,6 +171,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    searchInput.addEventListener("keydown", (event) => {
+        if (suggestionBox.style.display === "none") return;
+
+        if (event.key === "ArrowDown") {
+            event.preventDefault();
+            selectedIndex = (selectedIndex + 1) % suggestions.length; // Loops to first after last
+            updateHighlight();
+        } else if (event.key === "ArrowUp") {
+            event.preventDefault();
+            selectedIndex = (selectedIndex - 1 + suggestions.length) % suggestions.length; // Loops to last from first
+            updateHighlight();
+        } else if (event.key === "Enter") {
+            if (selectedIndex >= 0 && suggestions[selectedIndex]) {
+                suggestions[selectedIndex].click(); // Triggers click on highlighted suggestion
+                event.preventDefault();
+            }
+        }
+    })
+
     // Hides the dropdown if user clicks anywhere on the page
     document.addEventListener("click", (e) => {
         if (!searchInput.contains(e.target) && !suggestionBox.contains(e.target)) {
@@ -159,6 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+<<<<<<< HEAD
     //allows the entire ingredient div to be clickable
     document.querySelectorAll('.category-item').forEach(categoryItem => {
         categoryItem.addEventListener('click', (e) => {
@@ -182,6 +221,29 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (!checkbox.checked && alreadyAdded) {
                 removeSelectedItem(item);
                 categoryItem.classList.remove("selected");
+=======
+    // Highlights the currently selected suggestion based on selectedIndex
+    function updateHighlight() {
+        suggestions.forEach((s, index) => {
+            if (index === selectedIndex) {
+                s.classList.add("highlighted");
+                s.scrollIntoView({ block: "nearest", behavior: "smooth" });
+            } else {
+                s.classList.remove("highlighted");
+            }
+        })
+    }
+
+    // Add event listeners for manual checkbox clicks
+    document.querySelectorAll('.category-items').forEach(category => {
+        category.addEventListener('change', (e) => {
+            if (e.target.type === 'checkbox') {
+                if (e.target.checked) {
+                    addSelectedItem(e.target.name, e.target.id.split('-')[0]);
+                } else {
+                    removeSelectedItem(e.target.name);
+                }
+>>>>>>> origin/main
             }
         });
     });
