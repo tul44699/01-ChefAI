@@ -1,5 +1,5 @@
 
-/* .back-img{
+.back-img{
     position: fixed;
     top: 0;
     right: 0;
@@ -34,9 +34,9 @@
     color: #fff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     overflow-y: auto;
-} */
+} 
 
-/* button
+ button
 {
     margin-top: 15px;
     padding: 15px 15px;
@@ -113,4 +113,4 @@ li {
         width: 120px;
         height: 120px;
     }
-} */
+}

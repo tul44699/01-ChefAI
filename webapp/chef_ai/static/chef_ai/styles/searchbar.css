@@ -92,6 +92,11 @@
     border-radius: .2rem;
 }
 
+.suggestion-box .highlighted {
+    background-color: #ffcc00;
+    color: black;
+}
+
 
 /* Search bar turns into a row based layout on desktop view*/
 @media(min-width: 768px){

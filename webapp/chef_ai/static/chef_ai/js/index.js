@@ -139,13 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                         matched = true;
                                     }
                                 }
-<<<<<<< HEAD
-                                else {
-                                    //add item since it exists in db
-                                    addSelectedItem(data.results[0], data.results[0]);
-                                }
-=======
->>>>>>> origin/main
+                                // else {
+                                //     //add item since it exists in db
+                                //     addSelectedItem(data.results[0], data.results[0]);
+                                // }
                             });
                         });
                         // Treats non-matches in the ingredientCategories as a valid DB result
@@ -170,6 +167,18 @@ document.addEventListener('DOMContentLoaded', () => {
             suggestionBox.style.display = "none";
         }
     });
+
+    // Highlights the currently selected suggestion based on selectedIndex
+    function updateHighlight() {
+        suggestions.forEach((s, index) => {
+            if (index === selectedIndex) {
+                s.classList.add("highlighted");
+                s.scrollIntoView({ block: "nearest", behavior: "smooth" });
+            } else {
+                s.classList.remove("highlighted");
+            }
+        })
+    }
 
     searchInput.addEventListener("keydown", (event) => {
         if (suggestionBox.style.display === "none") return;
@@ -197,7 +206,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-<<<<<<< HEAD
     //allows the entire ingredient div to be clickable
     document.querySelectorAll('.category-item').forEach(categoryItem => {
         categoryItem.addEventListener('click', (e) => {
@@ -221,29 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (!checkbox.checked && alreadyAdded) {
                 removeSelectedItem(item);
                 categoryItem.classList.remove("selected");
-=======
-    // Highlights the currently selected suggestion based on selectedIndex
-    function updateHighlight() {
-        suggestions.forEach((s, index) => {
-            if (index === selectedIndex) {
-                s.classList.add("highlighted");
-                s.scrollIntoView({ block: "nearest", behavior: "smooth" });
-            } else {
-                s.classList.remove("highlighted");
-            }
-        })
-    }
-
-    // Add event listeners for manual checkbox clicks
-    document.querySelectorAll('.category-items').forEach(category => {
-        category.addEventListener('change', (e) => {
-            if (e.target.type === 'checkbox') {
-                if (e.target.checked) {
-                    addSelectedItem(e.target.name, e.target.id.split('-')[0]);
-                } else {
-                    removeSelectedItem(e.target.name);
-                }
->>>>>>> origin/main
             }
         });
     });
