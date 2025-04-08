@@ -5,11 +5,21 @@
 <head>
     <title>{% block title %}Chef AI{% endblock %}</title>
 
+    {% block background_Style %}
+    {% endblock %}
+
     <link rel="icon" type="image/x-icon" href="{% static 'chef_ai/icons/favicon.ico' %}">
-    <link rel="stylesheet" href="{% static 'chef_ai/styles/style.css' %}">
+
+                        <!--CSS files go below-->
+    <link rel="stylesheet" href="{% static 'chef_ai/styles/base.css' %}">
+    <link rel="stylesheet" href="{% static 'chef_ai/styles/header.css' %}">
+    <link rel="stylesheet" href="{% static 'chef_ai/styles/launchpage.css' %}">
     <link rel="stylesheet" href="{% static 'chef_ai/styles/logon.css' %}">
-    <link rel="stylesheet" href="{% static 'chef_ai/styles/response.css' %}">
-    <link rel="stylesheet" href="{% static 'chef_ai/styles/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'chef_ai/styles/response.css' %}"> 
+    <link rel="stylesheet" href="{% static 'chef_ai/styles/searchbar.css' %}">
+    <link rel="stylesheet" href="{% static 'chef_ai/styles/ingredientItems.css' %}">
+
+                    <!--Javascript files go below-->
     <script type="module" src="{% static 'chef_ai/js/index.js' %}" defer></script>
     <script type="module" src="{% static 'chef_ai/js/logout.js' %}"></script>
     <script type="module" src="{% static 'chef_ai/js/navbar.js' %}"></script>
@@ -18,14 +28,7 @@
  install Django Template Support to ignore red lines
   the image will be hidden by videos if they exist-->
 
-<body 
-    style="background-image: url('{% static 'chef_ai/images/spoonsbg.jpg' %}');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        height: 100vh;">
-
-
+<body> 
     <header class="header">
         <div class="chefAI">
             <a href="{% url 'index' %}">
@@ -35,19 +38,21 @@
         <div class="navbar">
             {% if user.is_authenticated %}
             <div class="dropdown">
+                <div class="userContainer">
                 <img class="userLogo dropbtn" src="{% static 'chef_ai/images/defaultLogo.png' %}">
+                <p>{{ request.user.username }}</p>
+                </div>
                 <div class="dropdown-content">
                     <ul>                     
                         <li><a href="{% url 'profile' %}">View Profile</a></li>
-                        <li><a id="logoutBtn" 
+                        <li><a href="#" id="logoutBtn" 
                             data-logout-url="{% url 'logout' %}" 
                             data-csrf-token="{{ csrf_token }}">Logout</a></li>
                             <!-- data tags needed to make django templating work in js file -->
-                        <li class="username">Logged in as: {{ request.user.username }}</li>
+                        {% comment %} <li class="username">Logged in as: {{ request.user.username }}</li> {% endcomment %}
                     </ul>
                 </div>
             </div>
-
             {% else %}
             <a class="loginButton" href="{% url 'login' %}">Log In</a>
             {% endif %}
@@ -60,18 +65,15 @@
     {% endif %}
     <!--plays the video on recipe page only-->
     {% if request.path == '/chefai/recipe/' %}
-    <video autoplay loop muted plays-inline class="back-video">
-        <source src="{% static 'chef_ai/videos/kitchen.mp4' %}" type="video/mp4">
-    </video>
+    
     {% endif %}
 
     <!--defaults to static image on other pages-->
-
+    <div class="root">
     {% block content %}
     {% endblock %}
+    </div>
 
-
-    </script>
     
 </body>
 

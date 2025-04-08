@@ -1,25 +1,37 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block background_Style %}
+    <style>
+        body{
+            background-image: url('{% static 'chef_ai/images/Countertop.png' %}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+        }
+    </style>
+{% endblock %}
+<script>
+    const STATIC_IMAGE = "{% static 'chef_ai/images/Countertop.png' %}";
+</script>
+
 {% block content %}
     <div class="content">
         <h1>Yum</h1>
         <a href="#" id="chefItUpBtn">Let's Chef it up!</a>
     </div>
-
-    <div class="search-section" id="searchSection">
-        <div class="search-container">
+    <div id="searchSection" style="display: none;">
+        <div class="search-wrapper">
             <form method="POST" action="{% url 'index' %}">
                 {% csrf_token %}
-                <div class="search-container">
-                    <div class="search-wrapper">
-                        <input type="text" id="searchInput" autocomplete="off">
-                        <div id="searchSuggestions" class="suggestion-box"></div>
-                    </div> 
+                    <input type="text" id="searchInput" autocomplete="off">
+                    <div id="searchSuggestions" class="suggestion-box"></div> 
                     <input type="hidden" id="final_ingredients" name="final_ingredients">
                     <button id="generateRecipeBtn" class="submit-btn" type="submit">Generate Recipe</button>
-                </div>
-            </form>
+                </form>
         </div>
+        
         <div class="slider">
             <div class="categories">
                 <div class="selected-items-container" id="selectedItemsContainer" style="display: none;">
@@ -35,12 +47,13 @@
                     <div class="category-items"></div>
                 </div>
                 <div class="category" id="vegetablesGreens">
-                    <h2>Vegetables & Greens</h2>
+                    <h2>Vegetables</h2>
                     <div class="category-items"></div>
                 </div>
             </div>
         </div>
     </div>
+        
 {% endblock %}
 </body>
 </html>

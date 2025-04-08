@@ -1,41 +1,4 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
-body{
-    position: relative;
-    font-size: 12px;
-}
-.header{
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 125px;
-  width: 100%;
-  padding: 5px 25px;
-  backdrop-filter: blur(100px);
-  display: flex;
-  align-items: center;
-  z-index: 100;  
-}
-
-.chefAI img{
-    margin-top: 5px;
-    max-width: 200px;
-    height: 200px;
-}
-
-.back-video{
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-}
-
+/* 
 .back-img{
     position: fixed;
     top: 0;
@@ -71,9 +34,9 @@ body{
     color: #fff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     overflow-y: auto;
-}
+} 
 
-button
+ button
 {
     margin-top: 15px;
     padding: 15px 15px;
@@ -150,4 +113,4 @@ li {
         width: 120px;
         height: 120px;
     }
-}
+} */
