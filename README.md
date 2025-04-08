@@ -59,13 +59,16 @@ Follow this project board to know the latest status of the project: [https://git
 ### How to build
 - Use this github repository: [https://github.com/cis3296s25/01-ChefAI]([https://github.com/cis3296s25/01-ChefAI])
 - Obtain your LLM API for free at GroqCloud: [https://console.groq.com/keys](url)
+- Obtain your Image Detection Model API Key: [https://clarifai.com/clarifai/main/models/food-item-recognition](url)
 - Use the `main` branch for the latest stable release:
 ```
 git checkout main
 ```
 - Create .env file in the project root.
 ```
-a. Inside the file, create variable: GROQ_API_KEY = "YOUR_API_KEY"  
+Inside the file,
+a. create variable: GROQ_API_KEY = "YOUR_API_KEY"
+b. create variable: PAT = "YOUR_IMAGE_MODEL_KEY"
 ```
 - All required dependencies are listed in `requirements.txt`. Install them with:
 ```
