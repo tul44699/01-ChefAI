@@ -310,3 +310,7 @@
   
 
 
+  .suggestion-box .highlighted {
+    background-color: #ffcc00;
+    color: black;
+}
