@@ -25,7 +25,7 @@ def index(request):
         ingredients_input = request.POST.get("final_ingredients", "")
         selected_options = [i.strip() for i in ingredients_input.split(",") if i.strip()]
 
-        print(f"[POST] Final selected ingredients with quantities: {selected_options}")
+        
 
         ai_response = feedLLM(selected_options)
 
@@ -74,7 +74,7 @@ def feedLLM(selected_options):
     # Directly access the content attribute
     # If there's a proxy, you may need to resolve it or use another method to extract data
     raw = response.content if hasattr(response, 'content') else response.resolve()
-    print(raw)
+    
 
     # Using regex to extract specific parts of the response
     sections = {

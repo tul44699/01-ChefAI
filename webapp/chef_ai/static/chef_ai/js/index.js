@@ -227,12 +227,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 addSelectedItem(item, categoryKey);
                 categoryItem.classList.add("selected");
             } else if (!checkbox.checked && alreadyAdded) {
+                console.log("removing the item from box: ",item)
                 removeSelectedItem(item);
                 categoryItem.classList.remove("selected");
             }
+            console.log("at bottom of querythinggy");
         });
     });
-    
+
 
     // Function to add selected item to the top div
     function addSelectedItem(item, categoryKey) {
@@ -309,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkIfEmpty() {
         if (selectedItemsDiv.children.length === 0) {
             selectedItemsContainer.style.display = 'none';
+            console.log("removing div from screen");
         }
     }
 

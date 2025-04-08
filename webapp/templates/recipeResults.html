@@ -58,7 +58,12 @@
         <button class="pdf" onclick="downloadFile('pdf')"><strong>PDF</strong></button>
     </div>
 </div>
-
+<script>
+    function downloadFile(type){
+        let url = type === 'pdf' ? '/download-pdf/' : '/download-jpg/';
+        window.location.href = url;
+    }
+</script>
 
 </body>
 

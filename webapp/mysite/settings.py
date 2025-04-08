@@ -130,3 +130,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/chefai'
 LOGOUT_REDIRECT_URL = '/chefai'
+
+TEST_RUNNER = 'chef_ai.test_runner.XMLTestRunner'
+
