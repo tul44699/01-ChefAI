@@ -24,6 +24,9 @@ def index(request):
     if request.method == "POST":
         ingredients_input = request.POST.get("final_ingredients", "")
         selected_options = [i.strip() for i in ingredients_input.split(",") if i.strip()]
+
+        
+
         
         ai_response = feedLLM(selected_options)
         #Save successful recipes to database
