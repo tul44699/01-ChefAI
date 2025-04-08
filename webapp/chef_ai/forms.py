@@ -4,7 +4,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 class ingredientList(forms.Form):
-    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
     ingredient_types = Ingredient.objects.values_list('ingredient_type',flat=True).distinct()
     
     for type in ingredient_types:

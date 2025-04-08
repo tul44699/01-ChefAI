@@ -24,7 +24,7 @@ def index(request):
     if request.method == "POST":
         ingredients_input = request.POST.get("final_ingredients", "")
         selected_options = [i.strip() for i in ingredients_input.split(",") if i.strip()]
-        print(selected_options)
+        
         ai_response = feedLLM(selected_options)
         #Save successful recipes to database
         if request.user.is_authenticated and ai_response:
@@ -53,7 +53,7 @@ def index(request):
 def response_recipe(request):
     selected_options = request.session.get('selected_options', [])
     ai_response = request.session.get('ai_response', "")
-
+    print("view was hit")
     return render(request, 'recipeResults.html', {'selected_options': selected_options, 'ai_response': ai_response})
 
 
@@ -86,7 +86,7 @@ def feedLLM(selected_options):
     # Directly access the content attribute
     # If there's a proxy, you may need to resolve it or use another method to extract data
     raw = response.content if hasattr(response, 'content') else response.resolve()
-    print(raw)
+    
 
     # Using regex to extract specific parts of the response
     sections = {
