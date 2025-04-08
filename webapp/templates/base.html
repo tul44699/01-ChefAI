@@ -5,6 +5,9 @@
 <head>
     <title>{% block title %}Chef AI{% endblock %}</title>
 
+    {% block background_Style %}
+    {% endblock %}
+
     <link rel="icon" type="image/x-icon" href="{% static 'chef_ai/icons/favicon.ico' %}">
 
                         <!--CSS files go below-->
@@ -25,14 +28,7 @@
  install Django Template Support to ignore red lines
   the image will be hidden by videos if they exist-->
 
-<body 
-    style="background-image: url('{% static 'chef_ai/images/spoonsbg.jpg' %}');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        height: 100vh;">
-
-
+<body> 
     <header class="header">
         <div class="chefAI">
             <a href="{% url 'index' %}">
@@ -69,9 +65,7 @@
     {% endif %}
     <!--plays the video on recipe page only-->
     {% if request.path == '/chefai/recipe/' %}
-    <video autoplay loop muted plays-inline class="back-video">
-        <source src="{% static 'chef_ai/videos/kitchen.mp4' %}" type="video/mp4">
-    </video>
+    
     {% endif %}
 
     <!--defaults to static image on other pages-->

@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show search section when "Let's Chef it up!" is clicked
     chefItUpBtn.addEventListener('click', (e) => {
         e.preventDefault();
+        const img = document.getElementById('bg-img');
 
         mainContent.style.display = 'none';
         searchSection.style.display = 'block';
@@ -92,7 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         video.pause();
         video.currentTime = video.duration;
-        video.style.filter = 'blur(8px)';
+        video.style.display = 'none';
+        img.style.backgroundImage = `url('${STATIC_IMAGE}')`;
+
     });
 
     // Search and select ingredients
@@ -192,11 +195,36 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedIndex = (selectedIndex - 1 + suggestions.length) % suggestions.length; // Loops to last from first
             updateHighlight();
         } else if (event.key === "Enter") {
+            event.preventDefault();
+            const inputValue = searchInput.value.trim();
             if (selectedIndex >= 0 && suggestions[selectedIndex]) {
                 suggestions[selectedIndex].click(); // Triggers click on highlighted suggestion
-                event.preventDefault();
+            }else if(inputValue.length>=2){
+                let matched = false;
+                Object.keys(ingredientCategories).forEach(categoryKey => {
+                    ingredientCategories[categoryKey].forEach(item => {
+                        if (item.toLowerCase() === inputValue.toLowerCase()) {
+                            const checkboxId = `${categoryKey}-${item.toLowerCase().replace(/\s+/g, '-')}`;
+                            const checkbox = document.getElementById(checkboxId);
+                            if (checkbox && !checkbox.checked) {
+                                checkbox.checked = true;
+                                addSelectedItem(item, categoryKey);
+                                matched = true;
+                            }
+                        }
+                    });
+                    // If not matched, assume it's a valid DB result and add it
+                    if (!matched) {
+                        addSelectedItem(inputValue, 'db');
+                    }
+
+                    // Clear input and hide suggestion box
+                    searchInput.value = '';
+                    suggestionBox.innerHTML = '';
+                    suggestionBox.style.display = 'none';
+                })
             }
-        }
+        }  
     })
 
     // Hides the dropdown if user clicks anywhere on the page
@@ -232,6 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    
     
 
     // Function to add selected item to the top div
@@ -272,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
         removeBtn.textContent = '✖';
         removeBtn.classList.add('remove-btn');
         removeBtn.addEventListener('click', () => {
-            itemDiv.remove();
+            removeSelectedItem(item);
 
             const checkbox = document.getElementById(`${categoryKey}-${item.toLowerCase().replace(/\s+/g, '-')}`);
             if (checkbox) {
@@ -309,6 +338,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkIfEmpty() {
         if (selectedItemsDiv.children.length === 0) {
             selectedItemsContainer.style.display = 'none';
+        }else{
+            console.log("Hello");
         }
     }
 
@@ -325,5 +356,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("final_ingredients").value = final.join(", ");
         console.log("Final Ingredients:", final); // For debugging
     });
-
 });
+
+
