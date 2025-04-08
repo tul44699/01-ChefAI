@@ -1,5 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block background_Style %}
+    <style>
+        body{
+            background-image: url('{% static 'chef_ai/images/Countertop.png' %}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
 <div class="recipe-container">
     <div class="recipe-content">
@@ -59,6 +72,12 @@
     </div>
 </div>
 
+<script>
+    function downloadFile(type){
+        let url = type === 'pdf' ? '/download-pdf/' : '/download-jpg/';
+        window.location.href = url;
+    }
+</script>
 
 </body>
 

@@ -1,19 +1,68 @@
 .slider {
-    display:flex;
-    flex-direction: column;
+    display: flex;
+    align-items: stretch; /* Stretch to match the height of the tallest item */
+    overflow-x: auto;
+    white-space: nowrap;
+    box-sizing: border-box;
+    width: 100%;
+    padding-bottom: 1rem;
+    scroll-behavior: smooth;
+}
+
+.slider::-webkit-scrollbar {
+    height: 0.5rem;
+}
+
+.slider::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+}
+
+.slider::-webkit-scrollbar-thumb {
+    background: #ffcc00;
+    border-radius: 1rem;
+}
+
+.slider .categories {
+    display: flex;
+    gap: 1.5rem; /* Adjust gap between categories */
+}
+
+.categories {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
-    margin:2rem;
+    padding: 1rem;
+}
+
+/* Ensures the selected-items-container will stretch to match other elements */
+.selected-items-container {
+    display: flex;
     overflow-x: auto;
-    flex-wrap: wrap;
-
+    gap: 1rem; 
+    max-height: 25rem; 
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: #d6d6d6;
+    flex-wrap: nowrap; 
+    height: 100%;
+    align-items: stretch; 
+    box-sizing: border-box;
+    scrollbar-gutter: stable;
 }
-.selected-items-container::-webkit-scrollbar{
-    width: .5rem;
+
+.selected-items-container .selected-item {
+    height: 100%;
 }
 
-.selected-items-container::-webkit-scrollbar-track{
-    background-color: rgba(255,255,255,0.1);
+.selected-items-container::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+.selected-items-container::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
 }
 
@@ -22,34 +71,37 @@
     border-radius: 10px;
 }
 
-/* Gray box that holds the button container*/
-.slider .category {
-    border-radius: 2rem;
+/* Styling for the category containers */
+.slider .categories .category {
+    border-radius: 1rem;
+    max-height: 25rem;
     min-width: 15rem;
-    margin:.5rem;
-    padding:2rem;
-    background-color:rgba(255, 255, 255, 0.336);
+    margin: 0.5rem;
+    padding: 1rem 2rem 1rem 2rem;
+    background-color: #d6d6d6;
 }
 
-.slider .category h2{
-    color:#FFB949;
+.slider .categories h2 {
+    color: #FFB949;
     text-align: center;
     text-shadow: 2px 2px 4px black;
+    padding-bottom: 0.5rem;
 }
-
 
 /* Individual items in category */
 .slider .category .category-item {
     border-radius: 1rem;
-    margin:0.5rem;
-    padding:.25rem;
+    margin: 0.5rem;
+    padding: 0.25rem;
     text-align: center;
     background-color: #FFB949;
     box-shadow: 0px 2px 4px #B4021E;
-    color:white;
+    color: white;
+    font-weight: bold;
     text-shadow: 2px 2px 4px black;
 }
-.slider .category .category-item:hover{
+
+.slider .category .category-item:hover {
     background-color: #e68900;
     cursor: pointer;
 }
@@ -59,104 +111,129 @@
     cursor: pointer;
 }
 
-.slider .category .category-item label{
-    padding:.5rem;
-    width:100%;
-    
+.slider .category .category-item label {
+    padding: 0.5rem;
+    width: 100%;
 }
-.slider .category .category-item label:hover{
+
+.slider .category .category-item label:hover {
     cursor: pointer;
-    
-}
-.slider .category .category-item input[type=checkbox]{
-    display:none;
 }
 
-/* CSS for items that have been selected */
-
-.slider .selected-items-container {
-    border-radius: 2rem;
-    min-width: 15rem;
-    margin:.5rem;
-    padding:2rem;
-    background-color:rgba(255, 255, 255, 0.336);
-    
-    
+.slider .category .category-item input[type=checkbox] {
+    display: none;
 }
 
-.slider .selected-items-container h2{
-    color:#FFB949;
-    text-align: center;
-    text-shadow: 2px 2px 4px black;
-}
-
+/* Selected items container for selected ingredients */
 .slider .selected-items-container .selected-item {
-    display:flex;
+    display: flex;
     flex-direction: center;
     justify-content: center;
-    min-width: 13rem;
+    min-width: 10rem;
     align-items: center;
     border-radius: 1rem;
     background-color: #FFB949;
     box-shadow: 0px 2px 4px #B4021E;
-    gap:.25rem;
+    gap: .25rem;
     margin: .5rem;
-    padding:0 1rem;
-    
+    padding: 0 1rem;
 }
+
 .slider .selected-items .selected-item .ingredient-name {
     text-shadow: 2px 2px 4px black;
-    color:white;
-    padding:.5rem;
+    color: white;
+    padding: .5rem;
     text-align: right;
+}
 
+.slider .selected-items .selected-item .quantity-container input {
+    max-width: 7rem;
 }
-.slider .selected-items .selected-item .quantity-container input{
-    max-width:7rem;
-}
-.slider .selected-items .selected-item .quantity-container:focus{
+
+.slider .selected-items .selected-item .quantity-container:focus {
     border: 1px solid white;
 }
 
-.slider .selected-items .selected-item .remove-btn{
+.slider .selected-items .selected-item .remove-btn {
     background: transparent;
     border: none;
     cursor: pointer;
     font-size: 1rem;
-    color:#B4021E;
-    margin:.2rem;
+    color: #B4021E;
+    margin: .2rem;
     transition: transform 0.2s ease-in-out;
 }
-.slider .selected-items .selected-item .remove-btn:hover{
-    transform:scale(1.2);
+
+.slider .selected-items .selected-item .remove-btn:hover {
+    transform: scale(1.2);
 }
 
 /* Turns into a single row on desktop */
-@media(min-width: 768px){
+@media (min-width: 768px) {
     .slider {
-        display:flex;
+        display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: stretch;
-        margin-top:2rem;
-
+        margin-top: 2rem;
     }
+
     .slider .category {
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        margin-top:2rem;
+        margin-top: 2rem;
     }
+
     .slider .selected-items-container {
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        margin-top:2rem;
-
-    
     }
-
-
 }
 
+@media (max-width: 767px) {
+    .slider {
+        flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: auto;
+        white-space: normal;
+        max-height: 80vh;
+    }
 
+    .slider::-webkit-scrollbar {
+        width: 0.5rem; /* For vertical scrollbar on mobile */
+    }
+
+    .slider .categories {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .categories {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .selected-items-container {
+        flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 100%;
+    }
+
+    .slider .categories .category {
+        min-width: 0;
+        width: 100%;
+        max-height: none;
+    }
+
+    .slider .category .category-item {
+        width: calc(100% - 1rem);
+    }
+
+    .slider .selected-items-container .selected-item {
+        width: calc(100% - 1rem);
+        min-width: 0;
+    }
+}

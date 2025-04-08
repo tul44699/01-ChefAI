@@ -34,12 +34,13 @@
     padding: 1rem 2rem;
     margin-right:2rem;
     background-color: #FFB949; /* orange from logo */
-    color: #B4021E;  /* red from logo */
+    color: white;  /* red from logo */
     text-align: center;
     text-decoration: none; /* Remove underline */
     border-radius: 2rem;
     font-weight: bold;
-    box-shadow: 0 .5rem .6rem rgba(0, 0, 0, 0.1);
+    box-shadow: 0 .3rem .4rem #B4021E;
+    text-shadow: 2px 2px 4px black;
 }
 .header .navbar .loginButton:hover {
     background-color: #e68900; /* Change color on hover */
