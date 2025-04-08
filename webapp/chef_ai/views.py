@@ -1,4 +1,4 @@
-from .models import userHistory
+from .models import userHistory, Ingredient
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
@@ -16,7 +16,6 @@ import os
 from dotenv import load_dotenv
 import re
 import io
-from .models import Ingredient
 # Create your views here.
 
 load_dotenv()
