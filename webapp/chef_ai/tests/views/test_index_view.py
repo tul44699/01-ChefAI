@@ -20,7 +20,16 @@ class IndexViewTest(TestCase):
     def test_index_view_form_post_has_one_ingredient_with_qty(self):
         response = self.client.post(reverse('index'),{"final_ingredients": "Rice {1cup}"})
         self.assertEqual(response.status_code, 302)
-
+    
+    
+    def test_index_view_form_post_has_many_ingredients(self):
+        response = self.client.post(reverse('index'), {"final_ingredients":"Rice, Apple, Sugar, Steak"})
+        self.assertEqual(response.status_code, 302)
+        
+    def test_index_view_form_post_has_many_ingredients_and_amounts(self):
+        response = self.client.post(reverse('index'), {"final_ingredients":"Rice (1), Apple (1), Sugar(1 cup), Steak (12oz)"})
+        self.assertEqual(response.status_code, 302)
+    
     def test_index_data_saved_in_session(self):
         data = {'final_ingredients':'Rice {1 cup}'}
 
