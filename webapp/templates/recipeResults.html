@@ -7,7 +7,7 @@
             background-image: url('{% static 'chef_ai/images/Countertop.png' %}');
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
+            background-repeat: repeat-y;
             height: 100vh;
         }
     </style>
@@ -28,35 +28,49 @@
             </p>
         </div>
         {% else %}
+        
         <div class="selected-ingredients">
             <h2>Your selected ingredients:</h2>
             <p>
                 {% for item in selected_options %}
-                {{ item }} {% if not forloop.last %} | {% endif %}
+                {{ item }}{% if not forloop.last %} | {% endif %}
                 {% endfor %}
             </p>
         </div>
 
-        <div class="res">
-            <h2>{{ ai_response.title }}</h2>
-            <p><strong>Cuisine:</strong> {{ ai_response.cuisine }}</p>
-            <p><strong>Time Required:</strong> {{ ai_response.time }}</p>
+        <!-- Details -->
+        <div class="recipe-details">
+            <span class="recipe-title">{{ ai_response.title }}</span>
+        </div>
 
-            <h2>Ingredients Used</h2>
+        <div class="recipe-time">
+            <span class="time">⏱️ {{ ai_response.time }}</span>
+        </div>
+
+        <!-- Ingredients -->
+        <div class="section-block">
+            
+            <h3>Ingredients</h3>
             <ul>
                 {% for item in ai_response.ingredients %}
                 <li>{{ item }}</li>
                 {% endfor %}
             </ul>
+        </div>
 
-            <h2>Utensils</h2>
+        <!-- Utensils -->
+        <div class="section-block">
+            <h3>Utensils</h3>
             <ul>
                 {% for item in ai_response.utensils %}
                 <li>{{ item }}</li>
                 {% endfor %}
             </ul>
+        </div>
 
-            <h2>Steps</h2>
+        <!-- Instructions -->
+        <div class="section-block">
+            <h3>Instructions</h3>
             <ol>
                 {% for step in ai_response.steps %}
                 <li>{{ step }}</li>
