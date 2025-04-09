@@ -18,14 +18,10 @@ import os
 from dotenv import load_dotenv
 import re
 import io
-<<<<<<< HEAD
-=======
-from .models import Ingredient
 from django.shortcuts import render
 from clarifai.client.model import Model
 
 
->>>>>>> origin/main
 # Create your views here.
 
 load_dotenv()
