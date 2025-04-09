@@ -25,9 +25,6 @@ def index(request):
         ingredients_input = request.POST.get("final_ingredients", "")
         selected_options = [i.strip() for i in ingredients_input.split(",") if i.strip()]
 
-        print(f"Here are ingredients from view: {selected_options}")
-
-        
         ai_response = feedLLM(selected_options)
         #Save successful recipes to database
         if request.user.is_authenticated and ai_response:
@@ -50,7 +47,7 @@ def response_recipe(request):
 
 def feedLLM(selected_options):
     
-    llm = ChatGroq(temperature=0, api_key=os.getenv("GROQ_API_KEY"), model_name="llama-3.3-70b-versatile")
+    llm = ChatGroq(temperature=0, api_key=os.getenv("GROQ_API_KEY"), model_name="deepseek-r1-distill-llama-70b") #llama-3.3-70b-versatile
 
 
        # Create the prompt
@@ -116,6 +113,7 @@ def feedLLM(selected_options):
 # Function to generate and download PDF
 def download_pdf(request):
     ai_response = request.session.get('ai_response', "")
+    print(ai_response)
 
     if not ai_response:
         return redirect('response_recipe')
@@ -127,7 +125,9 @@ def download_pdf(request):
     y_position = 750  # Start position for text
 
     for key, value in ai_response.items():
+        print(y_position)
         if y_position < 50:  # Create a new page if necessary
+            print("Making new page")
             pdf.showPage()
             pdf.setFont("Times-Roman", 12)
             y_position = 750
@@ -137,9 +137,18 @@ def download_pdf(request):
 
         if isinstance(value, list):
             for item in value:
+                if y_position < 50:  # Create a new page if necessary
+                    print("Making new page")
+                    pdf.showPage()
+                    pdf.setFont("Times-Roman", 12)
+                    y_position = 750
                 pdf.drawString(70, y_position, f"- {item}")  # Indent list items
                 y_position -= 15  # Move down for each item
         else:
+            if y_position < 50:
+                pdf.showPage()
+                pdf.setFont("Times-Roman", 12)
+                y_position = 750
             pdf.drawString(70, y_position, value)
             y_position -= 20  # Move down for the next section
 

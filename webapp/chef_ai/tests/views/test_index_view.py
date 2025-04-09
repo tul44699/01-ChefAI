@@ -24,6 +24,7 @@ class IndexViewTest(TestCase):
     def test_index_view_form_post_has_one_ingredient(self):
         response = self.client.post(reverse('index'), {"final_ingredients":"Rice"})
         self.assertEqual(response.status_code, 302)
+        
     def test_index_view_form_post_has_one_ingredient_with_qty(self):
         response = self.client.post(reverse('index'),{"final_ingredients": "Rice {1cup}"})
         self.assertEqual(response.status_code, 302)
@@ -55,15 +56,15 @@ class IndexViewTest(TestCase):
         
         login = self.client.login(username='testuser', password='testing1234')
         self.assertTrue(login)
-        selected_options = ['Tomato', 'Lettuce', 'Bacon']
-        response = self.client.post(reverse('index'), {'final_ingredients':sorted(selected_options)})
+        selected_options = 'Tomato, Lettuce, Bacon'
+        response = self.client.post(reverse('index'), {'final_ingredients':selected_options})
         
         self.assertEqual(response.status_code, 302)
         history = userHistory.objects.filter(userID=self.user).first()
         self.assertIsNotNone(history)
         print(f"Ingredients in table {history.selectedIngredients}")
-        historyIngredients = ", ".join(history.selectedIngredients)
-        self.assertEqual(historyIngredients, sorted(selected_options))
+
+        self.assertEqual(history.selectedIngredients, selected_options)
         
         
         
