@@ -12,3 +12,4 @@ class userHistory(models.Model):
     userID = models.ForeignKey(User, on_delete = models.PROTECT)
     selectedIngredients = models.CharField(max_length=2000, blank=False)
     generatedRecipe = models.CharField(max_length=10000, blank=False)
+    title = models.CharField(max_length=255, default='Untitled Recipe')

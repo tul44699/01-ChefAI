@@ -142,6 +142,7 @@
 .slider .selected-items .selected-item .ingredient-name {
     text-shadow: 2px 2px 4px black;
     color: white;
+    font-size: bold;
     padding: .5rem;
     text-align: right;
 }
