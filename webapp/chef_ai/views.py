@@ -9,16 +9,27 @@ from django.conf import settings
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from PIL import Image, ImageDraw, ImageFont
+from django.views.decorators.csrf import csrf_exempt
 import groq
+
 # from mysite.settings import LOADENV
 from langchain_groq import ChatGroq
 import os
 from dotenv import load_dotenv
 import re
 import io
+<<<<<<< HEAD
+=======
+from .models import Ingredient
+from django.shortcuts import render
+from clarifai.client.model import Model
+
+
+>>>>>>> origin/main
 # Create your views here.
 
 load_dotenv()
+
 
 def index(request):
     if request.method == "POST":
@@ -177,8 +188,7 @@ def download_jpg(request):
 
     for key, value in ai_response.items():
         if y_position > 550:  # Ensure text fits within image bounds
-            break  # You may need to create a new image if content is too long
-
+            break  
         draw.text((50, y_position), f"{key.capitalize()}:", fill="black", font=font)
         y_position += 30  # Move down after the key
 
@@ -244,5 +254,81 @@ def save_recipe_to_history(user, selected_options, ai_response):
     userHistory.objects.create(
         userID=user,
         selectedIngredients=", ".join(selected_options),
-        generatedRecipe=recipe_text
+        generatedRecipe=recipe_text,
+        title=ai_response.get('title', 'Untitled Recipe')
     )
+
+#Code that runs the Image detection model
+@csrf_exempt
+def scan_images(request):
+    if request.method == 'POST':
+        images = request.FILES.getlist('images')
+        detected_items = set()
+
+        model = Model(url="https://clarifai.com/clarifai/main/models/food-item-recognition", pat=os.getenv('PAT'))
+        for image in images:
+            print("success")
+            img_bytes = image.read()
+            prediction = model.predict_by_bytes(img_bytes, input_type="image", output_config={"min_value": 0.01})
+            print(prediction)
+            for c in prediction.outputs[0].data.concepts:
+                if c.value > 0.75:
+                    detected_items.add(c.name.lower())
+                    print(c.name)
+
+        # Match items to your DB
+        #Ingredients Model 
+        db_items = Ingredient.objects.values_list('ingredient_name', flat=True)
+        db_items_lowered = [item.lower() for item in db_items]
+        matched = [item for item in detected_items if item in db_items_lowered]
+        matched_upper = [item.capitalize() for item in matched]
+        return JsonResponse({'ingredients': matched_upper})
+
+
+#History Page content
+
+def view_saved_recipe(request, recipe_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    try:
+        recipe = userHistory.objects.get(id=recipe_id, userID=request.user)
+    except userHistory.DoesNotExist:
+        return HttpResponse("Recipe not found.", status=404)
+
+    # Parse the generatedRecipe string back into structured data
+    raw_content = recipe.generatedRecipe
+    
+    # Extract sections using regex patterns similar to your feedLLM function
+    title_match = re.search(r"Title:\s*(.+)", raw_content)
+    cuisine_match = re.search(r"Cuisine:\s*(.+)", raw_content)
+    time_match = re.search(r"Time Required:\s*(.+)", raw_content)
+    
+    # Extract list sections
+    ingredients_section = re.search(r"Ingredients:\s*((?:.|\n)+?)(?:\n\nUtensils:|\n\nSteps:)", raw_content)
+    utensils_section = re.search(r"Utensils:\s*((?:.|\n)+?)(?:\n\nSteps:)", raw_content)
+    steps_section = re.search(r"Steps:\s*((?:.|\n)+)", raw_content)
+    
+    # Format into ai_response dictionary
+    ai_response = {
+        "title": title_match.group(1) if title_match else recipe.title,
+        "cuisine": cuisine_match.group(1) if cuisine_match else "Not specified",
+        "time": time_match.group(1) if time_match else "Not specified",
+        "ingredients": [line.strip("- ") for line in ingredients_section.group(1).strip().split("\n")] if ingredients_section else [],
+        "utensils": [line.strip("- ") for line in utensils_section.group(1).strip().split("\n")] if utensils_section else [],
+        "steps": [line.strip("0123456789. ") for line in steps_section.group(1).strip().split("\n")] if steps_section else []
+    }
+    
+    return render(request, 'recipeResults.html', {
+        'selected_options': recipe.selectedIngredients.split(', '),
+        'ai_response': ai_response  # Pass with the same name your template expects
+    })
+
+
+
+def getProfile(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
+    history = userHistory.objects.filter(userID=request.user).order_by('-id')
+    return render(request, 'registration/profile.html', {'history': history})
