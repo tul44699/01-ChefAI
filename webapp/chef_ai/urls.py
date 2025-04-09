@@ -12,6 +12,7 @@ urlpatterns = [
     path('register/', views.userRegistration, name='register'),
     path('logout/', views.logoutUser, name='logout'),
     path('profile/', views.getProfile, name='profile'),
+    path('scan-images/', views.scan_images, name='scan-images'),
     
 
 ]

@@ -8,7 +8,9 @@ from django.conf import settings
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from PIL import Image, ImageDraw, ImageFont
+from django.views.decorators.csrf import csrf_exempt
 import groq
+
 # from mysite.settings import LOADENV
 from langchain_groq import ChatGroq
 import os
@@ -16,9 +18,14 @@ from dotenv import load_dotenv
 import re
 import io
 from .models import Ingredient
+from django.shortcuts import render
+from clarifai.client.model import Model
+
+
 # Create your views here.
 
 load_dotenv()
+
 
 def index(request):
     if request.method == "POST":
@@ -165,8 +172,7 @@ def download_jpg(request):
 
     for key, value in ai_response.items():
         if y_position > 550:  # Ensure text fits within image bounds
-            break  # You may need to create a new image if content is too long
-
+            break  
         draw.text((50, y_position), f"{key.capitalize()}:", fill="black", font=font)
         y_position += 30  # Move down after the key
 
@@ -217,3 +223,30 @@ def logoutUser(request):
 def getProfile(request):
     
     return render(request, 'registration/profile.html')
+
+
+#Code that runs the Image detection model
+@csrf_exempt
+def scan_images(request):
+    if request.method == 'POST':
+        images = request.FILES.getlist('images')
+        detected_items = set()
+
+        model = Model(url="https://clarifai.com/clarifai/main/models/food-item-recognition", pat=os.getenv('PAT'))
+        for image in images:
+            print("success")
+            img_bytes = image.read()
+            prediction = model.predict_by_bytes(img_bytes, input_type="image", output_config={"min_value": 0.01})
+            print(prediction)
+            for c in prediction.outputs[0].data.concepts:
+                if c.value > 0.75:
+                    detected_items.add(c.name.lower())
+                    print(c.name)
+
+        # Match items to your DB
+        #Ingredients Model 
+        db_items = Ingredient.objects.values_list('ingredient_name', flat=True)
+        db_items_lowered = [item.lower() for item in db_items]
+        matched = [item for item in detected_items if item in db_items_lowered]
+        matched_upper = [item.capitalize() for item in matched]
+        return JsonResponse({'ingredients': matched_upper})

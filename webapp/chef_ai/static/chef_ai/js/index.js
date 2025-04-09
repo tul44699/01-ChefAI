@@ -168,6 +168,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    //Script that scans images for ingredients
+    document.getElementById('scan-btn').addEventListener('click', () => {
+        const formData = new FormData();
+        const images = document.getElementById('image-upload-input').files;
+    
+        for (let i = 0; i < images.length; i++) {
+            formData.append('images', images[i]);
+        }
+    
+        fetch('/scan-images/', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            const ingredients = data.ingredients;
+            const categoryKey = 'detected'; // Or however you want to categorize
+    
+            ingredients.forEach(item => {
+                addSelectedItem(item, categoryKey);
+                console.log("added item: ",item);
+            });
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
     // Highlights the currently selected suggestion based on selectedIndex
     function updateHighlight() {
         suggestions.forEach((s, index) => {
