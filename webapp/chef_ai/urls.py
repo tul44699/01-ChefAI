@@ -13,6 +13,5 @@ urlpatterns = [
     path('logout/', views.logoutUser, name='logout'),
     path('profile/', views.getProfile, name='profile'),
     path('scan-images/', views.scan_images, name='scan-images'),
-    
-
+    path('history/<int:recipe_id>/', views.view_saved_recipe, name='view_saved_recipe'),
 ]

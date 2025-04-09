@@ -1,13 +1,39 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block background_Style %}
+<style>
+    body {
+        background-image: url('{% static 'chef_ai/images/image.png' %}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        margin: 0;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+<div class="journal-container">
+    <div class="user-greeting">
+        <h1>My Kitchen Journal</h1>
+        <p>Hello, <strong>{{ request.user.username }}</strong>! Here's your recipe journey ✨</p>
+    </div>
 
-
-
-<div class="loginContainer">
-    <div class="details">
-        <h2>Profile</h2>
-        <p>profile page coming soon</p>
+    <div class="history-section">
+        <h2>Your Recipes</h2>
+        <ul class="recipe-list">
+            {% for recipe in history %}
+                <li class="recipe-item">
+                    <a href="{% url 'view_saved_recipe' recipe.id %}">
+                        🍽️ {{ recipe.title }}
+                    </a>
+                </li>
+            {% empty %}
+                <li class="empty-message">You haven't generated any recipes yet.</li>
+            {% endfor %}
+        </ul>        
     </div>
 </div>
-
 {% endblock %}
