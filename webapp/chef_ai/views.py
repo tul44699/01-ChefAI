@@ -29,25 +29,12 @@ def index(request):
 
         
         ai_response = feedLLM(selected_options)
-        
         #Save successful recipes to database
         if request.user.is_authenticated and ai_response:
-            userHistory.objects.create(
-                userID=request.user, 
-                selectedIngredients=", ".join(selected_options),
-                generatedRecipe="\n".join([ 
-                    f"Title: {ai_response.get('title', 'N/A')}", 
-                    f"Cuisine: {ai_response.get('cuisine', 'N/A')}",
-                    f"Time Required: {ai_response.get('time', 'N/A')}",
-
-                    "\nIngredients:\n" + "\n".join(ai_response.get('ingredients', [])),
-                    "\nUtensils:\n" + "\n".join(ai_response.get('utensils', [])),
-                    "\nSteps:\n" + "\n".join(ai_response.get('steps', [])),
-                ])
-            )
-
+            save_recipe_to_history(request.user, selected_options, ai_response)
         request.session['selected_options'] = selected_options
         request.session['ai_response'] = ai_response
+
 
         return redirect('response_recipe')
 
@@ -233,3 +220,20 @@ def logoutUser(request):
 def getProfile(request):
     
     return render(request, 'registration/profile.html')
+
+def save_recipe_to_history(user, selected_options, ai_response):
+
+    recipe_text = "\n".join([
+        f"Title: {ai_response.get('title', 'N/A')}",
+        f"Cuisine: {ai_response.get('cuisine', 'N/A')}",
+        f"Time Required: {ai_response.get('time', 'N/A')}",
+        "\nIngredients:\n" + "\n".join(ai_response.get('ingredients', [])),
+        "\nUtensils:\n" + "\n".join(ai_response.get('utensils', [])),
+        "\nSteps:\n" + "\n".join(ai_response.get('steps', [])),
+    ])
+
+    userHistory.objects.create(
+        userID=user,
+        selectedIngredients=", ".join(selected_options),
+        generatedRecipe=recipe_text
+    )
