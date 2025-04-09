@@ -227,7 +227,6 @@ def getProfile(request):
     
     return render(request, 'registration/profile.html')
 
-<<<<<<< HEAD
 def save_recipe_to_history(user, selected_options, ai_response):
 
     recipe_text = "\n".join([
@@ -244,7 +243,6 @@ def save_recipe_to_history(user, selected_options, ai_response):
         selectedIngredients=", ".join(selected_options),
         generatedRecipe=recipe_text
     )
-=======
 
 #Code that runs the Image detection model
 @csrf_exempt
@@ -271,4 +269,3 @@ def scan_images(request):
         matched = [item for item in detected_items if item in db_items_lowered]
         matched_upper = [item.capitalize() for item in matched]
         return JsonResponse({'ingredients': matched_upper})
->>>>>>> Feature-Image-detection-model
