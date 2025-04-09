@@ -25,10 +25,11 @@ def index(request):
         ingredients_input = request.POST.get("final_ingredients", "")
         selected_options = [i.strip() for i in ingredients_input.split(",") if i.strip()]
 
-        
+        print(f"Here are ingredients from view: {selected_options}")
 
         
         ai_response = feedLLM(selected_options)
+        
         #Save successful recipes to database
         if request.user.is_authenticated and ai_response:
             userHistory.objects.create(

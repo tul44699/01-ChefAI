@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.views.test_views.IndexViewTest-20250408032039" tests="5" file="tests/views/test_views.py" time="4.066" timestamp="2025-04-08T03:20:43" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.views.test_views.IndexViewTest" name="test_index_data_saved_in_session" time="1.326" timestamp="2025-04-08T03:20:40" file="chef_ai/tests/views/test_views.py" line="24"/>
-	<testcase classname="tests.views.test_views.IndexViewTest" name="test_index_view_form_post_has_one_ingredient" time="1.018" timestamp="2025-04-08T03:20:41" file="chef_ai/tests/views/test_views.py" line="17"/>
-	<testcase classname="tests.views.test_views.IndexViewTest" name="test_index_view_form_post_has_one_ingredient_with_qty" time="1.119" timestamp="2025-04-08T03:20:42" file="chef_ai/tests/views/test_views.py" line="20"/>
-	<testcase classname="tests.views.test_views.IndexViewTest" name="test_index_view_form_post_isEmpty" time="0.592" timestamp="2025-04-08T03:20:43" file="chef_ai/tests/views/test_views.py" line="12"/>
-	<testcase classname="tests.views.test_views.IndexViewTest" name="test_index_view_status_code" time="0.012" timestamp="2025-04-08T03:20:43" file="chef_ai/tests/views/test_views.py" line="7"/>
-</testsuite>

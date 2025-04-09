@@ -1,9 +1,16 @@
 from django.test import TestCase
 from django.urls import reverse
+from django import forms
+from chef_ai.forms import UserRegistration
+from django.contrib.auth.models import User
+from chef_ai.views import feedLLM
+from chef_ai.models import userHistory
 # Create your tests here.
 
 
 class IndexViewTest(TestCase):
+    
+
     def test_index_view_status_code(self):
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
@@ -39,3 +46,26 @@ class IndexViewTest(TestCase):
 
         self.assertIn('selected_options', session)
         self.assertIn('ai_response', session)
+       
+      
+  
+    def test_user_history_gets_saved(self):
+
+        self.user = User.objects.create_user(username='testuser', email='testuser@example.com', password='testing1234')
+        
+        login = self.client.login(username='testuser', password='testing1234')
+        self.assertTrue(login)
+        selected_options = ['Tomato', 'Lettuce', 'Bacon']
+        response = self.client.post(reverse('index'), {'final_ingredients':sorted(selected_options)})
+        
+        self.assertEqual(response.status_code, 302)
+        history = userHistory.objects.filter(userID=self.user).first()
+        self.assertIsNotNone(history)
+        print(f"Ingredients in table {history.selectedIngredients}")
+        historyIngredients = ", ".join(history.selectedIngredients)
+        self.assertEqual(historyIngredients, sorted(selected_options))
+        
+        
+        
+        
+        

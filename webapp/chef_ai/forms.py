@@ -7,14 +7,16 @@ class ingredientList(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-    ingredient_types = Ingredient.objects.values_list('ingredient_type',flat=True).distinct()
+        ingredient_types = Ingredient.objects.values_list('ingredient_type',flat=True).distinct()
     
-    for type in ingredient_types:
-        ingredients = Ingredient.objects.filter(ingredient_type=type)
+        for type in ingredient_types:
+            print(f"Adding field for {type}") 
+            ingredients = Ingredient.objects.filter(ingredient_type=type)
         
-        choices = [(ingredient.ingredient_name, ingredient.ingredient_name) for ingredient in ingredients]
-        field_name = f"{type.upper()}"
-        locals()[field_name] = forms.MultipleChoiceField(choices = choices, widget=forms.CheckboxSelectMultiple, required=False)
+            choices = [(ingredient.ingredient_name, ingredient.ingredient_name) for ingredient in ingredients]
+            field_name = f"{type.upper()}"
+            print(f"name of field added: {field_name}")
+            self.fields[field_name] = forms.MultipleChoiceField(choices = choices, widget=forms.CheckboxSelectMultiple, required=False)
     
 
 

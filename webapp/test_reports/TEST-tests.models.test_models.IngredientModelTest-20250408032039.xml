@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="tests.models.test_models.IngredientModelTest-20250408032039" tests="1" file="tests/models/test_models.py" time="0.001" timestamp="2025-04-08T03:20:39" failures="0" errors="0" skipped="0">
-	<testcase classname="tests.models.test_models.IngredientModelTest" name="test_ingredient_creation" time="0.001" timestamp="2025-04-08T03:20:39" file="chef_ai/tests/models/test_models.py" line="11">
-		<system-out><![CDATA[Success test ingredients insert
-]]></system-out>
-	</testcase>
-</testsuite>
