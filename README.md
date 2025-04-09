@@ -31,7 +31,7 @@ instructions and a list of necessary ingredients.
 
 # How to run
 Here is a deployed version of our current app:
-[Chef-AI](http://18.216.183.6/)
+[Chef-AI](http://3.21.159.180/)
 
 To run the ChefAI locally:
 1. Ensure Python3 is installed on development computer
@@ -96,3 +96,9 @@ a. python manage.py runserver
 ```
 http://127.0.0.1:8000/    
 ```
+
+# How to Run Tests
+- Enter folder that contains manage.py and pytest.ini
+- Run Command: pytest
+- Once tests complete, there is a Test_report.html page that is created.
+- There is also a Coverage Report that is available for viewing.
