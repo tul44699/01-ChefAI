@@ -1,4 +1,3 @@
-/* 
 .back-img{
     position: fixed;
     top: 0;
@@ -28,7 +27,7 @@
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 15px;
     padding: 30px;
-    backdrop-filter: blur(50px);
+    backdrop-filter: blur(60px);
     width: 80%;
     max-width: 1000px;
     color: #fff;
@@ -85,7 +84,7 @@ ul, ol {
 }
 
 li {
-    font-size: 12px;
+    font-size: 16px;
     margin-bottom: 8px;
 }
 
@@ -113,4 +112,53 @@ li {
         width: 120px;
         height: 120px;
     }
-} */
+} 
+/* --- New Styles for Improved Recipe Display --- */
+
+.recipe-title {
+    font-size: 34px;
+    font-weight: bold;
+    text-align: center;
+    color: #fffacd;
+    margin: 15px 0 10px;
+}
+
+.recipe-details {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+}
+
+.recipe-time {
+    padding: 8px 20px 8px 20px;
+    background: rgba(255, 255, 255, 0.25);
+    margin-bottom: 15px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.section-block {
+    margin-bottom: 30px;
+    color: white;
+}
+
+.section-block h3 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #ffcc00;
+    padding-bottom: 5px;
+}
+
+.section-block ul,
+.section-block ol {
+    padding-left: 25px;
+    font-size: 15px;
+    line-height: 1.6;
+}
