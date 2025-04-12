@@ -12,6 +12,21 @@ function type() {
 
 type();
 
+let plusButton = document.getElementById("increment_recipes");
+let minusButton = document.getElementById("decrement_recipes");
+let numRecipesDisplay = document.getElementById("recipe_amount");
+
+numRecipesDisplay.value=1;
+
+plusButton.addEventListener("click", () =>{
+    numRecipesDisplay.value =Number(numRecipesDisplay.value)+1; 
+
+});
+minusButton.addEventListener("click", () =>{
+    numRecipesDisplay.value = Math.max(1, Number(numRecipesDisplay.value)-1);
+});
+
+
 const ingredientCategories = {
     pantryEssentials: [
         'Rice', 'Pasta', 'Flour', 'Sugar',
@@ -369,19 +384,80 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    document.getElementById("generateRecipeBtn").addEventListener("click", () => {
-        const items = document.querySelectorAll('.selected-item');
-        const final = [];
+//     //items sent back as an Array ["Ing1 (1)", "Ing2 (1)", "...", "IngN(1)", "Number of Recipes: (1)""]
+//     document.getElementById("generateRecipeBtn").addEventListener("click", () => {
+//         const items = document.querySelectorAll('.selected-item');
+        
+//         const final = [];
 
-        items.forEach(item => {
-            const name = item.querySelector('.ingredient-name').textContent;
-            const qty = item.querySelector('input[type="text"]').value || '1';
-            final.push(`${name} (${qty})`);
+//         items.forEach(item => {
+//             const name = item.querySelector('.ingredient-name').textContent;
+//             const qty = item.querySelector('input[type="text"]').value || '1';
+//             final.push(`${name} (${qty})`);
+//         });
+        
+
+//         document.getElementById("final_ingredients").value = final.join(", ");
+//         console.log("Final Ingredients:", final); // For debugging
+//     });
+// });
+
+document.getElementById("generateRecipeBtn").addEventListener("click", () => {
+    const items = document.querySelectorAll('.selected-item');
+    const numRecipes = numRecipesDisplay.value;
+    const final = [];
+
+    items.forEach(item => {
+        const name = item.querySelector('.ingredient-name').textContent;
+        const qty = item.querySelector('input[type="text"]').value || '1';
+        final.push(`${name} (${qty})`);
+    });
+    
+    // document.body.innerHTML = "<h1>Loading recipe...</h1>";
+
+    document.getElementById("final_ingredients").value = final.join(", ");
+    console.log("Final Ingredients:", final); // For debugging
+
+    document.body.innerHTML = "<h1>Loading recipe...</h1>";
+
+    fetch('/post-recipe/', {
+        method: 'POST',
+        body: JSON.stringify({'ingredients':final, 'numberOfRecipes': numRecipes
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': getCookie('csrftoken') 
+        }
+    })
+    //loading function
+    .then(response => {
+        
+        return response.json();
+    })
+    //success function
+    .then(data => {
+        console.log(data);
+        sessionStorage.setItem('ai_response', JSON.stringify(data));
+
+        window.location.href='/chefai/recipe/';
         });
-
-        document.getElementById("final_ingredients").value = final.join(", ");
-        console.log("Final Ingredients:", final); // For debugging
     });
 });
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
 
+            // Does this cookie string begin with the name we want?
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}

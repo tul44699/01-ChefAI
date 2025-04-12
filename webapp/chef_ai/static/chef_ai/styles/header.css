@@ -18,7 +18,7 @@
       text-align: right;
   }
   .header .chefAI img{
-    margin:3rem;
+    margin-left:3rem;
     max-width: 10rem;
     max-height: 7.5rem;
     transition: transform 0.2s ease-in-out;

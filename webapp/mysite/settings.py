@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_ajax',
     'chef_ai.apps.ChefAiConfig',
     'django.contrib.admin',
     'django.contrib.auth',
