@@ -62,13 +62,15 @@ def index(request):
     return render(request, 'index.html')
 
 
-#displays a new page with the recipe listed
-def response_recipe(request):
-    selected_options = request.session.get('selected_options', [])
-    ai_response = request.session.get('ai_response', [])
-    print("view was hit")
-    return render(request, 'recipeResults.html', {'selected_options': selected_options, 'ai_response': ai_response})
+# #displays a new page with the recipe listed
+# def response_recipe(request):
+#     selected_options = request.session.get('selected_options', [])
+#     ai_response = request.session.get('ai_response', [])
+#     print("view was hit")
+#     return render(request, 'recipeResults.html', {'selected_options': selected_options, 'ai_response': ai_response})
 
+
+# Using this for the results page
 def list_of_recipes(request):
         selected_options = request.session.get('selected_options', [])
         ai_responses = request.session.get('ai_response', [])
