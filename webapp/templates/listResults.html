@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block background_Style %}
+    <style>
+        body{
+            background-image: url('{% static 'chef_ai/images/Countertop.png' %}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+{% for ai_response in ai_responses %}
+    <div class="results-container">
+        <div class="recipe-container">
+            <div class="recipe-content">
+                {% if ai_response.title == "Cannot make recipe with ingredients provided" or ai_response.title == "" %}
+                <div class="no-recipe">
+                    <h1>{{ ai_response.title }}</h1>
+                    <h2>You need more ingredients!</h2>
+                    <h3>Additional:</h3>
+                    <p class="suggestion">
+                        {% for item in ai_response.ingredients %}
+                        {{ item }} {% if not forloop.last %} | {% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
+                {% else %}
+                
+                <div class="selected-ingredients">
+                    <h2>Your selected ingredients:</h2>
+                    <p>
+                        {% for item in selected_options %}
+                        {{ item }}{% if not forloop.last %} | {% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
+        
+                <!-- Details -->
+                <div class="recipe-details">
+                    <h2 class="recipe-title">{{ ai_response.title }}</h2>
+                </div>
+        
+                <div class="recipe-time">
+                    <span class="time">⏱️ {{ ai_response.time }}</span>
+                </div>
+        
+                <!-- Ingredients -->
+                <div class="section-block">
+                    
+                    <h3>Ingredients</h3>
+                    <ul>
+                        {% for item in ai_response.ingredients %}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+        
+                <!-- Utensils -->
+                <div class="section-block">
+                    <h3>Utensils</h3>
+                    <ul>
+                        {% for item in ai_response.utensils %}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+        
+                <!-- Instructions -->
+                <div class="section-block">
+                    <h3>Instructions</h3>
+                    <ol>
+                        {% for step in ai_response.steps %}
+                        <li>{{ step }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+                {% endif %}
+            </div>
+            <div class="download-recipe">
+                <p class="download-text">Download recipe: </p>
+                <button class="jpg" id="{{ai_response.title}}" onclick="downloadFile('jpg')"><strong>JPG</strong></button>
+                <button class="pdf" onclick="downloadFile('pdf')"><strong>PDF</strong></button>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+    <script>
+        function downloadFile(type){
+            let url = type === 'pdf' ? '/download-pdf/' : '/download-jpg/';
+            window.location.href = url;
+        }
+    </script>
+    
+    </body>
+    
+    </html>
+    {% endblock %}

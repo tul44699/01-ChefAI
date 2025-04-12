@@ -14,4 +14,5 @@ urlpatterns = [
     path('profile/', views.getProfile, name='profile'),
     path('scan-images/', views.scan_images, name='scan-images'),
     path('history/<int:recipe_id>/', views.view_saved_recipe, name='view_saved_recipe'),
+    path('list-of-recipes/', views.list_of_recipes, name="list_of_recipes"),
 ]
