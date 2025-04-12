@@ -12,6 +12,21 @@ function type() {
 
 type();
 
+let plusButton = document.getElementById("increment_recipes");
+let minusButton = document.getElementById("decrement_recipes");
+let numRecipesDisplay = document.getElementById("recipe_amount");
+
+numRecipesDisplay.value=1;
+
+plusButton.addEventListener("click", () =>{
+    numRecipesDisplay.value =Number(numRecipesDisplay.value)+1; 
+
+});
+minusButton.addEventListener("click", () =>{
+    numRecipesDisplay.value = Math.max(1, Number(numRecipesDisplay.value)-1);
+});
+
+
 const ingredientCategories = {
     pantryEssentials: [
         'Rice', 'Pasta', 'Flour', 'Sugar',
@@ -369,8 +384,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    //items sent back as an Array ["Ing1 (1)", "Ing2 (1)", "...", "IngN(1)", "Number of Recipes: (1)""]
     document.getElementById("generateRecipeBtn").addEventListener("click", () => {
         const items = document.querySelectorAll('.selected-item');
+        const numRecipes = document.getElementById("recipe_amount").value;
         const final = [];
 
         items.forEach(item => {
@@ -378,6 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const qty = item.querySelector('input[type="text"]').value || '1';
             final.push(`${name} (${qty})`);
         });
+        final.push(`Number of Recipes: (${numRecipes})`);
 
         document.getElementById("final_ingredients").value = final.join(", ");
         console.log("Final Ingredients:", final); // For debugging

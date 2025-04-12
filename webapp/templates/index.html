@@ -27,6 +27,11 @@
                 {% csrf_token %}
                     <input type="text" id="searchInput" autocomplete="off">
                     <div id="searchSuggestions" class="suggestion-box"></div> 
+                    <div class="number_of_recipes">
+                        <button id="increment_recipes" class="plus_button" type="button">+</button>
+                        <input class="num_recipes_shown_input" id="recipe_amount" name="recipe_amount" value="1"></input>
+                        <button id="decrement_recipes" class="minus_button" type="button">-</button>
+                    </div>
                     <input type="hidden" id="final_ingredients" name="final_ingredients">
                     <button id="generateRecipeBtn" class="submit-btn" type="submit">Generate Recipe</button>
                 </form>

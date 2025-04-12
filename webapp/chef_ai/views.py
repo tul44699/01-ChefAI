@@ -29,10 +29,18 @@ load_dotenv()
 
 def index(request):
     if request.method == "POST":
+        
         ingredients_input = request.POST.get("final_ingredients", "")
         selected_options = [i.strip() for i in ingredients_input.split(",") if i.strip()]
-
-        ai_response = feedLLM(selected_options)
+        num_recipes = int(request.POST.get("recipe_amount", "1"))
+        ai_responses = []
+        print(f"Number of recipes returned: {num_recipes}")
+        
+        for i in range(num_recipes):
+            ai_response=(feedLLM(selected_options, num_recipes))
+            ai_responses.append(ai_response)
+            print(ai_responses)
+            
         #Save successful recipes to database
         if request.user.is_authenticated and ai_response:
             save_recipe_to_history(request.user, selected_options, ai_response)
@@ -42,7 +50,8 @@ def index(request):
 
         return redirect('response_recipe')
 
-    return render(request, 'index.html') 
+    return render(request, 'index.html')
+
 
 #displays a new page with the recipe listed
 def response_recipe(request):
@@ -52,7 +61,7 @@ def response_recipe(request):
     return render(request, 'recipeResults.html', {'selected_options': selected_options, 'ai_response': ai_response})
 
 
-def feedLLM(selected_options):
+def feedLLM(selected_options, num_recipes):
     
     llm = ChatGroq(temperature=0, api_key=os.getenv("GROQ_API_KEY"), model_name="deepseek-r1-distill-llama-70b") #llama-3.3-70b-versatile
 
@@ -74,7 +83,9 @@ def feedLLM(selected_options):
     Steps:
     1. ...
     2. ...
-    Here is the list of ingredients with the quantity: {selected_options}"""
+    Here is the list of ingredients with the quantity: {selected_options}
+    
+    Please make {num_recipes} unique recipes based on the above."""
 
     # Invoke the model with the prompt
     response = llm.invoke(prompt)
