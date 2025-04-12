@@ -24,6 +24,8 @@ from django.shortcuts import render
 from clarifai.client.model import Model
 import logging
 import traceback
+from django_ajax.decorators import ajax
+import json
 
 
 logger = logging.getLogger(__name__)  # optional logging
@@ -76,11 +78,12 @@ def list_of_recipes(request):
 
 async def run_multiple_llm_calls(selected_options, num_recipes):
     tasks = [feedLLM(selected_options) for _ in range(num_recipes)]
-    return await asyncio.gather(*tasks)
+    results = await asyncio.gather(*tasks)
+    return JsonResponse(results, safe=False)
 
 
 
-async def feedLLM(selected_options):
+def feedLLM(selected_options):
     
     try:
         llm = ChatGroq(
@@ -107,7 +110,7 @@ async def feedLLM(selected_options):
     2. ...
     Here is the list of ingredients with the quantity: {selected_options}"""
 
-        response = await asyncio.to_thread(llm.invoke, prompt)
+        response = llm.invoke(prompt)
         raw = response.content if hasattr(response, 'content') else response.resolve()
         
         print(f"the raw output from llm: {raw}")
@@ -137,6 +140,7 @@ async def feedLLM(selected_options):
             )
             for key, match in sections.items() if match
         }
+        print(f"Inside feedLLM Parsed data: {parsed}")  
 
         return parsed
 
@@ -357,3 +361,27 @@ def getProfile(request):
     
     history = userHistory.objects.filter(userID=request.user).order_by('-id')
     return render(request, 'registration/profile.html', {'history': history})
+
+
+def post_recipe(request):
+    if request.method == "POST" and request.headers.get("x-requested-with") == "XMLHttpRequest":
+        try:
+            data = json.loads(request.body)
+            ingredients = data.get('ingredients', [])
+            numRecipes = int(data.get('numberOfRecipes', 1))
+            print("Recieved number of recipes to be processed: ", numRecipes)
+            print("Recieved ingredients in backend ", ingredients)
+            ai_response_list = []
+            
+            for i in range(numRecipes):
+                ai_response = feedLLM(ingredients)
+                ai_response_list.append(ai_response)
+            
+            request.session['ai_response']= ai_response_list
+            
+            return JsonResponse({'status': 'success', 'recieved': ai_response_list})
+        
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+        
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)

@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("test/", views.index, name="test"),
-    path("recipe/", views.response_recipe, name="response_recipe"),
+    path("recipe/", views.list_of_recipes, name="response_recipe"),
     path("download-pdf/", views.download_pdf, name = 'download_pdf'),
     path("download-jpg/", views.download_jpg, name='download_jpg'),
     path("search/", views.search_ingredients, name="search_ingredients"),
@@ -14,5 +14,5 @@ urlpatterns = [
     path('profile/', views.getProfile, name='profile'),
     path('scan-images/', views.scan_images, name='scan-images'),
     path('history/<int:recipe_id>/', views.view_saved_recipe, name='view_saved_recipe'),
-    path('list-of-recipes/', views.list_of_recipes, name="list_of_recipes"),
+    path('post-recipe/', views.post_recipe, name="post-recipe"),
 ]
