@@ -77,13 +77,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedIndex = -1; 
     let suggestions = [];
     
-    const chefItUpBtn = document.getElementById('chefItUpBtn');
-    const mainContent = document.querySelector('.content');
-    const searchSection = document.getElementById('searchSection');
+    const letsCook = document.getElementById('letsCook');
     const searchInput = document.getElementById('searchInput');
     const selectedItemsContainer = document.getElementById('selectedItemsContainer');
     const selectedItemsDiv = document.getElementById('selectedItems');
-    const video = document.querySelector('.back-video');
     const form = document.querySelector("form");
 
 
@@ -96,22 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     createCategoryItems(); // Generate ingredient checkboxes
 
-    // Show search section when "Let's Chef it up!" is clicked
-    chefItUpBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const img = document.getElementById('bg-img');
-
-        mainContent.style.display = 'none';
-        searchSection.style.display = 'block';
-
-        searchInput.focus();
-
-        video.pause();
-        video.currentTime = video.duration;
-        video.style.display = 'none';
-        img.style.backgroundImage = `url('${STATIC_IMAGE}')`;
-
-    });
 
     // Search and select ingredients
     const suggestionBox = document.getElementById("searchSuggestions");
@@ -417,8 +398,11 @@ document.getElementById("generateRecipeBtn").addEventListener("click", () => {
 
     document.getElementById("final_ingredients").value = final.join(", ");
     console.log("Final Ingredients:", final); // For debugging
+    document.getElementById("searchSection").style.display = "none";
+    document.getElementById("loadingScreen").style.display = "block";
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
 
-    document.body.innerHTML = "<h1>Loading recipe...</h1>";
 
     fetch('/post-recipe/', {
         method: 'POST',
@@ -461,3 +445,59 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+
+//this is for the login page
+const themes = [
+    {
+        background: "#1A1A2E",
+        color: "#FFFFFF",
+        primaryColor: "#0F3460"
+    },
+    {
+        background: "#461220",
+        color: "#FFFFFF",
+        primaryColor: "#E94560"
+    },
+    {
+        background: "#192A51",
+        color: "#FFFFFF",
+        primaryColor: "#967AA1"
+    },
+    {
+        background: "#F7B267",
+        color: "#000000",
+        primaryColor: "#F4845F"
+    },
+    {
+        background: "#F25F5C",
+        color: "#000000",
+        primaryColor: "#642B36"
+    },
+    {
+        background: "#231F20",
+        color: "#FFF",
+        primaryColor: "#BB4430"
+    }
+];
+
+const setTheme = (theme) => {
+    const root = document.querySelector(":root");
+    root.style.setProperty("--background", theme.background);
+    root.style.setProperty("--color", theme.color);
+    root.style.setProperty("--primary-color", theme.primaryColor);
+    root.style.setProperty("--glass-color", theme.glassColor);
+};
+
+const displayThemeButtons = () => {
+    const btnContainer = document.querySelector(".theme-btn-container");
+    themes.forEach((theme) => {
+        const div = document.createElement("div");
+        div.className = "theme-btn";
+        div.style.cssText = `background: ${theme.background}; width: 25px; height: 25px`;
+        btnContainer.appendChild(div);
+        div.addEventListener("click", () => setTheme(theme));
+    });
+};
+
+displayThemeButtons();

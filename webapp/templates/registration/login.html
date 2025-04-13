@@ -1,18 +1,36 @@
 {% extends "base.html" %}
+
 {% block content %}
 
-<div class="loginContainer">
-    <div class="details">
-        <h2>Login</h2>
-        {% if form.errors %}
-        <p style="color: red;">Invalid username or password.</p>
-        {% endif %}
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Log in</button>
-            <p>Not a member? <a href="{% url 'register' %}">Click here to sign up</a></p>
-        </form>
-    </div>
+<div class="gradient-background">
+    <div class="gradient-sphere sphere-1"></div>
+    <div class="gradient-sphere sphere-2"></div>
+    <div class="gradient-sphere sphere-3"></div>
+    <div class="glow"></div>
+    <div class="grid-overlay"></div>
+    <div class="noise-overlay"></div>
+    <div class="particles-container" id="particles-container"></div>
 </div>
+
+<section class="container">
+    <div class="login-container">
+        <div class="form-container">
+            <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png" alt="illustration" class="illustration" />
+            <h1 class="opacity">LOGIN</h1>
+            {% if form.errors %}
+            <p style="color: red;">Invalid username or password.</p>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="opacity" type="submit">SUBMIT</button>
+            </form>
+            <div class="register-forget opacity">
+                <a href="{% url 'register' %}">REGISTER</a>
+                <a href="{% url 'password_reset' %}">FORGOT PASSWORD</a>
+            </div>
+        </div>
+    </div>
+    <div class="theme-btn-container"></div>
+</section>
 {% endblock %}

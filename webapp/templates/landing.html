@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Welcome to Chef AI{% endblock %}
+
+{% block background_Style %}
+<!-- Add any background overrides or styles here if needed -->
+{% endblock %}
+
+{% block content %}
+<div class="gradient-background">
+    <div class="gradient-sphere sphere-1"></div>
+    <div class="gradient-sphere sphere-2"></div>
+    <div class="gradient-sphere sphere-3"></div>
+    <div class="glow"></div>
+    <div class="grid-overlay"></div>
+    <div class="noise-overlay"></div>
+    <div class="particles-container" id="particles-container"></div>
+</div>
+
+<div class="content-container">
+    <h1 class="landingh1">No Plan? No Problem. Just Ask ChefAI</h1>
+    <p class="landingP">Discover recipes tailored to your ingredients, scan what’s in your kitchen, and cook with AI-powered precision. ChefAI turns your everyday meals into culinary magic—no guesswork, just greatness.</p>
+    <a href="{% url 'index' %}" id="letsCook" class="btn btn-primary" style="text-decoration: none;">Let's Cook...</a>
+</div>
+{% endblock %}

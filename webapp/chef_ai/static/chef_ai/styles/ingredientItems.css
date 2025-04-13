@@ -45,7 +45,7 @@
     max-height: 25rem; 
     padding: 1rem;
     border-radius: 1rem;
-    background-color: #d6d6d6;
+    background-color: rgba(255, 255, 255, 0.2);
     flex-wrap: nowrap; 
     height: 100%;
     align-items: stretch; 
@@ -78,7 +78,7 @@
     min-width: 15rem;
     margin: 0.5rem;
     padding: 1rem 2rem 1rem 2rem;
-    background-color: #d6d6d6;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .slider .categories h2 {
@@ -94,7 +94,7 @@
     margin: 0.5rem;
     padding: 0.25rem;
     text-align: center;
-    background-color: #FFB949;
+    background: linear-gradient(90deg, #B4021E, #FFB949);
     box-shadow: 0px 2px 4px #B4021E;
     color: white;
     font-weight: bold;
@@ -103,7 +103,8 @@
 }
 
 .slider .category .category-item:hover {
-    background-color: #e68900;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(255, 58, 130, 0.4);
     cursor: pointer;
 }
 
@@ -133,7 +134,7 @@
     min-width: 10rem;
     align-items: center;
     border-radius: 1rem;
-    background-color: #FFB949;
+    background: linear-gradient(90deg, #B4021E, #FFB949);
     box-shadow: 0px 2px 4px #B4021E;
     gap: .25rem;
     margin: .5rem;
@@ -144,8 +145,13 @@
     overflow: hidden;
 }
 
+.slider .selected-items-container .selected-item:hover{
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.375rem 1.5625rem rgba(255, 58, 130, 0.4);
+}
+
 .slider .selected-items .selected-item .ingredient-name {
-     text-shadow: 2px 2px 4px black;
+    text-shadow: 0.125rem 0.125rem 0.25rem black;
     color: white;
     font-weight: bold;
     padding: .5rem;
@@ -170,9 +176,6 @@
 .slider .selected-items .selected-item .quantity-container input::placeholder{
     color:rgba(128, 128, 128, 0.658);
     font-size: 1rem;
-    
-    
-    
 }
 
 .slider .selected-items .selected-item .quantity-container:focus {
@@ -191,11 +194,11 @@
 }
 
 .slider .selected-items .selected-item .remove-btn:hover {
-    transform: scale(1.2);
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.375rem 1.5625rem rgba(255, 58, 130, 0.4);
 }
 .regular-button{
-
-    background-color: #FFB949;
+    background: linear-gradient(90deg, #B4021E, #FFB949);
     color: white;
     padding: .5rem 1rem;
     border: none;
@@ -205,7 +208,10 @@
     white-space: nowrap;
     box-shadow: 0px 2px 4px #B4021E;
     text-shadow: 2px 2px 4px black;
-    margin: 0.6rem;
+}
+.regular-button:hover{
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.375rem 1.5625rem rgba(255, 58, 130, 0.4);
 }
 
 /* Turns into a single row on desktop */
