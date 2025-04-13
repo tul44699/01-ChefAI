@@ -19,11 +19,15 @@
     <link rel="stylesheet" href="{% static 'chef_ai/styles/searchbar.css' %}">
     <link rel="stylesheet" href="{% static 'chef_ai/styles/ingredientItems.css' %}">
     <link rel="stylesheet" href="{% static 'chef_ai/styles/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'chef_ai/styles/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'chef_ai/styles/loading.css' %}">
 
                     <!--Javascript files go below-->
     <script type="module" src="{% static 'chef_ai/js/index.js' %}" defer></script>
     <script type="module" src="{% static 'chef_ai/js/logout.js' %}"></script>
     <script type="module" src="{% static 'chef_ai/js/navbar.js' %}"></script>
+    <script type="module" src="{% static 'chef_ai/js/landing.js' %}"></script>
+
 </head>
 <!-- made inline styling because link wont work when web hosting otherwise.
  install Django Template Support to ignore red lines
@@ -59,11 +63,6 @@
             {% endif %}
         </div>
     </header>
-    {% if request.path == '/chefai/' or request.path == '/'%}<!--plays the video on launch page only-->
-    <video autoplay loop muted plays-inline class="back-video">
-        <source src="{% static 'chef_ai/videos/backgroundvid.mp4' %}" type="video/mp4">
-    </video>
-    {% endif %}
     <!--plays the video on recipe page only-->
     {% if request.path == '/chefai/recipe/' %}
     
@@ -73,9 +72,7 @@
     <div class="root">
     {% block content %}
     {% endblock %}
-    </div>
-
-    
+    </div>    
 </body>
 
 </html>

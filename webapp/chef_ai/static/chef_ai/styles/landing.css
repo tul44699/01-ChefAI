@@ -1,3 +1,64 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Helvetica Neue', sans-serif;
+    background-color: #050505;
+    color: white;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-container {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+.landingh1{
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(to right, #fff, #acacac);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 1.25rem rgba(255, 255, 255, 0.1);
+}
+
+.landingP{
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 2rem;
+}
+
+.btn {
+    background: linear-gradient(90deg, #B4021E, #FFB949);
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 3.125rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.0625rem;
+    box-shadow: 0 0.25rem 1.25px rgba(255, 58, 130, 0.3);
+}
+
+.btn:hover {
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.375rem 1.5625rem rgba(255, 58, 130, 0.4);
+}
+
 .gradient-background {
     position: fixed;
     top: 0;
@@ -135,144 +196,4 @@
     border-radius: 50%;
     opacity: 0;
     pointer-events: none;
-}
-
-
-.download-recipe .jpg, .download-recipe .pdf
-{
-    background: linear-gradient(90deg, #B4021E, #FFB949);
-    color: white;
-    padding: .5rem 1rem;
-    border: none;
-    border-radius: .5rem;
-    cursor: pointer;
-    font-size: 1rem;
-    white-space: nowrap;
-    box-shadow: 0rem 0.125rem 0.25rem #B4021E;
-    text-shadow: 0.125rem 0.125rem 0.25rem black;
-    margin: 0.6rem;
-}
-
-.download-recipe .jpg:hover, .download-recipe .pdf:hover{
-    transform: translateY(-0.125rem);
-    box-shadow: 0 0.375rem 1.5625rem rgba(255, 58, 130, 0.4);
-}
-
-.recipe-card .no-recipe {
-    text-align: center;
-}
-
-.recipe-card .no-recipe h2 {
-    color: #ff0000;
-    font-size: 1.5rem;
-    margin-bottom: 0.625rem;
-}
-
-.carousel-container {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    margin-top: 3.125rem;
-}
-
-.carousel-wrapper {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-    width: 100%;
-}
-
-.recipe-card {
-    min-width: 100%;
-    box-sizing: border-box;
-    padding: 1.875rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 0.0625rem solid hsla(0, 0%, 65%, 0.158);
-    box-shadow: 0 0 2.25rem 0.0625rem rgba(0, 0, 0, 0.2);
-    background-color: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px); 
-    border-radius: 0.625rem;
-    color: white;
-    text-align: center;
-}
-
-.recipe-card h2.recipe-title {
-    font-size: 1.8rem;
-    margin-bottom: 0.3rem;
-}
-
-.recipe-card .recipe-meta {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-}
-
-.recipe-card .recipe-section.preview-section h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.4rem;
-    padding-bottom: 0.3rem;
-}
-
-.ingredient-list {
-    padding-left: 1.2rem;
-    font-size: 0.95rem;
-    line-height: 1.4;
-}
-
-.carousel-controls {
-    text-align: center;
-    margin-top: 1.25rem;
-}
-
-.carousel-controls button {
-    background: linear-gradient(90deg, #B4021E, #FFB949);
-    border: none;
-    padding: 0.625rem 1.25rem;
-    font-size: 1.5rem;
-    border-radius: 0.625rem;
-    margin: 0 0.625rem;
-    cursor: pointer;
-    color: white;
-}
-
-.view-btn {
-    margin-top: 1.25rem;
-    background: linear-gradient(90deg, #B4021E, #FFB949);
-    padding: 0.625rem 0.9375rem;
-    border: none;
-    border-radius: 0.5rem;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 999;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: white;
-    color: black;
-    padding: 1.875rem;
-    border-radius: 0.75rem;
-    width: 80%;
-    max-height: 90%;
-    overflow-y: auto;
-    position: relative;
-}
-
-.close-btn {
-    position: absolute;
-    top: 0.9375rem;
-    right: 1.25rem;
-    font-size: 1.75rem;
-    cursor: pointer;
 }

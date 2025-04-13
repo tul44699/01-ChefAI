@@ -5,8 +5,8 @@
     right: 0;
     max-height: 7.5rem;
     width: 100vw;
-    background-color: rgba(245, 245, 245, 0.226);
-    backdrop-filter: blur(100px);
+    /* background-color: rgba(245, 245, 245, 0.226);
+    backdrop-filter: blur(100px); */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -33,7 +33,7 @@
     display: inline-block;
     padding: 1rem 2rem;
     margin-right:2rem;
-    background-color: #FFB949; /* orange from logo */
+    background: linear-gradient(90deg, #B4021E, #FFB949);
     color: white;  /* red from logo */
     text-align: center;
     text-decoration: none; /* Remove underline */
@@ -43,7 +43,8 @@
     text-shadow: 2px 2px 4px black;
 }
 .header .navbar .loginButton:hover {
-    background-color: #e68900; /* Change color on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(255, 58, 130, 0.4);
 }
 /* End of styling for login button */
 

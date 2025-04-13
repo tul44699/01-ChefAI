@@ -35,6 +35,9 @@ logger = logging.getLogger(__name__)  # optional logging
 load_dotenv()
 
 
+def landing(request):
+    return render(request, 'landing.html')
+
 def index(request):
     if request.method == "POST":
         
@@ -91,7 +94,7 @@ def feedLLM(selected_options):
         llm = ChatGroq(
             temperature=0,
             api_key=os.getenv("GROQ_API_KEY"),
-            model_name="deepseek-r1-distill-llama-70b"
+            model_name="llama-3.3-70b-versatile"
         )
 
         prompt = f"""I want a recipe that I can make for the list of ingredients and quantity. It is fine even if it simple. The recipe should be accurate with the list of ingredients and their quantity. For now you can assume that the user has the required quantity. The recipe should have a title, cuisine, 
