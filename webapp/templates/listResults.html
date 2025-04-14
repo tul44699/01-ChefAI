@@ -91,14 +91,19 @@
 
             <div class="download-recipe">
                 <p class="download-text">Download recipe: </p>
-                <button class="jpg" onclick="downloadFile('jpg')"><strong>JPG</strong></button>
-                <button class="pdf" onclick="downloadFile('pdf')"><strong>PDF</strong></button>
+                <button class="jpg" id="jpg-{{ai_response.title}}"onclick="downloadFile('jpg')"><strong>JPG</strong></button>
+                <button class="pdf" id="pdf-{{ai_response.title}}"onclick="downloadFile('pdf')"><strong>PDF</strong></button>
             </div>
         </div>
     </div>
     {% endfor %}
 
         <script>
+            function downloadFile(type){
+                let url = type === 'pdf' ? '/download-pdf/' : '/download-jpg/';
+                window.location.href = url;
+            }
+
             let currentSlide = 0;
             const wrapper = document.querySelector('.carousel-wrapper');
             const cards = document.querySelectorAll('.recipe-card');

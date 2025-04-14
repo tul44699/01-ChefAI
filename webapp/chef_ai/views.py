@@ -112,7 +112,6 @@ def feedLLM(selected_options, prevRecipes):
     2. ...
     Here is the list of ingredients with the quantity: {selected_options}"""
     
-        print(prompt)
 
         response = llm.invoke(prompt)
         raw = response.content if hasattr(response, 'content') else response.resolve()
@@ -292,7 +291,7 @@ def save_recipe_to_history(user, selected_options, ai_response):
     )
 
 #Code that runs the Image detection model
-@csrf_exempt
+# @csrf_exempt
 def scan_images(request):
     if request.method == 'POST':
         images = request.FILES.getlist('images')

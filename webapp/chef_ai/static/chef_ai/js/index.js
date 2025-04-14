@@ -197,6 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('/scan-images/', {
             method: 'POST',
             body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
         })
         .then(response => response.json())
         .then(data => {
