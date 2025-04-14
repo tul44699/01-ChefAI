@@ -30,6 +30,7 @@ import json
 
 logger = logging.getLogger(__name__)  # optional logging
 
+
 # Create your views here.
 
 load_dotenv()
@@ -39,28 +40,24 @@ def landing(request):
     return render(request, 'landing.html')
 
 def index(request):
-    if request.method == "POST":
+    # if request.method == "POST":
         
-        ingredients_input = request.POST.get("final_ingredients", "")
-        selected_options = [i.strip() for i in ingredients_input.split(",") if i.strip()]
-        num_recipes = int(request.POST.get("recipe_amount", "1"))
+    #     ingredients_input = request.POST.get("final_ingredients", "")
+    #     selected_options = [i.strip() for i in ingredients_input.split(",") if i.strip()]
+    #     num_recipes = int(request.POST.get("recipe_amount", "1"))
         
-        print(f"Number of recipes returned: {num_recipes}")
-        ai_response = asyncio.run(run_multiple_llm_calls(selected_options, num_recipes))
-        print(ai_response)
+    #     print(f"Number of recipes returned: {num_recipes}")
+    #     ai_response = asyncio.run(run_multiple_llm_calls(selected_options, num_recipes))
+    #     print(ai_response)
             
-        #Save successful recipes to database
-        if request.user.is_authenticated and ai_response:
-            save_recipe_to_history(request.user, selected_options, ai_response[0])
+    #     #Save successful recipes to database
+    #     if request.user.is_authenticated and ai_response:
+    #         save_recipe_to_history(request.user, selected_options, ai_response[0])
             
-        request.session['selected_options'] = selected_options
-        request.session['ai_response'] = ai_response
-
-        # if num_recipes ==1:
-        #     return redirect('response_recipe')
-        # else:
+    #     request.session['selected_options'] = selected_options
+    #     request.session['ai_response'] = ai_response
             
-        return redirect('list_of_recipes')
+    #     return redirect('list_of_recipes')
 
     return render(request, 'index.html')
 
