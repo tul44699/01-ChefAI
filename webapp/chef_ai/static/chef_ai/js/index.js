@@ -15,16 +15,34 @@ type();
 let plusButton = document.getElementById("increment_recipes");
 let minusButton = document.getElementById("decrement_recipes");
 let numRecipesDisplay = document.getElementById("recipe_amount");
+let maxNumRecipe=5;
+let minNumRecipe=1;
 
 numRecipesDisplay.value=1;
 
 plusButton.addEventListener("click", () =>{
-    numRecipesDisplay.value =Number(numRecipesDisplay.value)+1; 
+    numRecipesDisplay.value =Math.min(Number(numRecipesDisplay.value)+1, maxNumRecipe); 
 
 });
 minusButton.addEventListener("click", () =>{
-    numRecipesDisplay.value = Math.max(1, Number(numRecipesDisplay.value)-1);
+    numRecipesDisplay.value = Math.max(minNumRecipe, Number(numRecipesDisplay.value)-1);
 });
+
+
+//values exist for form validation in case we allow the user to manually type in the box
+//Also limits the value
+numRecipesDisplay.addEventListener("change", () =>{
+
+    if(Number(numRecipesDisplay.value) >maxNumRecipe){
+        numRecipesDisplay.value = maxNumRecipe;
+    }
+    else if(Number(numRecipesDisplay.vlaue) < minNumRecipe){
+        numRecipesDisplay.value = minNumRecipe;
+    }
+    else if(isNaN(numRecipesDisplay.value)){
+        numRecipesDisplay.value = minNumRecipe;
+    }
+})
 
 
 const ingredientCategories = {
@@ -179,6 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('/scan-images/', {
             method: 'POST',
             body: formData,
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
         })
         .then(response => response.json())
         .then(data => {
@@ -365,23 +386,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-//     //items sent back as an Array ["Ing1 (1)", "Ing2 (1)", "...", "IngN(1)", "Number of Recipes: (1)""]
-//     document.getElementById("generateRecipeBtn").addEventListener("click", () => {
-//         const items = document.querySelectorAll('.selected-item');
-        
-//         const final = [];
-
-//         items.forEach(item => {
-//             const name = item.querySelector('.ingredient-name').textContent;
-//             const qty = item.querySelector('input[type="text"]').value || '1';
-//             final.push(`${name} (${qty})`);
-//         });
-        
-
-//         document.getElementById("final_ingredients").value = final.join(", ");
-//         console.log("Final Ingredients:", final); // For debugging
-//     });
-// });
 
 document.getElementById("generateRecipeBtn").addEventListener("click", () => {
     const items = document.querySelectorAll('.selected-item');

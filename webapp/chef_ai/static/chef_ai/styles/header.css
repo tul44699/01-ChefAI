@@ -5,8 +5,8 @@
     right: 0;
     max-height: 7.5rem;
     width: 100vw;
-    /* background-color: rgba(245, 245, 245, 0.226);
-    backdrop-filter: blur(100px); */
+    /* background-color: rgba(245, 245, 245, 0.226); */
+    backdrop-filter: blur(10px); 
     display: flex;
     justify-content: space-between;
     align-items: center;
