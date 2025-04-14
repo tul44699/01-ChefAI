@@ -65,12 +65,8 @@ def index(request):
     return render(request, 'index.html')
 
 
-# #displays a new page with the recipe listed
-# def response_recipe(request):
-#     selected_options = request.session.get('selected_options', [])
-#     ai_response = request.session.get('ai_response', [])
-#     print("view was hit")
-#     return render(request, 'recipeResults.html', {'selected_options': selected_options, 'ai_response': ai_response})
+
+
 
 
 # Using this for the results page
@@ -88,7 +84,7 @@ async def run_multiple_llm_calls(selected_options, num_recipes):
 
 
 
-def feedLLM(selected_options):
+def feedLLM(selected_options, prevRecipes):
     
     try:
         llm = ChatGroq(
@@ -99,7 +95,8 @@ def feedLLM(selected_options):
 
         prompt = f"""I want a recipe that I can make for the list of ingredients and quantity. It is fine even if it simple. The recipe should be accurate with the list of ingredients and their quantity. For now you can assume that the user has the required quantity. The recipe should have a title, cuisine, 
     and amount of time required to cook the recipe, the list of ingredients with their quantity, utensils required and then a step by step process of cooking the recipe. Be careful to not suggest a recipe with ingredients that the user has not mentioned, 
-    and one that does not exist. Do not assume that the user has more ingredients. YOU DO NOT NEED TO USE ALL THE INGREDIENTS LISTED.
+    and one that does not exist. Do not assume that the user has more ingredients. YOU DO NOT NEED TO USE ALL THE INGREDIENTS LISTED. It must be a different recipe than the following:
+    {prevRecipes}
 
     Please format your recipe response like this:
 
@@ -114,6 +111,8 @@ def feedLLM(selected_options):
     1. ...
     2. ...
     Here is the list of ingredients with the quantity: {selected_options}"""
+    
+        print(prompt)
 
         response = llm.invoke(prompt)
         raw = response.content if hasattr(response, 'content') else response.resolve()
@@ -374,12 +373,12 @@ def post_recipe(request):
             data = json.loads(request.body)
             ingredients = data.get('ingredients', [])
             numRecipes = int(data.get('numberOfRecipes', 1))
-            print("Recieved number of recipes to be processed: ", numRecipes)
-            print("Recieved ingredients in backend ", ingredients)
+
             ai_response_list = []
             
+            # feeds the ingredients and previous recipes into the llm for unique recipes
             for i in range(numRecipes):
-                ai_response = feedLLM(ingredients)
+                ai_response = feedLLM(ingredients, ai_response_list)
                 ai_response_list.append(ai_response)
             
             request.session['ai_response']= ai_response_list

@@ -20,22 +20,30 @@
         <div class="search-wrapper">
             <form method="POST" action="{% url 'index' %}">
                 {% csrf_token %}
-                    <input type="text" id="searchInput" autocomplete="off">
-                    <div id="searchSuggestions" class="suggestion-box"></div> 
-                    <div class="number_of_recipes">
-                        <button id="increment_recipes" class="plus_button" type="button">+</button>
-                        <input class="num_recipes_shown_input" id="recipe_amount" name="recipe_amount" value="1"></input>
-                        <button id="decrement_recipes" class="minus_button" type="button">-</button>
+                <div class="grid-container">
+                    <div class="column1">
+                        <input class="searchBar" type="text" id="searchInput" autocomplete="off">
+                        <div id="searchSuggestions" class="suggestion-box"></div> 
                     </div>
-                    <input type="hidden" id="final_ingredients" name="final_ingredients">
-                    <button id="generateRecipeBtn" class="submit-btn" type="button">Generate Recipe</button>
-                </form>
-                <div class="upload-container">
-                    <label for="image-upload-input" class="upload-label">+</label>
-                    <input type="file" id="image-upload-input" multiple accept="image/*" />
-                    <button class="regular-button" id="scan-btn">Scan</button>
-                </div>
+                        <input type="hidden" id="final_ingredients" name="final_ingredients">
+                    <div class="column2">
+                        <div class="number_of_recipes">
+                            <button id="generateRecipeBtn" class="submit-btn" type="button">Generate Recipe</button>
+                            <div class="addMinus">
+                                <button id="increment_recipes" class="plus_button" type="button">+</button>
+                                <input class="num_recipes_shown_input" id="recipe_amount" name="recipe_amount" value="1" disabled></input>
+                                <button id="decrement_recipes" class="minus_button" type="button">-</button>
+                            </div>
+                        </div>
+                        </form>
+                            <div class="upload-container">
+                                <label for="image-upload-input" class="upload-label">+ Add Image</label>
+                                <input type="file" id="image-upload-input" multiple accept="image/*" />
+                                <button class="scan-button" id="scan-btn">Scan Image</button>
+                            </div>
+                    </div>
         </div>
+    </div>
         
         <div class="slider">
             <div class="categories">
