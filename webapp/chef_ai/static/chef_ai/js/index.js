@@ -194,6 +194,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Handles uploaded image file display
+    const imageInput = document.getElementById("image-upload-input");
+    const uploadedImagesContainer = document.getElementById("uploadedImagesContainer");
+    const uploadedFilesList = document.getElementById("uploadedFilesList");
+
+    imageInput.addEventListener("change", function (event) {
+    const fileList = event.target.files;
+
+    if (fileList.length > 0) {
+        uploadedImagesContainer.style.display = "block";
+        uploadedFilesList.innerHTML = "";
+
+        for (let i = 0; i < fileList.length; i++) {
+        const item = document.createElement("div");
+        item.className = "uploaded-file-item";
+        item.textContent = fileList[i].name;
+        uploadedFilesList.appendChild(item);
+        }
+    } else {
+        uploadedImagesContainer.style.display = "none";
+    }
+    });
+
     //Script that scans images for ingredients
     document.getElementById('scan-btn').addEventListener('click', () => {
         const formData = new FormData();
