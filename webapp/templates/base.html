@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="{% static 'chef_ai/styles/loading.css' %}">
 
                     <!--Javascript files go below-->
-    <script type="module" src="{% static 'chef_ai/js/index.js' %}" defer></script>
+   <!-- <script type="module" src="{% static 'chef_ai/js/index.js' %}" defer></script> -->
     <script type="module" src="{% static 'chef_ai/js/logout.js' %}"></script>
     <script type="module" src="{% static 'chef_ai/js/navbar.js' %}"></script>
     <script type="module" src="{% static 'chef_ai/js/landing.js' %}"></script>
@@ -72,7 +72,9 @@
     <div class="root">
     {% block content %}
     {% endblock %}
-    </div>    
+    </div>
+    {{ selected_options|json_script:"selected_options" }}
+    <script type="module" src="{% static 'chef_ai/js/index.js' %}"></script>  
 </body>
 
 </html>

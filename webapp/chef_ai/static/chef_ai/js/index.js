@@ -12,13 +12,21 @@ function type() {
 
 type();
 
+
+
 let plusButton = document.getElementById("increment_recipes");
 let minusButton = document.getElementById("decrement_recipes");
 let numRecipesDisplay = document.getElementById("recipe_amount");
 let maxNumRecipe=5;
 let minNumRecipe=1;
 
-numRecipesDisplay.value=1;
+//resets num recipes to zero unless redirected from another page(aka the hyperlink on the results page)
+if (
+    document.referrer === "" ||                  // direct reload
+    new URL(document.referrer).pathname === window.location.pathname // same page navigation
+) {
+    numRecipesDisplay.value = 1;
+}
 
 plusButton.addEventListener("click", () =>{
     numRecipesDisplay.value =Math.min(Number(numRecipesDisplay.value)+1, maxNumRecipe); 
@@ -33,7 +41,7 @@ minusButton.addEventListener("click", () =>{
 //Also limits the value
 numRecipesDisplay.addEventListener("change", () =>{
 
-    if(Number(numRecipesDisplay.value) >maxNumRecipe){
+    if(Number(numRecipesDisplay.value) > maxNumRecipe){
         numRecipesDisplay.value = maxNumRecipe;
     }
     else if(Number(numRecipesDisplay.vlaue) < minNumRecipe){
@@ -43,6 +51,7 @@ numRecipesDisplay.addEventListener("change", () =>{
         numRecipesDisplay.value = minNumRecipe;
     }
 })
+let clearItems = document.getElementById("clr-btn");
 
 
 const ingredientCategories = {
@@ -309,9 +318,16 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
     // Function to add selected item to the top div
-    function addSelectedItem(item, categoryKey) {
+    function addSelectedItem(parts, categoryKey) {
         selectedItemsContainer.style.display = 'block'; // Show container when items are added
-
+        var item = parts;
+        
+        //handles the session object to only use the name and not include the quantity
+        if(Array.isArray(parts)){
+            var item = parts[0];
+        }
+        
+        
         // Prevent duplicates
         if (document.getElementById(`selected-${item.toLowerCase().replace(/\s+/g, '-')}`)) return;
         console.log(item, categoryKey);
@@ -319,6 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const itemDiv = document.createElement('div');
         itemDiv.classList.add('selected-item');
         itemDiv.id = `selected-${item.toLowerCase().replace(/\s+/g, '-')}`;
+        itemDiv.dataset.itemName = item;
 
         // Create the quantity container (wraps the input field)
         const quantityContainer = document.createElement('div');
@@ -328,6 +345,15 @@ document.addEventListener('DOMContentLoaded', () => {
         quantityInput.type = 'text';
         quantityInput.placeholder = 'Quantity';
         quantityInput.id = `quantity-${item.toLowerCase().replace(/\s+/g, '-')}`;
+        
+
+        //adds text back on reload if user had text. (defaults to nothing)
+        if(Array.isArray(parts) && parts.length >1){
+            let quantity = parts[1];
+            if( quantity != '1'){
+                quantityInput.value = quantity;
+            }
+        }
 
         quantityContainer.appendChild(quantityInput);
 
@@ -365,19 +391,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Append itemDiv to selected items container
         selectedItemsDiv.appendChild(itemDiv);
+        let list = makeIngredientList();
         console.log('Added selected item:', item); // For debugging
+        console.log('Current list so far: ', list);
         // Clear the input field after adding the i
     }
 
     // Function to remove item from selected list
     function removeSelectedItem(item) {
+        console.log("inside the removeSelectedItem ",item)
         const itemDiv = document.getElementById(`selected-${item.toLowerCase().replace(/\s+/g, '-')}`);
         if (itemDiv) {
             console.log("removed item: ", itemDiv);
             itemDiv.remove();
+            let list = makeIngredientList();
+            console.log("List should be smaller since an item was deleted", list);
             checkIfEmpty();
         }
     }
+
+    clearItems.addEventListener("click", () => {
+        const items = document.querySelectorAll('.selected-item');
+    
+        items.forEach(item => {
+            let trimmed = item.dataset.itemName;
+            console.log("in clearItems", trimmed);
+            removeSelectedItem(trimmed);
+        });
+    })
 
     // Hide container if no items remain
     function checkIfEmpty() {
@@ -385,6 +426,38 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedItemsContainer.style.display = 'none';
         }
     }
+
+    //grabs items from session storage so that user can add or remove items
+    const rawOptions = sessionStorage.getItem('selected_options') || [];
+    if (rawOptions) {
+        const selected_options = JSON.parse(rawOptions);
+        sessionStorage.setItem("selected_options", JSON.stringify(selected_options)); // Save for future reloads
+        selected_options.forEach(option => {
+            let parts = option.split(":");
+            console.log("Loaded option:", parts);
+            addSelectedItem(parts, 'ingredient-category');
+        });
+    } else {
+        console.log("No selected-options element found");
+    }
+
+    function makeIngredientList(){
+        const items = document.querySelectorAll('.selected-item');
+        const final = [];
+    
+        items.forEach(item => {
+            const name = item.querySelector('.ingredient-name').textContent;
+            const qty = item.querySelector('input[type="text"]').value || '1';
+            final.push(`${name} :${qty}`);
+        });
+        document.getElementById("final_ingredients").value = final.join(", ");
+        sessionStorage.setItem('selected_options', JSON.stringify(final));//updates the session storage
+        const selected = JSON.parse(sessionStorage.getItem('selected_options')) || [];
+        console.log("updated list in makeINgredientList: ", selected);
+        return final;
+
+    }
+
 
 
 document.getElementById("generateRecipeBtn").addEventListener("click", () => {
@@ -395,10 +468,9 @@ document.getElementById("generateRecipeBtn").addEventListener("click", () => {
     items.forEach(item => {
         const name = item.querySelector('.ingredient-name').textContent;
         const qty = item.querySelector('input[type="text"]').value || '1';
-        final.push(`${name} (${qty})`);
+        final.push(`${name} :${qty}`);
     });
     
-    // document.body.innerHTML = "<h1>Loading recipe...</h1>";
 
     document.getElementById("final_ingredients").value = final.join(", ");
     console.log("Final Ingredients:", final); // For debugging
@@ -505,3 +577,6 @@ const displayThemeButtons = () => {
 };
 
 displayThemeButtons();
+
+
+

@@ -53,6 +53,7 @@
     grid-template-columns: 4fr 1fr;
     width:80%;
     justify-content: center;
+    
 
 
 }
@@ -62,6 +63,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    
 }
 .number_of_recipes .addMinus .num_recipes_shown_input {
     max-width: 1.5rem;
@@ -71,6 +73,7 @@
     color: white;
     border: none;
     text-shadow: 2px 2px 4px black;
+    font-weight: bold;
     
     
 }
@@ -86,6 +89,7 @@
     font-size: 1rem;
     white-space: nowrap; 
     text-shadow: 2px 2px 4px black;
+    font-weight: bold;
     
 }
 .number_of_recipes .addMinus .plus_button:hover, 
@@ -105,6 +109,7 @@
     font-size: 1rem;
     white-space: nowrap;   
     text-shadow: 2px 2px 4px black;
+    font-weight: bold;
     
 }
 .number_of_recipes:hover{
@@ -127,6 +132,7 @@
     white-space: nowrap;   
     text-shadow: 2px 2px 4px black;
     box-shadow: 0px 0.125rem 0.25rem #B4021E;
+    font-weight: bold;
     
 }
 .scan-button:hover{
@@ -220,6 +226,7 @@
     white-space: nowrap;
     box-shadow: 0px 0.125rem 0.25rem #B4021E;
     text-shadow: 0.125rem 0.125rem 0.25rem black;
+    font-weight: bold;
 }
 
 .upload-label:hover{

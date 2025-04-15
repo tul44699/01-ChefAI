@@ -31,7 +31,8 @@
                             <button id="generateRecipeBtn" class="submit-btn" type="button">Generate Recipe</button>
                             <div class="addMinus">
                                 <button id="increment_recipes" class="plus_button" type="button">+</button>
-                                <input class="num_recipes_shown_input" id="recipe_amount" name="recipe_amount" value="1" disabled></input>
+                                
+                                <input class="num_recipes_shown_input" id="recipe_amount" name="recipe_amount" value={{ num_recipes }} disabled></input>
                                 <button id="decrement_recipes" class="minus_button" type="button">-</button>
                             </div>
                         </div>
@@ -49,7 +50,9 @@
             <div class="categories">
                 <div class="selected-items-container" id="selectedItemsContainer" style="display: none;">
                     <h2>Selected Ingredients</h2>
+                    <h2><button type="button" class="regular-button" id="clr-btn">Clear Items</button></h2>
                     <div class="selected-items" id="selectedItems"></div>
+                    
                 </div>
                 <div class="category" id="pantryEssentials">
                     <h2>Pantry Essentials</h2>
@@ -76,6 +79,9 @@
         <div class="noise-overlay"></div>
         <div class="particles-container" id="particles-container"></div>
     </div> 
-{% endblock %}
+
+    
+
 </body>
 </html>
+{% endblock %}

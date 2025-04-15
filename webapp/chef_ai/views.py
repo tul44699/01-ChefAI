@@ -58,8 +58,12 @@ def index(request):
     #     request.session['ai_response'] = ai_response
             
     #     return redirect('list_of_recipes')
+    selected_options = request.session.get('selected_options', [])
+    num_recipes = request.session.get('num_recipes', 1)
+    print("inside index ", selected_options)
+    
 
-    return render(request, 'index.html')
+    return render(request, 'index.html', {'selected_options':selected_options, 'num_recipes':num_recipes})
 
 
 
@@ -70,7 +74,8 @@ def index(request):
 def list_of_recipes(request):
         selected_options = request.session.get('selected_options', [])
         ai_responses = request.session.get('ai_response', [])
-        print(f"list_of_recipes view was hit {ai_responses}")
+        request.session['selected_options'] = selected_options
+        print(f"list_of_recipes view was hit {selected_options}")
         return render(request, 'listResults.html', {'selected_options': selected_options, 'ai_responses': ai_responses})
 
 
@@ -369,6 +374,10 @@ def post_recipe(request):
             data = json.loads(request.body)
             ingredients = data.get('ingredients', [])
             numRecipes = int(data.get('numberOfRecipes', 1))
+            
+            # saves ingredients and number to generate to session
+            request.session['selected_options'] = ingredients
+            request.session['num_recipes'] = numRecipes
 
             ai_response_list = []
             

@@ -15,8 +15,9 @@
         <div class="noise-overlay"></div>
         <div class="particles-container" id="particles-container"></div>
     </div>
-
-
+    <div class="return-link-container">
+        <h2><a class="return-link" href="{% url 'index' %}">Forgot an ingredient?</a></h2>
+    </div>
     <div class="carousel-container">
         <div class="carousel-wrapper">
             {% for ai_response in ai_responses %}
@@ -91,15 +92,17 @@
 
             <div class="download-recipe">
                 <p class="download-text">Download recipe: </p>
-                <button class="jpg" id="jpg-{{ai_response.title}}"onclick="downloadFile('jpg')"><strong>JPG</strong></button>
+                <button class="jpg" id="jpg-{{ai_response.id}}}"onclick="downloadFile('jpg')"><strong>JPG</strong></button>
                 <button class="pdf" id="pdf-{{ai_response.title}}"onclick="downloadFile('pdf')"><strong>PDF</strong></button>
             </div>
         </div>
     </div>
     {% endfor %}
+    
 
         <script>
             function downloadFile(type){
+
                 let url = type === 'pdf' ? '/download-pdf/' : '/download-jpg/';
                 window.location.href = url;
             }
@@ -135,6 +138,8 @@
                 document.getElementById(`modal-${index}`).style.display = 'none';
             }
         </script>
+        
+    
     </body>
 </html>
     {% endblock %}
