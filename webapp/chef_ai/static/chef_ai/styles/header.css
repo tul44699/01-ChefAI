@@ -5,8 +5,11 @@
     right: 0;
     max-height: 7.5rem;
     width: 100vw;
-    /* background-color: rgba(245, 245, 245, 0.226); */
-    backdrop-filter: blur(10px); 
+    background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent),
+     linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent),
+    linear-gradient(90deg, #b4021d, #FFB949, #FFB949, #b4021d); 
+     /* backdrop-filter: blur(10px);   */
     display: flex;
     justify-content: space-between;
     align-items: center;

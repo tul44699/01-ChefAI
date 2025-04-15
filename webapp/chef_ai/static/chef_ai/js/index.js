@@ -428,9 +428,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //grabs items from session storage so that user can add or remove items
-    const rawOptions = sessionStorage.getItem('selected_options') || [];
+    const rawOptions = JSON.parse(sessionStorage.getItem('selected_options') || "[]");
     if (rawOptions) {
-        const selected_options = JSON.parse(rawOptions);
+        const selected_options = rawOptions;
         sessionStorage.setItem("selected_options", JSON.stringify(selected_options)); // Save for future reloads
         selected_options.forEach(option => {
             let parts = option.split(":");
@@ -446,17 +446,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const final = [];
     
         items.forEach(item => {
-            const name = item.querySelector('.ingredient-name').textContent;
-            const qty = item.querySelector('input[type="text"]').value || '1';
+            const name = item.querySelector('.ingredient-name').textContent;//gets name of item selected
+            //updates the quantity for ingredient on each key press
+            const qtyElement = item.querySelector('input[type="text"]');
+            qtyElement.addEventListener('input', makeIngredientList);
+            const qty = qtyElement.value || '1';//defaults to one if no value
+            console.log("inside function here is qty being passed from value ",qty);
             final.push(`${name} :${qty}`);
         });
         document.getElementById("final_ingredients").value = final.join(", ");
         sessionStorage.setItem('selected_options', JSON.stringify(final));//updates the session storage
-        const selected = JSON.parse(sessionStorage.getItem('selected_options')) || [];
+        const selected = JSON.parse(sessionStorage.getItem('selected_options') || "[]");
         console.log("updated list in makeINgredientList: ", selected);
         return final;
 
     }
+    
 
 
 
