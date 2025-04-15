@@ -276,3 +276,22 @@
     font-size: 1.75rem;
     cursor: pointer;
 }
+
+.return-link-container {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.returnLink-container h2{
+    align-items: center;
+}
+
+.return-link-container .return-link {
+    text-decoration: underline;
+    text-align: center;
+    
+}
+.return-link-container .return-link:hover {
+    color:#FFB949
+}
