@@ -60,9 +60,6 @@ def index(request):
     #     return redirect('list_of_recipes')
     selected_options = request.session.get('selected_options', [])
     num_recipes = request.session.get('num_recipes', 1)
-    print("inside index ", selected_options)
-    
-
     return render(request, 'index.html', {'selected_options':selected_options, 'num_recipes':num_recipes})
 
 
@@ -385,6 +382,9 @@ def post_recipe(request):
             for i in range(numRecipes):
                 ai_response = feedLLM(ingredients, ai_response_list)
                 ai_response_list.append(ai_response)
+                    #     #Save successful recipes to database
+                if request.user.is_authenticated and ai_response:
+                    save_recipe_to_history(request.user, ingredients, ai_response)
             
             request.session['ai_response']= ai_response_list
             
