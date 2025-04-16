@@ -52,9 +52,11 @@
     box-sizing: border-box;
     scrollbar-gutter: stable;
 }
+/*
 .selected-items-container .clearItems {
 
 }
+*/
 
 .selected-items-container .selected-item {
     height: 100%;
@@ -292,4 +294,4 @@
         width: calc(100% - 1rem);
         min-width: 0;
     }
-}
+}  
