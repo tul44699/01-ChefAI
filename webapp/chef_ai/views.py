@@ -25,6 +25,7 @@ from clarifai.client.model import Model
 import logging
 import traceback
 from django_ajax.decorators import ajax
+from textwrap import wrap
 import json
 
 
@@ -157,89 +158,147 @@ def feedLLM(selected_options, prevRecipes):
 
 # Function to generate and download PDF
 def download_pdf(request):
-    ai_response = request.session.get('ai_response', "")
-    print(ai_response)
+    index = int(request.GET.get('index', 0))
+    ai_responses = request.session.get('ai_response', [])
 
-    if not ai_response:
+    if not ai_responses or index >= len(ai_responses):
         return redirect('response_recipe')
+
+    ai_response = ai_responses[index]
 
     buffer = io.BytesIO()
     pdf = canvas.Canvas(buffer, pagesize=letter)
-    pdf.setFont("Times-Roman", 12)  # Set font to Times New Roman
+    pdf.setFont("Helvetica-Bold", 16)
 
-    y_position = 750  # Start position for text
+    y = 750
+    left_margin = 50
+    line_height = 15
+    wrap_width = 90  # Approx chars per line
 
-    for key, value in ai_response.items():
-        print(y_position)
-        if y_position < 50:  # Create a new page if necessary
-            print("Making new page")
-            pdf.showPage()
-            pdf.setFont("Times-Roman", 12)
-            y_position = 750
+    # Title
+    title = ai_response.get("title", "Recipe")
+    pdf.drawString(left_margin, y, title)
+    y -= 30
 
-        pdf.drawString(50, y_position, f"{key.capitalize()}:")
-        y_position -= 20  # Move down after the key
+    pdf.setFont("Helvetica", 12)
 
-        if isinstance(value, list):
-            for item in value:
-                if y_position < 50:  # Create a new page if necessary
-                    print("Making new page")
-                    pdf.showPage()
-                    pdf.setFont("Times-Roman", 12)
-                    y_position = 750
-                pdf.drawString(70, y_position, f"- {item}")  # Indent list items
-                y_position -= 15  # Move down for each item
-        else:
-            if y_position < 50:
+    # Time
+    time_required = ai_response.get("time", "")
+    pdf.drawString(left_margin, y, f"Time Required: {time_required}")
+    y -= 25
+
+    # Ingredients
+    pdf.drawString(left_margin, y, "Ingredients:")
+    y -= 20
+    for item in ai_response.get("ingredients", []):
+        for line in wrap(f"- {item}", wrap_width):
+            pdf.drawString(left_margin + 20, y, line)
+            y -= line_height
+            if y < 50:
                 pdf.showPage()
-                pdf.setFont("Times-Roman", 12)
-                y_position = 750
-            pdf.drawString(70, y_position, value)
-            y_position -= 20  # Move down for the next section
+                pdf.setFont("Helvetica", 12)
+                y = 750
+
+    y -= 10
+
+    # Utensils
+    pdf.drawString(left_margin, y, "Utensils:")
+    y -= 20
+    for item in ai_response.get("utensils", []):
+        for line in wrap(f"- {item}", wrap_width):
+            pdf.drawString(left_margin + 20, y, line)
+            y -= line_height
+            if y < 50:
+                pdf.showPage()
+                pdf.setFont("Helvetica", 12)
+                y = 750
+
+    y -= 10
+
+    # Instructions
+    pdf.drawString(left_margin, y, "Instructions:")
+    y -= 20
+    for idx, step in enumerate(ai_response.get("steps", []), 1):
+        step_lines = wrap(f"{idx}. {step}", wrap_width)
+        for line in step_lines:
+            pdf.drawString(left_margin + 20, y, line)
+            y -= line_height
+            if y < 50:
+                pdf.showPage()
+                pdf.setFont("Helvetica", 12)
+                y = 750
 
     pdf.save()
     buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename="recipe.pdf")
+
+    safe_title = re.sub(r'[^a-zA-Z0-9_]+', '_', title)
+    return FileResponse(buffer, as_attachment=True, filename=f"{safe_title}.pdf")
+
 
 
 # Function to generate and download JPG
 def download_jpg(request):
-    ai_response = request.session.get('ai_response', "")
+    index = int(request.GET.get('index', 0))
+    ai_responses = request.session.get('ai_response', [])
 
-    if not ai_response:
-        return redirect('response_recipe')  # Redirect if no data
+    if not ai_responses or index >= len(ai_responses):
+        return redirect('response_recipe')
 
-    img = Image.new("RGB", (800, 800), "white")
+    ai_response = ai_responses[index]
+
+    # Create blank image
+    img_width, img_height = 800, 800
+    img = Image.new("RGB", (img_width, img_height), "white")
     draw = ImageDraw.Draw(img)
 
     try:
-        font = ImageFont.truetype("arial.ttf", 20)  # Use Arial if available
+        font = ImageFont.truetype("arial.ttf", 20)
     except:
         font = ImageFont.load_default()
 
-    y_position = 50
-    line_spacing = 25  # Adjust line spacing for better readability
+    y = 50
+    line_spacing = 20
+    wrap_width = 80  # characters per line
 
-    for key, value in ai_response.items():
-        if y_position > 550:  # Ensure text fits within image bounds
-            break  
-        draw.text((50, y_position), f"{key.capitalize()}:", fill="black", font=font)
-        y_position += 30  # Move down after the key
+    def draw_wrapped(text, indent=0):
+        nonlocal y
+        lines = wrap(text, width=wrap_width)
+        for line in lines:
+            draw.text((50 + indent, y), line, fill="black", font=font)
+            y += line_spacing
+            if y > img_height - 50:
+                break  # stop if image height exceeded
 
-        if isinstance(value, list):
-            for item in value:
-                draw.text((70, y_position), f"- {item}", fill="black", font=font)  # Indent list items
-                y_position += line_spacing  # Move down for each list item
-        else:
-            draw.text((70, y_position), value, fill="black", font=font)
-            y_position += line_spacing  # Move down for the next section
+    # Title
+    title = ai_response.get("title", "Recipe")
+    draw.text((50, y), title, fill="black", font=font)
+    y += line_spacing * 2
 
+    # Time
+    draw_wrapped(f"Time Required: {ai_response.get('time', '')}")
+
+    y += line_spacing
+    draw_wrapped("Ingredients:")
+    for item in ai_response.get("ingredients", []):
+        draw_wrapped(f"- {item}", indent=20)
+
+    y += line_spacing
+    draw_wrapped("Utensils:")
+    for item in ai_response.get("utensils", []):
+        draw_wrapped(f"- {item}", indent=20)
+
+    y += line_spacing
+    draw_wrapped("Instructions:")
+    for idx, step in enumerate(ai_response.get("steps", []), 1):
+        draw_wrapped(f"{idx}. {step}", indent=20)
+
+    # Save image to buffer
     buffer = io.BytesIO()
-    img.save(buffer, format="JPEG")
+    img.save(buffer, format="JPEG", quality=95, dpi=(150,150))
     buffer.seek(0)
-    
-    return FileResponse(buffer, as_attachment=True, filename="recipe.jpg")
 
+    safe_title = re.sub(r'[^a-zA-Z0-9_]+', '_', title)
+    return FileResponse(buffer, as_attachment=True, filename=f"{safe_title}.jpg")
 
 def search_ingredients(request):
     # Gets the search query
