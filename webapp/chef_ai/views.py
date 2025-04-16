@@ -310,7 +310,6 @@ def logoutUser(request):
     return redirect('index')
 
 def getProfile(request):
-    
     return render(request, 'registration/profile.html')
 
 def save_recipe_to_history(user, selected_options, ai_response):
@@ -383,18 +382,18 @@ def view_saved_recipe(request, recipe_id):
     steps_section = re.search(r"Steps:\s*((?:.|\n)+)", raw_content)
     
     # Format into ai_response dictionary
-    ai_response = {
+    ai_response = [{
         "title": title_match.group(1) if title_match else recipe.title,
         "cuisine": cuisine_match.group(1) if cuisine_match else "Not specified",
         "time": time_match.group(1) if time_match else "Not specified",
         "ingredients": [line.strip("- ") for line in ingredients_section.group(1).strip().split("\n")] if ingredients_section else [],
         "utensils": [line.strip("- ") for line in utensils_section.group(1).strip().split("\n")] if utensils_section else [],
         "steps": [line.strip("0123456789. ") for line in steps_section.group(1).strip().split("\n")] if steps_section else []
-    }
+    }]
     
-    return render(request, 'recipeResults.html', {
-        'selected_options': recipe.selectedIngredients.split(', '),
-        'ai_response': ai_response  # Pass with the same name your template expects
+    return render(request, 'listResults.html', {
+        
+        'ai_responses': ai_response  # Pass with the same name your template expects
     })
 
 
