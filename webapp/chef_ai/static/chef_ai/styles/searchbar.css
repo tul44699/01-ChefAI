@@ -255,8 +255,7 @@
         align-items: center;
         justify-content: center;
         max-width:45rem;
-        
-        
+        margin-top: 2rem;
     }
 
     .grid-container {
@@ -275,7 +274,4 @@
     .upload-container {
         width:100%;
     }
-
-
-
 }

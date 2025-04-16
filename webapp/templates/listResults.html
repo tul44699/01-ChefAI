@@ -1,99 +1,88 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block background_Style %}
-{% endblock %}
-
 {% block content %}
-
-    <div class="gradient-background">
-        <div class="gradient-sphere sphere-1"></div>
-        <div class="gradient-sphere sphere-2"></div>
-        <div class="gradient-sphere sphere-3"></div>
-        <div class="glow"></div>
-        <div class="grid-overlay"></div>
-        <div class="noise-overlay"></div>
-        <div class="particles-container" id="particles-container"></div>
-    </div>
     <div class="return-link-container">
         <h2><a class="return-link" href="{% url 'index' %}">Forgot an ingredient?</a></h2>
     </div>
-    <div class="carousel-container">
-        <div class="carousel-wrapper">
-            {% for ai_response in ai_responses %}
-            <div class="recipe-card">
-                {% if ai_response.title == "Cannot make recipe with ingredients provided" or ai_response.title == "" %}
-                    <div class="no-recipe">
-                        <h2>{{ ai_response.title }}</h2>
-                        <h3>You need more ingredients!</h3>
-                        <p>
-                            {% for item in ai_response.ingredients %}
-                                {{ item }}{% if not forloop.last %} | {% endif %}
+    <div class="recipe-card-container">
+        <div class="carousel-container">
+            <div class="carousel-wrapper">
+                {% for ai_response in ai_responses %}
+                <div class="recipe-card">
+                    {% if ai_response.title == "Cannot make recipe with ingredients provided" or ai_response.title == "" %}
+                        <div class="no-recipe">
+                            <h2>{{ ai_response.title }}</h2>
+                            <h3>You need more ingredients!</h3>
+                            <p>
+                                {% for item in ai_response.ingredients %}
+                                    {{ item }}{% if not forloop.last %} | {% endif %}
+                                {% endfor %}
+                            </p>
+                        </div>
+                    {% else %}
+                    <h2 class="recipe-title">{{ ai_response.title }}</h2>
+                    <p class="recipe-meta">⏱️ {{ ai_response.time }}</p>
+                    
+                    <div class="recipe-section preview-section">
+                        <h3>📝 Ingredients</h3>
+                        <ul class="ingredient-list">
+                            {% for item in ai_response.ingredients|slice:":5" %}
+                                <li>{{ item }}</li>
                             {% endfor %}
-                        </p>
-                    </div>
-                {% else %}
-                <h2 class="recipe-title">{{ ai_response.title }}</h2>
-                <p class="recipe-meta">⏱️ {{ ai_response.time }}</p>
-                
-                <div class="recipe-section preview-section">
-                    <h3>📝 Ingredients</h3>
-                    <ul class="ingredient-list">
-                        {% for item in ai_response.ingredients|slice:":5" %}
-                            <li>{{ item }}</li>
-                        {% endfor %}
-                        {% if ai_response.ingredients|length > 5 %}
-                            <li><em>...and more</em></li>
-                        {% endif %}
-                    </ul>
-                </div>                
-                <button onclick="openModal({{ forloop.counter0 }})" class="view-btn">View Recipe</button>
-                {% endif %}
+                            {% if ai_response.ingredients|length > 5 %}
+                                <li><em>...and more</em></li>
+                            {% endif %}
+                        </ul>
+                    </div>                
+                    <button onclick="openModal({{ forloop.counter0 }})" class="view-btn">View Recipe</button>
+                    {% endif %}
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+
+            {% if ai_responses|length > 1 %}
+            <div class="carousel-controls">
+                <button onclick="prevCard()">‹</button>
+                <button onclick="nextCard()">›</button>
+            </div>
+            {% endif %}
         </div>
 
-        {% if ai_responses|length > 1 %}
-        <div class="carousel-controls">
-            <button onclick="prevCard()">‹</button>
-            <button onclick="nextCard()">›</button>
-        </div>
-        {% endif %}
-    </div>
+        <!-- Modal for full recipe -->
+        {% for ai_response in ai_responses %}
+        <div class="modal" id="modal-{{ forloop.counter0 }}">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal({{ forloop.counter0 }})">&times;</span>
+                <h2>{{ ai_response.title }}</h2>
+                <p><strong>Time:</strong> {{ ai_response.time }}</p>
 
-    <!-- Modal for full recipe -->
-    {% for ai_response in ai_responses %}
-    <div class="modal" id="modal-{{ forloop.counter0 }}">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal({{ forloop.counter0 }})">&times;</span>
-            <h2>{{ ai_response.title }}</h2>
-            <p><strong>Time:</strong> {{ ai_response.time }}</p>
+                <h3>Ingredients</h3>
+                <ul>
+                    {% for item in ai_response.ingredients %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
 
-            <h3>Ingredients</h3>
-            <ul>
-                {% for item in ai_response.ingredients %}
-                <li>{{ item }}</li>
-                {% endfor %}
-            </ul>
+                <h3>Utensils</h3>
+                <ul>
+                    {% for item in ai_response.utensils %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
 
-            <h3>Utensils</h3>
-            <ul>
-                {% for item in ai_response.utensils %}
-                <li>{{ item }}</li>
-                {% endfor %}
-            </ul>
+                <h3>Instructions</h3>
+                <ol>
+                    {% for step in ai_response.steps %}
+                    <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
 
-            <h3>Instructions</h3>
-            <ol>
-                {% for step in ai_response.steps %}
-                <li>{{ step }}</li>
-                {% endfor %}
-            </ol>
-
-            <div class="download-recipe">
-                <p class="download-text">Download recipe: </p>
-                <button class="jpg" id="jpg-{{ai_response.id}}}"onclick="downloadFile('jpg')"><strong>JPG</strong></button>
-                <button class="pdf" id="pdf-{{ai_response.title}}"onclick="downloadFile('pdf')"><strong>PDF</strong></button>
+                <div class="download-recipe">
+                    <p class="download-text">Download recipe: </p>
+                    <button type="button" class="jpg" id="jpg-{{ai_response.id}}}" onclick="event.stopPropagation(); downloadFile('jpg', {{ forloop.counter0 }})"><strong>JPG</strong></button>
+                    <button type="button" class="pdf" id="pdf-{{ai_response.title}}" onclick="event.stopPropagation(); downloadFile('pdf', {{ forloop.counter0 }})"><strong>PDF</strong></button>
+                </div>
             </div>
         </div>
     </div>
@@ -101,9 +90,8 @@
     
 
         <script>
-            function downloadFile(type){
-
-                let url = type === 'pdf' ? '/download-pdf/' : '/download-jpg/';
+            function downloadFile(type, index){
+                let url = type === 'pdf' ? `/download-pdf/?index=${index}` : `/download-jpg/?index=${index}`;
                 window.location.href = url;
             }
 

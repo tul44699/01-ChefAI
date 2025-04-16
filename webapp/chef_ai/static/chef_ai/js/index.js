@@ -194,14 +194,84 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Handles uploaded image file display
+    const imageInput = document.getElementById("image-upload-input");
+    const uploadedImagesContainer = document.getElementById("uploadedImagesContainer");
+    const uploadedFilesList = document.getElementById("uploadedFilesList");
+
+    // Tracks selected image files in memory
+    let selectedImages = [];
+
+    imageInput.addEventListener("change", function (event) {
+        const newFiles = Array.from(event.target.files);
+      
+        newFiles.forEach(file => {
+          const duplicate = selectedImages.some(existing => existing.name === file.name && existing.size === file.size);
+          if (!duplicate) {
+            selectedImages.push({ file, selected: true });
+          }
+        });
+      
+        refreshImageListDisplay();
+      
+        // Resets input so user can re-upload same file again if needed
+        imageInput.value = "";
+    });
+
+    function refreshImageListDisplay() {
+    uploadedFilesList.innerHTML = "";
+
+    if (selectedImages.length === 0) {
+        uploadedImagesContainer.style.display = "none";
+        return;
+    }
+
+    uploadedImagesContainer.style.display = "block";
+    
+    selectedImages.forEach((item, index) => {
+        const container = document.createElement("div");
+        container.className = "uploaded-file-item";
+    
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = item.selected ?? true;
+        checkbox.addEventListener("change", () => {
+          selectedImages[index].selected = checkbox.checked;
+        });
+    
+        const fileNameSpan = document.createElement("span");
+        fileNameSpan.textContent = item.file?.name || item.name || "Unnamed";
+        fileNameSpan.style.marginLeft = "0.5rem";
+    
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "uploaded-file-remove";
+        deleteBtn.innerHTML = "❌";
+        deleteBtn.addEventListener("click", () => {
+          selectedImages.splice(index, 1);
+          refreshImageListDisplay();
+        });
+    
+        container.appendChild(checkbox);
+        container.appendChild(fileNameSpan);
+        container.appendChild(deleteBtn);
+        uploadedFilesList.appendChild(container);
+    });
+    
+    uploadedFilesList.scrollTop = uploadedFilesList.scrollHeight;
+    }
+
     //Script that scans images for ingredients
     document.getElementById('scan-btn').addEventListener('click', () => {
+        const scanBtn = document.getElementById('scan-btn');
+        scanBtn.textContent = "Scanning...";
+        scanBtn.disabled = true;
+
         const formData = new FormData();
-        const images = document.getElementById('image-upload-input').files;
-    
-        for (let i = 0; i < images.length; i++) {
-            formData.append('images', images[i]);
-        }
+        selectedImages
+            .filter(item => item.selected)
+            .forEach(item => {
+                formData.append('images', item.file);
+            });
     
         fetch('/scan-images/', {
             method: 'POST',
@@ -210,17 +280,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 'X-CSRFToken': getCookie('csrftoken')
             }
         })
-        .then(response => response.json())
+        .then(async response => {
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Scan failed (${response.status}): ${errorText}`);
+            }
+            return response.json();
+        })
         .then(data => {
             const ingredients = data.ingredients;
             const categoryKey = 'detected'; // Or however you want to categorize
-    
+            
+            console.log("Scan returned:", data);
+            if (!Array.isArray(ingredients)) {
+                alert("No ingredients detected.");
+                return;
+            }
+
             ingredients.forEach(item => {
                 addSelectedItem(item, categoryKey);
-                console.log("added item: ",item);
             });
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Scan error:', error);
+            alert("Scan failed");
+        })
+        .finally(() => {
+            scanBtn.textContent = "Scan Image";
+            scanBtn.disabled = false;
+        });
     });
 
     // Highlights the currently selected suggestion based on selectedIndex
@@ -428,9 +516,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //grabs items from session storage so that user can add or remove items
-    const rawOptions = sessionStorage.getItem('selected_options') || [];
+    const rawOptions = JSON.parse(sessionStorage.getItem('selected_options') || "[]");
     if (rawOptions) {
-        const selected_options = JSON.parse(rawOptions);
+        const selected_options = rawOptions;
         sessionStorage.setItem("selected_options", JSON.stringify(selected_options)); // Save for future reloads
         selected_options.forEach(option => {
             let parts = option.split(":");
@@ -446,17 +534,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const final = [];
     
         items.forEach(item => {
-            const name = item.querySelector('.ingredient-name').textContent;
-            const qty = item.querySelector('input[type="text"]').value || '1';
+            const name = item.querySelector('.ingredient-name').textContent;//gets name of item selected
+            //updates the quantity for ingredient on each key press
+            const qtyElement = item.querySelector('input[type="text"]');
+            qtyElement.addEventListener('input', makeIngredientList);
+            const qty = qtyElement.value || '1';//defaults to one if no value
+            console.log("inside function here is qty being passed from value ",qty);
             final.push(`${name} :${qty}`);
         });
         document.getElementById("final_ingredients").value = final.join(", ");
         sessionStorage.setItem('selected_options', JSON.stringify(final));//updates the session storage
-        const selected = JSON.parse(sessionStorage.getItem('selected_options')) || [];
+        const selected = JSON.parse(sessionStorage.getItem('selected_options') || "[]");
         console.log("updated list in makeINgredientList: ", selected);
         return final;
 
     }
+    
 
 
 

@@ -18,11 +18,9 @@ class response_recipeTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Confirm context contains expected data
-        self.assertIn('selected_options', response.context)
-        self.assertIn('ai_response', response.context)
+        self.assertIn('ai_responses', response.context)
 
-        self.assertEqual(response.context['selected_options'], ['option1', 'option2'])
-        self.assertEqual(response.context['ai_response'], 'Here is the AI-generated recipe')
+        self.assertEqual(response.context['ai_responses'], 'Here is the AI-generated recipe')
 
         
     def test_response_recipe_without_session_data(self):
@@ -33,8 +31,6 @@ class response_recipeTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Check that the context variables are set to default values
-        self.assertIn('selected_options', response.context)
-        self.assertIn('ai_response', response.context)
+        self.assertIn('ai_responses', response.context)
 
-        self.assertEqual(response.context['selected_options'], [])
-        self.assertEqual(response.context['ai_response'], "")
+        self.assertEqual(response.context['ai_responses'], [])

@@ -6,6 +6,20 @@
     <title>{% block title %}Chef AI{% endblock %}</title>
 
     {% block background_Style %}
+    <style>
+        body{
+            background-image: url('{% static 'chef_ai/images/Countertop.png' %}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100%;
+        }
+        @media(min-width: 768px){
+            body{
+                height: 100vh;
+            };
+        }
+    </style>
     {% endblock %}
 
     <link rel="icon" type="image/x-icon" href="{% static 'chef_ai/icons/favicon.ico' %}">
@@ -21,7 +35,11 @@
     <link rel="stylesheet" href="{% static 'chef_ai/styles/profile.css' %}">
     <link rel="stylesheet" href="{% static 'chef_ai/styles/landing.css' %}">
     <link rel="stylesheet" href="{% static 'chef_ai/styles/loading.css' %}">
+
     <link rel="stylesheet" href="{% static 'chef_ai/styles/footer.css' %}">
+
+
+    <link rel="stylesheet" href="{% static 'chef_ai/styles/uploadedImages.css' %}">
 
 
                     <!--Javascript files go below-->
@@ -36,7 +54,7 @@
   the image will be hidden by videos if they exist-->
 
 <body> 
-    <header class="header">
+    <header class="header {% if request.path == '/' %}landing-header{% endif %}">
         <div class="chefAI">
             <a href="{% url 'index' %}">
                 <img src="{% static 'chef_ai/images/AICHEF400X.png' %}" alt="">
@@ -75,7 +93,7 @@
     {% block content %}
     {% endblock %}
     </div>
-    {{ selected_options|json_script:"selected_options" }}
+    
     <script type="module" src="{% static 'chef_ai/js/index.js' %}"></script>  
 
     <footer class="site-footer">

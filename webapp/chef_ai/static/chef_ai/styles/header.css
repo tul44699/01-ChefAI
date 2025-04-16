@@ -5,8 +5,11 @@
     right: 0;
     max-height: 7.5rem;
     width: 100vw;
-    /* background-color: rgba(245, 245, 245, 0.226); */
-    backdrop-filter: blur(10px); 
+    background:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent),
+     linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent),
+    linear-gradient(90deg, #b4021d, #FFB949, #FFB949, #b4021d); 
+     /* backdrop-filter: blur(10px);   */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -14,8 +17,7 @@
   }
   
   .header .navBar {
-   
-      text-align: right;
+    text-align: right;
   }
   .header .chefAI img{
     margin-left:3rem;
@@ -136,4 +138,13 @@
 /* When the dropdown is active, display the menu */
 .header .navbar .dropdown.active .dropdown-content {
     display: block;
+}
+
+
+/* Header override for landing page only */
+.header.landing-header {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    box-shadow: none;
+    background-image: none;         
 }
