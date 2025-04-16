@@ -294,23 +294,4 @@
         width: calc(100% - 1rem);
         min-width: 0;
     }
-}
-
-.category#uploadedImagesContainer .category-items {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .uploaded-file-item {
-    background: linear-gradient(90deg, #B4021E, #FFB949);
-    box-shadow: 0px 2px 4px #B4021E;
-    border-radius: 1rem;
-    padding: 0.5rem 1rem;
-    margin: 0.5rem;
-    color: white;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px black;
-    min-width: 12rem;
-    text-align: center;
-  }
-  
+}  
