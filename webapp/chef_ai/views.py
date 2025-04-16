@@ -41,29 +41,10 @@ def landing(request):
     return render(request, 'landing.html')
 
 def index(request):
-    # if request.method == "POST":
-        
-    #     ingredients_input = request.POST.get("final_ingredients", "")
-    #     selected_options = [i.strip() for i in ingredients_input.split(",") if i.strip()]
-    #     num_recipes = int(request.POST.get("recipe_amount", "1"))
-        
-    #     print(f"Number of recipes returned: {num_recipes}")
-    #     ai_response = asyncio.run(run_multiple_llm_calls(selected_options, num_recipes))
-    #     print(ai_response)
-            
-    #     #Save successful recipes to database
-    #     if request.user.is_authenticated and ai_response:
-    #         save_recipe_to_history(request.user, selected_options, ai_response[0])
-            
-    #     request.session['selected_options'] = selected_options
-    #     request.session['ai_response'] = ai_response
-            
-    #     return redirect('list_of_recipes')
+
     selected_options = request.session.get('selected_options', [])
     num_recipes = request.session.get('num_recipes', 1)
     return render(request, 'index.html', {'selected_options':selected_options, 'num_recipes':num_recipes})
-
-
 
 
 
@@ -73,8 +54,9 @@ def list_of_recipes(request):
         selected_options = request.session.get('selected_options', [])
         ai_responses = request.session.get('ai_response', [])
         request.session['selected_options'] = selected_options
-        print(f"list_of_recipes view was hit {selected_options}")
-        return render(request, 'listResults.html', {'selected_options': selected_options, 'ai_responses': ai_responses})
+
+        return render(request, 'listResults.html', {'selected_options': selected_options, 
+                                                    'ai_responses': ai_responses})
 
 
 async def run_multiple_llm_calls(selected_options, num_recipes):
@@ -237,6 +219,7 @@ def download_pdf(request):
 def download_jpg(request):
     index = int(request.GET.get('index', 0))
     ai_responses = request.session.get('ai_response', [])
+    
 
     if not ai_responses or index >= len(ai_responses):
         return redirect('response_recipe')
