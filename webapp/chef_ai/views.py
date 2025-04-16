@@ -41,32 +41,10 @@ def landing(request):
     return render(request, 'landing.html')
 
 def index(request):
-    # if request.method == "POST":
-        
-    #     ingredients_input = request.POST.get("final_ingredients", "")
-    #     selected_options = [i.strip() for i in ingredients_input.split(",") if i.strip()]
-    #     num_recipes = int(request.POST.get("recipe_amount", "1"))
-        
-    #     print(f"Number of recipes returned: {num_recipes}")
-    #     ai_response = asyncio.run(run_multiple_llm_calls(selected_options, num_recipes))
-    #     print(ai_response)
-            
-    #     #Save successful recipes to database
-    #     if request.user.is_authenticated and ai_response:
-    #         save_recipe_to_history(request.user, selected_options, ai_response[0])
-            
-    #     request.session['selected_options'] = selected_options
-    #     request.session['ai_response'] = ai_response
-            
-    #     return redirect('list_of_recipes')
+
     selected_options = request.session.get('selected_options', [])
     num_recipes = request.session.get('num_recipes', 1)
-    print("inside index ", selected_options)
-    
-
     return render(request, 'index.html', {'selected_options':selected_options, 'num_recipes':num_recipes})
-
-
 
 
 
@@ -76,8 +54,9 @@ def list_of_recipes(request):
         selected_options = request.session.get('selected_options', [])
         ai_responses = request.session.get('ai_response', [])
         request.session['selected_options'] = selected_options
-        print(f"list_of_recipes view was hit {selected_options}")
-        return render(request, 'listResults.html', {'selected_options': selected_options, 'ai_responses': ai_responses})
+
+        return render(request, 'listResults.html', {'selected_options': selected_options, 
+                                                    'ai_responses': ai_responses})
 
 
 async def run_multiple_llm_calls(selected_options, num_recipes):
@@ -240,6 +219,7 @@ def download_pdf(request):
 def download_jpg(request):
     index = int(request.GET.get('index', 0))
     ai_responses = request.session.get('ai_response', [])
+    
 
     if not ai_responses or index >= len(ai_responses):
         return redirect('response_recipe')
@@ -330,7 +310,6 @@ def logoutUser(request):
     return redirect('index')
 
 def getProfile(request):
-    
     return render(request, 'registration/profile.html')
 
 def save_recipe_to_history(user, selected_options, ai_response):
@@ -403,18 +382,18 @@ def view_saved_recipe(request, recipe_id):
     steps_section = re.search(r"Steps:\s*((?:.|\n)+)", raw_content)
     
     # Format into ai_response dictionary
-    ai_response = {
+    ai_response = [{
         "title": title_match.group(1) if title_match else recipe.title,
         "cuisine": cuisine_match.group(1) if cuisine_match else "Not specified",
         "time": time_match.group(1) if time_match else "Not specified",
         "ingredients": [line.strip("- ") for line in ingredients_section.group(1).strip().split("\n")] if ingredients_section else [],
         "utensils": [line.strip("- ") for line in utensils_section.group(1).strip().split("\n")] if utensils_section else [],
         "steps": [line.strip("0123456789. ") for line in steps_section.group(1).strip().split("\n")] if steps_section else []
-    }
+    }]
     
-    return render(request, 'recipeResults.html', {
-        'selected_options': recipe.selectedIngredients.split(', '),
-        'ai_response': ai_response  # Pass with the same name your template expects
+    return render(request, 'listResults.html', {
+        
+        'ai_responses': ai_response  # Pass with the same name your template expects
     })
 
 
@@ -444,6 +423,9 @@ def post_recipe(request):
             for i in range(numRecipes):
                 ai_response = feedLLM(ingredients, ai_response_list)
                 ai_response_list.append(ai_response)
+                    #     #Save successful recipes to database
+                if request.user.is_authenticated and ai_response:
+                    save_recipe_to_history(request.user, ingredients, ai_response)
             
             request.session['ai_response']= ai_response_list
             

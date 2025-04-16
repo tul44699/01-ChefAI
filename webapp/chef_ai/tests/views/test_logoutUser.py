@@ -18,7 +18,8 @@ class LogoutUserTestCase(TestCase):
         self.assertEqual(response.status_code, 200)  # After follow=True, we should get a 200 response at the final destination
 
         # Ensure the user is redirected to the index page (check the template used)
-        self.assertTemplateUsed(response, 'index.html')
+        self.assertTemplateUsed(response, 'landing.html')
+        self.assertTemplateUsed(response, 'base.html')
 
         # Ensure the user is logged out (should be an instance of AnonymousUser)
         user = response.context['user']
