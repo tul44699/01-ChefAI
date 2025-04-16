@@ -38,11 +38,12 @@ class DownloadPDFTest(TestCase):
         
         self.assertIsInstance(response, FileResponse)
         
-    def test_download_pdf_two_pages_long(self):
+    def test_download_pdf_multiple_pages_long(self):
         self.ai_response = [{
             'title': 'Delicious Pasta',
             'cuisine': 'Italian',
-            'ingredients': ['Pasta', 'Tomato Sauce', 'Basil'],
+            'ingredients': [f'Step {i}\n' for i in range(200)],
+            'utensils':[f'Step {i}\n' for i in range(200)],
             'steps': [f'Step {i}\n' for i in range(200)]
         }]
         
@@ -61,4 +62,6 @@ class DownloadPDFTest(TestCase):
         # Assert more than one page
         print(f"Number of pages made: {len(reader.pages)}")
         self.assertGreater(len(reader.pages), 1)
+        
+        
         
