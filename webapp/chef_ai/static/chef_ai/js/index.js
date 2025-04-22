@@ -531,7 +531,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function makeIngredientList(){
         const items = document.querySelectorAll('.selected-item');
-        const final = [];
+        const updatedList = [];
     
         items.forEach(item => {
             const name = item.querySelector('.ingredient-name').textContent;//gets name of item selected
@@ -540,33 +540,26 @@ document.addEventListener('DOMContentLoaded', () => {
             qtyElement.addEventListener('input', makeIngredientList);
             const qty = qtyElement.value || '1';//defaults to one if no value
             console.log("inside function here is qty being passed from value ",qty);
-            final.push(`${name} :${qty}`);
+            updatedList.push(`${name} :${qty}`);
         });
-        document.getElementById("final_ingredients").value = final.join(", ");
-        sessionStorage.setItem('selected_options', JSON.stringify(final));//updates the session storage
+        document.getElementById("final_ingredients").value = updatedList.join(", ");
+        sessionStorage.setItem('selected_options', JSON.stringify(updatedList));//updates the session storage
         const selected = JSON.parse(sessionStorage.getItem('selected_options') || "[]");
         console.log("updated list in makeINgredientList: ", selected);
-        return final;
+        return updatedList;
 
     }
     
 
 
-
+//uses a promise so that we can have a loading screen
 document.getElementById("generateRecipeBtn").addEventListener("click", () => {
-    const items = document.querySelectorAll('.selected-item');
     const numRecipes = numRecipesDisplay.value;
-    const final = [];
-
-    items.forEach(item => {
-        const name = item.querySelector('.ingredient-name').textContent;
-        const qty = item.querySelector('input[type="text"]').value || '1';
-        final.push(`${name} :${qty}`);
-    });
+    const final = makeIngredientList();
     
 
-    document.getElementById("final_ingredients").value = final.join(", ");
-    console.log("Final Ingredients:", final); // For debugging
+
+    //loading screen
     document.getElementById("searchSection").style.display = "none";
     document.getElementById("loadingScreen").style.display = "block";
     document.body.scrollTop = 0;
@@ -583,12 +576,12 @@ document.getElementById("generateRecipeBtn").addEventListener("click", () => {
             'X-CSRFToken': getCookie('csrftoken') 
         }
     })
-    //loading function
+    //gets json data
     .then(response => {
         
         return response.json();
     })
-    //success function
+    //redirects to new page
     .then(data => {
         console.log(data);
         sessionStorage.setItem('ai_response', JSON.stringify(data));
@@ -605,7 +598,7 @@ function getCookie(name) {
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
 
-            // Does this cookie string begin with the name we want?
+            // gets cookie labeled with 'name'
             if (cookie.startsWith(name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
