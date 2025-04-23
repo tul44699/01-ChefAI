@@ -331,7 +331,6 @@ def save_recipe_to_history(user, selected_options, ai_response):
     )
 
 #Code that runs the Image detection model
-# @csrf_exempt
 def scan_images(request):
     if request.method == 'POST':
         images = request.FILES.getlist('images')

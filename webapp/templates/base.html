@@ -55,7 +55,7 @@
 
 <body> 
     <header class="header {% if request.path == '/' %}landing-header{% endif %}">
-        <div class="chefAI">
+        <div class="chefAI" id='chefAI-logo'>
             <a href="{% url 'index' %}">
                 <img src="{% static 'chef_ai/images/AICHEF400X.png' %}" alt="">
             </a>
