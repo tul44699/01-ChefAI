@@ -96,7 +96,7 @@
     
     <script type="module" src="{% static 'chef_ai/js/index.js' %}"></script>  
 
-    <footer class="site-footer">
+    <footer class="site-footer {% if request.path == '/' %}landing-footer{% endif %}">
         <div class="footer-content">
             <p>© 2025 ChefAI. All rights reserved.</p>
             <div class="social-icons">

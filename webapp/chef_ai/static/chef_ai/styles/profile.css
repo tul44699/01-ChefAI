@@ -90,4 +90,17 @@
     border-radius: 1rem;
 }
 
+.history-section {
+    overflow-y: auto;
+    max-height: calc(100vh - 350px); /* Adjust based on header + padding */
+    padding-right: 1rem; /* Optional: space for scrollbar */
+}
 
+.history-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.history-section::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
