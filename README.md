@@ -28,6 +28,10 @@ instructions and a list of necessary ingredients.
 - Allow users to view any previous recipe they have searched in their profiles page
 - Improved UI readability and design
 
+Sample Images for Image Feature:
+[Strawberry](https://github.com/cis3296s25/01-ChefAI/blob/main/strawberry.jpg)
+[Cucumber](https://github.com/cis3296s25/01-ChefAI/blob/main/cucumber.jpg)
+[Apple](https://github.com/cis3296s25/01-ChefAI/blob/main/apple.jpg)
 
 # How to run
 Here is a deployed version of our current app:
