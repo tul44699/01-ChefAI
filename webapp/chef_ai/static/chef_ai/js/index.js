@@ -37,6 +37,7 @@ minusButton.addEventListener("click", () =>{
 });
 
 
+
 //values exist for form validation in case we allow the user to manually type in the box
 //Also limits the value
 numRecipesDisplay.addEventListener("change", () =>{
@@ -161,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     const checkbox = document.getElementById(checkboxId);
                                     if (checkbox && !checkbox.checked) {
                                         checkbox.checked = true;
-                                        addSelectedItem(item, categoryKey);
+                                        addSelectedItem(item, categoryKey,'1');
                                         matched = true;
                                     }
                                 }
@@ -173,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                         // Treats non-matches in the ingredientCategories as a valid DB result
                         if (!matched) {
-                            addSelectedItem(result, "db");
+                            addSelectedItem(result, "db",'1');
                         }
 
                         // Clears input and hides dropdown after user clicks a suggestion
@@ -298,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             ingredients.forEach(item => {
-                addSelectedItem(item, categoryKey);
+                addSelectedItem(item, categoryKey, '1');
             });
         })
         .catch(error => {
@@ -348,14 +349,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             const checkbox = document.getElementById(checkboxId);
                             if (checkbox && !checkbox.checked) {
                                 checkbox.checked = true;
-                                addSelectedItem(item, categoryKey);
+                                addSelectedItem(item, categoryKey, '1');
                                 matched = true;
                             }
                         }
                     });
                     // If not matched, assume it's a valid DB result and add it
                     if (!matched) {
-                        addSelectedItem(inputValue, 'db');
+                        addSelectedItem(inputValue, 'db', '1');
                     }
 
                     // Clear input and hide suggestion box
@@ -392,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const alreadyAdded = document.getElementById(selectedId);
     
             if (checkbox.checked && !alreadyAdded) {
-                addSelectedItem(item, categoryKey);
+                addSelectedItem(item, categoryKey, '1');
                 categoryItem.classList.add("selected");
             } else if (!checkbox.checked && alreadyAdded) {
                 console.log("removing the item from box: ",item)
@@ -403,17 +404,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    
 
     // Function to add selected item to the top div
-    function addSelectedItem(parts, categoryKey) {
+    function addSelectedItem(parts, categoryKey, qty) {
         selectedItemsContainer.style.display = 'block'; // Show container when items are added
         var item = parts;
         
-        //handles the session object to only use the name and not include the quantity
-        if(Array.isArray(parts)){
-            var item = parts[0];
-        }
         
         
         // Prevent duplicates
@@ -436,12 +432,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
 
         //adds text back on reload if user had text. (defaults to nothing)
-        if(Array.isArray(parts) && parts.length >1){
-            let quantity = parts[1];
-            if( quantity != '1'){
-                quantityInput.value = quantity;
+        if( qty != '1'){
+                quantityInput.value = qty;
             }
-        }
+        
 
         quantityContainer.appendChild(quantityInput);
 
@@ -515,23 +509,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    //grabs items from session storage so that user can add or remove items
+    // //grabs items from session storage so that user can add or remove items
+    // const rawOptions = JSON.parse(sessionStorage.getItem('selected_options') || "[]");
+    // if (rawOptions) {
+    //     const selected_options = rawOptions;
+    //     sessionStorage.setItem("selected_options", JSON.stringify(selected_options)); // Save for future reloads
+    //     selected_options.forEach(option => {
+    //         let parts = option.split(":");
+    //         console.log("Loaded option:", parts);
+    //         addSelectedItem(parts, 'ingredient-category');
+    //     });
+    // } else {
+    //     console.log("No selected-options element found");
+    // }
+
+
     const rawOptions = JSON.parse(sessionStorage.getItem('selected_options') || "[]");
-    if (rawOptions) {
-        const selected_options = rawOptions;
-        sessionStorage.setItem("selected_options", JSON.stringify(selected_options)); // Save for future reloads
-        selected_options.forEach(option => {
-            let parts = option.split(":");
-            console.log("Loaded option:", parts);
-            addSelectedItem(parts, 'ingredient-category');
-        });
-    } else {
-        console.log("No selected-options element found");
-    }
+if (rawOptions.length > 0) {
+    rawOptions.forEach(option => {
+        const parts = option.split(":");
+        //will always be two because each ingredient defaults to qty of 1
+        if (parts.length === 2) {
+            const item = parts[0].trim();
+            const quantity = parts[1].trim();
+
+            // find the category
+            let categoryKey = null;
+            for (const [key, items] of Object.entries(ingredientCategories)) {
+                if (items.includes(item)) {
+                    categoryKey = key;
+                    break;
+                }
+            }
+
+            if (categoryKey) 
+            {
+                const itemId = item.toLowerCase().replace(/\s+/g, '-');
+                const checkbox = document.querySelector(`#${categoryKey}-${itemId}`);
+                if (!checkbox) {return};
+
+                const categoryItem = checkbox.closest('.category-item');
+                checkbox.checked = true;
+                categoryItem.classList.add("selected");
+            }
+            addSelectedItem(item.trim(), categoryKey, quantity.trim());
+        }
+    });
+} else {
+    console.log("No selected-options element found");
+}
 
     function makeIngredientList(){
         const items = document.querySelectorAll('.selected-item');
-        const final = [];
+        const updatedList = [];
     
         items.forEach(item => {
             const name = item.querySelector('.ingredient-name').textContent;//gets name of item selected
@@ -540,33 +570,26 @@ document.addEventListener('DOMContentLoaded', () => {
             qtyElement.addEventListener('input', makeIngredientList);
             const qty = qtyElement.value || '1';//defaults to one if no value
             console.log("inside function here is qty being passed from value ",qty);
-            final.push(`${name} :${qty}`);
+            updatedList.push(`${name} :${qty}`);
         });
-        document.getElementById("final_ingredients").value = final.join(", ");
-        sessionStorage.setItem('selected_options', JSON.stringify(final));//updates the session storage
+        document.getElementById("final_ingredients").value = updatedList.join(", ");
+        sessionStorage.setItem('selected_options', JSON.stringify(updatedList));//updates the session storage
         const selected = JSON.parse(sessionStorage.getItem('selected_options') || "[]");
         console.log("updated list in makeINgredientList: ", selected);
-        return final;
+        return updatedList;
 
     }
     
 
 
-
+//uses a promise so that we can have a loading screen
 document.getElementById("generateRecipeBtn").addEventListener("click", () => {
-    const items = document.querySelectorAll('.selected-item');
     const numRecipes = numRecipesDisplay.value;
-    const final = [];
-
-    items.forEach(item => {
-        const name = item.querySelector('.ingredient-name').textContent;
-        const qty = item.querySelector('input[type="text"]').value || '1';
-        final.push(`${name} :${qty}`);
-    });
+    const final = makeIngredientList();
     
 
-    document.getElementById("final_ingredients").value = final.join(", ");
-    console.log("Final Ingredients:", final); // For debugging
+
+    //loading screen
     document.getElementById("searchSection").style.display = "none";
     document.getElementById("loadingScreen").style.display = "block";
     document.body.scrollTop = 0;
@@ -583,12 +606,12 @@ document.getElementById("generateRecipeBtn").addEventListener("click", () => {
             'X-CSRFToken': getCookie('csrftoken') 
         }
     })
-    //loading function
+    //gets json data
     .then(response => {
         
         return response.json();
     })
-    //success function
+    //redirects to new page
     .then(data => {
         console.log(data);
         sessionStorage.setItem('ai_response', JSON.stringify(data));
@@ -605,7 +628,7 @@ function getCookie(name) {
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
 
-            // Does this cookie string begin with the name we want?
+            // gets cookie labeled with 'name'
             if (cookie.startsWith(name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
@@ -614,6 +637,25 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+function checkAndHighlightIngredient(item) {
+    for (const [categoryKey, itemList] of Object.entries(ingredientCategories)) {
+        if (itemList.includes(item)) {
+            const checkboxId = `${categoryKey}-${item.toLowerCase().replace(/\s+/g, '-')}`;
+            const checkbox = document.getElementById(checkboxId);
+            if (checkbox) {
+                checkbox.checked = true;
+
+                const categoryItem = checkbox.closest('.category-item');
+                if (categoryItem) {
+                    categoryItem.classList.add('selected');
+                }
+            }
+            break; // stop looping once found
+        }
+    }
+}
+
 
 
 //this is for the login page
